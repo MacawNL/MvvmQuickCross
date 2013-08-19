@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<package>
+  <metadata>
+    <id>MvvmQuickCross</id>
+    <version>0.1.0.0</version>
+    <authors>Vincent Hoogendoorn [Macaw]</authors>
+    <owners>Vincent Hoogendoorn [Macaw]</owners>
+    <description>
+      MvvmQuickCross is a cross-platform MVVM pattern to quickly build 
+      native iOS, Android, Windows Phone and Windows Store Apps with 
+      shared C# code and Xamarin.
+      MvvmQuickCross is lightweight and easy to modify: it adds no binaries,
+      just a Visual Studio C# code snippets file and a few C# source files.
+    </description>
+    <summary>
+       Quickly build cross-platform apps in C# with the MVVM pattern and Xamarin.
+    </summary>
+    <licenseUrl>http://github.com/MacawNL/MvvmQuickCross</licenseUrl>
+    <projectUrl>http://github.com/MacawNL/MvvmQuickCross</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <tags>iOS Android WP8 Win8 MVVM CrossPlatform Xamarin Mobile App</tags>
+  </metadata>
+  <files>
+    <!--<file src="..\RichTextBlockHtml2Xaml.xslt" target="content\Common\RichTextBlockHtml2Xaml.xslt" />
+    <file src="..\RichTextBlockProperties.cs" target="content\Common\RichTextBlockProperties.cs" />-->
+    <file src="Install.ps1" target="tools\Install.ps1" />
+  </files>
+</package>
