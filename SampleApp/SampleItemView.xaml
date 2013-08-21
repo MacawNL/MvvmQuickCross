@@ -1,0 +1,27 @@
+﻿<Page
+    x:Class="SampleApp.SampleItemView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:SampleApp"
+    xmlns:vm="using:SampleApp.Shared.ViewModels.Design"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DataContext="{d:DesignInstance IsDesignTimeCreatable=True, Type=vm:SampleItemViewModelDesign}"
+    Width="Auto" Height="Auto" d:DesignWidth="480" FontSize="24"
+>
+    <Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}" >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50" />
+            <RowDefinition Height="50" />
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Column="0" Grid.Row="0" Text="Title:"/>
+        <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding Item.Title}"/>
+        <TextBlock Grid.Column="0" Grid.Row="1" Text="Description:"/>
+        <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding Item.Description}"/>
+    </Grid>
+</Page>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SampleApp.Shared;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -16,7 +17,7 @@ using Windows.UI.Xaml.Navigation;
 
 // The Blank Application template is documented at http://go.microsoft.com/fwlink/?LinkId=234227
 
-namespace SampleApp.w8
+namespace SampleApp
 {
     /// <summary>
     /// Provides application-specific behavior to supplement the default Application class.
@@ -31,6 +32,16 @@ namespace SampleApp.w8
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+        }
+
+        public static SampleAppApplication EnsureApplication(Frame rootFrame)
+        {
+            if (SampleAppApplication.Current == null)
+            {
+                var app = new SampleAppApplication(new SampleAppNavigator());
+                app.CurrentNavigationContext = rootFrame;
+            }
+            return SampleAppApplication.Current;
         }
 
         /// <summary>
@@ -64,10 +75,12 @@ namespace SampleApp.w8
                 // When the navigation stack isn't restored navigate to the first page,
                 // configuring the new page by passing required information as a navigation
                 // parameter
-                if (!rootFrame.Navigate(typeof(MainPage), args.Arguments))
-                {
-                    throw new Exception("Failed to create initial page");
-                }
+                EnsureApplication(rootFrame).ContinueToSampleItemList();
+                // TODO: remove 
+                //if (!rootFrame.Navigate(typeof(SampleItemListView), args.Arguments))
+                //{
+                //    throw new Exception("Failed to create initial page");
+                //}
             }
             // Ensure the current window is active
             Window.Current.Activate();
