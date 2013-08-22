@@ -15,7 +15,11 @@ namespace SampleApp.Shared.ViewModels
         public SampleItemListViewModel(SampleItemService itemService)
         {
             _itemService = itemService;
-            Items = new ObservableCollection<SampleItem>(itemService.GetItems());
+        }
+
+        public void Refresh()
+        {
+            Items = new ObservableCollection<SampleItem>(_itemService.GetItems());
         }
 
         public ObservableCollection<SampleItem> Items /* One-way data-bindable property generated with propdbcol snippet. Keep on one line - see http://goo.gl/Yg6QMd for why. */ { get { return _Items; } protected set { if (_Items != value) { _Items = value; RaisePropertyChanged(PROPERTYNAME_Items); UpdateItemsHasItems(); } } } private ObservableCollection<SampleItem> _Items; public const string PROPERTYNAME_Items = "Items";
@@ -29,20 +33,22 @@ namespace SampleApp.Shared.ViewModels
         private void ViewItem(object parameter)
         {
             var item = (SampleItem)parameter;
-            SampleAppApplication.Current.ContinueToSampleItem(item);
+            if (item != null) SampleAppApplication.Current.ContinueToSampleItem(item);
         }
 
         private void AddItem()
         {
-            var item = new SampleItem { Title = "new", Description = "" };
-            Items.Add(item);
-            SampleAppApplication.Current.ContinueToSampleItem(item);
+            SampleAppApplication.Current.ContinueToSampleItem();
         }
 
         private void RemoveItem(object parameter)
         {
             var item = (SampleItem)parameter;
-            Items.Remove(item);
+            if (item != null)
+            {
+                _itemService.RemoveItem(item);
+                Items.Remove(item);
+            }
         }
     }
 }
@@ -52,9 +58,9 @@ namespace SampleApp.Shared.ViewModels.Design
     public class SampleItemListViewModelDesign : SampleItemListViewModel
     {
         private static SampleItem[] _itemData = new SampleItem[] {
-            new SampleItem { Title = "One Design", Description = "First design-time item" },
-            new SampleItem { Title = "Two Design", Description = "Second design-time item" },
-            new SampleItem { Title = "Three Design", Description = "Third design-time item" }
+            new SampleItem { Id = 1, Title = "One Design", Description = "First design-time item" },
+            new SampleItem { Id = 2, Title = "Two Design", Description = "Second design-time item" },
+            new SampleItem { Id = 3, Title = "Three Design", Description = "Third design-time item" }
         };
 
         public SampleItemListViewModelDesign()

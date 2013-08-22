@@ -1,4 +1,5 @@
 ﻿using SampleApp.Shared;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 
@@ -24,6 +25,11 @@ namespace SampleApp
         /// property is typically used to configure the page.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+        }
+
+        private void Button_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            ((Frame)Window.Current.Content).GoBack();
         }
     }
 }

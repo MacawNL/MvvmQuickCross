@@ -31,12 +31,14 @@ namespace SampleApp.Shared
         public void ContinueToSampleItemList(bool skipNavigation = false)
         {
             if (SampleItemListViewModel == null) SampleItemListViewModel = new SampleItemListViewModel(_itemService);
+            SampleItemListViewModel.Refresh();
             if (!skipNavigation) RunOnUIThread(() => _navigator.NavigateToSampleItemListView(CurrentNavigationContext));
         }
 
-        public void ContinueToSampleItem(SampleItem item)
+        public void ContinueToSampleItem(SampleItem item = null)
         {
-            if (SampleItemViewModel == null) SampleItemViewModel = new SampleItemViewModel(item);
+            if (SampleItemViewModel == null) SampleItemViewModel = new SampleItemViewModel(_itemService);
+            SampleItemViewModel.Initialize(item);
             RunOnUIThread(() => _navigator.NavigateToSampleItemView(CurrentNavigationContext));
         }
     }

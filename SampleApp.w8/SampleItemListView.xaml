@@ -11,17 +11,26 @@
     >
 
     <Grid x:Name="PageRoot" Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="50" />
+        </Grid.RowDefinitions>
         <ListView x:Name="ItemsList" ItemsSource="{Binding Items}">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <Button Command="{Binding DataContext.ViewItemCommand, ElementName=PageRoot}" CommandParameter="{Binding}">
+                    <!--<Button Command="{Binding DataContext.ViewItemCommand, ElementName=PageRoot}" CommandParameter="{Binding}">-->
                         <StackPanel>
                             <TextBlock Text="{Binding Title}" FontWeight="Bold" />
                             <TextBlock Text="{Binding Description}" />
                         </StackPanel>
-                    </Button>
+                    <!--</Button>-->
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+        <StackPanel Orientation="Horizontal" Grid.Row="2">
+            <Button Content="Add" Command="{Binding AddItemCommand}" />
+            <Button Content="View" Command="{Binding ViewItemCommand}" CommandParameter="{Binding SelectedItem, ElementName=ItemsList}" />
+            <Button Content="Remove" Command="{Binding RemoveItemCommand}" CommandParameter="{Binding SelectedItem, ElementName=ItemsList}" />
+        </StackPanel>
     </Grid>
 </Page>

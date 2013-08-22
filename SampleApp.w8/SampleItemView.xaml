@@ -18,10 +18,16 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="50" />
             <RowDefinition Height="50" />
+            <RowDefinition />
+            <RowDefinition Height="50" />
         </Grid.RowDefinitions>
         <TextBlock Grid.Column="0" Grid.Row="0" Text="Title:"/>
-        <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding Item.Title}"/>
+        <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding Title, Mode=TwoWay}" FontSize="24"/>
         <TextBlock Grid.Column="0" Grid.Row="1" Text="Description:"/>
-        <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding Item.Description}"/>
+        <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding Description, Mode=TwoWay}" FontSize="24"/>
+        <StackPanel Orientation="Horizontal" Grid.Row="3">
+            <Button Content="Back" Click="Button_Click" />
+            <Button Content="Save" Command="{Binding SaveCommand}" />
+        </StackPanel>
     </Grid>
 </Page>

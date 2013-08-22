@@ -1,5 +1,7 @@
 ﻿using MvvmQuickCross;
 using SampleApp.Shared.Models;
+using SampleApp.Shared.Services;
+using System.Collections.ObjectModel;
 
 namespace SampleApp.Shared.ViewModels
 {
@@ -7,12 +9,49 @@ namespace SampleApp.Shared.ViewModels
     {
         protected SampleItemViewModel () { } // VS Design time support
 
-        public SampleItemViewModel(SampleItem item)
+        private int _itemId;
+        private SampleItemService _itemService;
+
+        public SampleItemViewModel(SampleItemService itemService, SampleItem item = null)
         {
-            Item = item;
+            _itemService = itemService;
+            Initialize(item);
         }
 
-        public SampleItem Item /* One-way data-bindable property generated with propdb1 snippet. Keep on one line - see http://goo.gl/Yg6QMd for why. */ { get { return _Item; } protected set { if (_Item != value) { _Item = value; RaisePropertyChanged(PROPERTYNAME_Item); } } } private SampleItem _Item; public const string PROPERTYNAME_Item = "Item";
+        public void Initialize(SampleItem item = null)
+        {
+            if (item == null)
+            {
+                _itemId = -1;
+                Title = "";
+                Description = "";
+            }
+            else
+            {
+                _itemId = item.Id;
+                Title = item.Title;
+                Description = item.Description;
+            }
+        }
+
+        public string Title /* Two-way data-bindable property generated with propdb2 snippet */ { get { return _Title; } set { if (_Title != value) { _Title = value; RaisePropertyChanged(PROPERTYNAME_Title); } } } private string _Title; public const string PROPERTYNAME_Title = "Title";
+        public string Description /* Two-way data-bindable property generated with propdb2 snippet */ { get { return _Description; } set { if (_Description != value) { _Description = value; RaisePropertyChanged(PROPERTYNAME_Description); } } } private string _Description; public const string PROPERTYNAME_Description = "Description";
+
+        public RelayCommand SaveCommand /* Data-bindable command that calls Save(), generated with cmd snippet */ { get { if (_SaveCommand == null) _SaveCommand = new RelayCommand(Save); return _SaveCommand; } } private RelayCommand _SaveCommand;
+
+        private void Save()
+        {
+            if (_itemId < 0)
+            {
+                _itemService.AddItem(Title, Description);
+            }
+            else
+            {
+                var item = new SampleItem() { Id = _itemId, Title = this.Title, Description = this.Description };
+                _itemService.UpdateItem(item);
+            }
+            SampleAppApplication.Current.ContinueToSampleItemList();
+        }
     }
 }
 
@@ -22,7 +61,7 @@ namespace SampleApp.Shared.ViewModels.Design
     {
         public SampleItemViewModelDesign() 
         {
-            Item = new SampleItem { Title = "Item Design", Description = "A design-time item" };
+            Initialize(new SampleItem { Title = "Item Design", Description = "A design-time item" });
         }
     }
 }
