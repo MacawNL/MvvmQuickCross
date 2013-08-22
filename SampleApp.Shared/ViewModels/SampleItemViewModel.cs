@@ -1,7 +1,7 @@
-﻿using MvvmQuickCross;
+﻿using System;
+using MvvmQuickCross;
 using SampleApp.Shared.Models;
 using SampleApp.Shared.Services;
-using System.Collections.ObjectModel;
 
 namespace SampleApp.Shared.ViewModels
 {
@@ -47,8 +47,7 @@ namespace SampleApp.Shared.ViewModels
             }
             else
             {
-                var item = new SampleItem() { Id = _itemId, Title = this.Title, Description = this.Description };
-                _itemService.UpdateItem(item);
+                _itemService.UpdateItem(new SampleItem() { Id = _itemId, Title = this.Title, Description = this.Description });
             }
             SampleAppApplication.Current.ContinueToSampleItemList();
         }
@@ -61,7 +60,7 @@ namespace SampleApp.Shared.ViewModels.Design
     {
         public SampleItemViewModelDesign() 
         {
-            Initialize(new SampleItem { Title = "Item Design", Description = "A design-time item" });
+            Initialize(new SampleItem { Id = 0, Title = "Item Design", Description = "A design-time item" });
         }
     }
 }
