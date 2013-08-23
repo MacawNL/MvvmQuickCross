@@ -9,7 +9,8 @@ namespace MvvmQuickCross.Templates.ViewModels
         {
         }
 
-        #region Data-bindable properties and commands, generated with prop* and cmd* code snippets
+        #region Data-bindable properties and commands
+        // TODO: Generate data-bindable properties and commands here with prop* and cmd* code snippets
         #endregion
     }
 }

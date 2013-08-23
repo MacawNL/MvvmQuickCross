@@ -2,11 +2,11 @@ param($installPath, $toolsPath, $package, $project)
 
 function ReplaceStringsInString([string]$text, [Hashtable]$replacements)
 {
-    foreach ($replacement in $replacements)
+    foreach ($replacement in $replacements.GetEnumerator())
     {
         $text = $text.Replace($replacement.Name, $replacement.Value);
     }
-    return $text
+    $text
 }
 
 function ReplaceStringsInFile([string]$filePath, [Hashtable]$replacements)
@@ -16,7 +16,7 @@ function ReplaceStringsInFile([string]$filePath, [Hashtable]$replacements)
     [System.IO.File]::WriteAllText($filePath, $content, [System.Text.Encoding]::UTF8)
 }
 
-function Install()
+function Install($project)
 {
     # Get the application name from the solution file name
     $solutionName = Split-Path ($project.DTE.Solution.FullName) -Leaf
@@ -46,4 +46,4 @@ function Install()
     }
 }
 
-Install
+Install -project $project
