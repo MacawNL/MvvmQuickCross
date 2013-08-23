@@ -21,9 +21,6 @@ MvvmQuickCross is lightweight and easy to modify: it adds no binaries, just one 
 	
 	**Note** do not select the MvvmQuickCross folder itself as the location to import snippets **to**; that may prevent the snippets to be imported correctly, as this would mean copying the snippets file over itself.
 
-4. Start coding, following this guidance:
-
-	- The files ViewModels\\\_VIEWNAME\_ViewModel.cs, *\_APPNAME\_*Application.cs and I*\_APPNAME\_*Navigator.cs in your class library project
-	- The example solution in this GitHub repository
+4. Start coding, following the files ViewModels\\\_VIEWNAME\_ViewModel.cs, *\_APPNAME\_*Application.cs and I*\_APPNAME\_*Navigator.cs in your class library project, and the example solution in this GitHub repository
 
 To add more platforms, create a new solution for each platform, with a class library project and an application project, just like the first platform. Then add all existing shared code files to the class library for the new platform, and code the views, navigator and other platform specific service implementations in the application project.
