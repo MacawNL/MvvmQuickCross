@@ -7,6 +7,8 @@ namespace MvvmQuickCross.Templates.ViewModels
     {
         public _VIEWMODEL_ViewModel()
         {
+            // TODO: pass any services that this model needs as contructor parameters. 
+            // To support design-time data in VS, either make all parameters for this constructor optional or add a protected contructor without parameters.
         }
 
         #region Data-bindable properties and commands

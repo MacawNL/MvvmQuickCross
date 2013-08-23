@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>MvvmQuickCross</id>
-    <version>0.1.0.0</version>
+    <version>0.2.0.0</version>
     <authors>Vincent Hoogendoorn [Macaw]</authors>
     <owners>Vincent Hoogendoorn [Macaw]</owners>
     <description>
@@ -10,7 +10,7 @@
       native iOS, Android, Windows Phone and Windows Store Apps with 
       shared C# code and Xamarin.
       MvvmQuickCross is lightweight and easy to modify: it adds no binaries,
-      just a Visual Studio C# code snippets file and a few C# source files.
+      just one Visual Studio C# code snippets file and a few C# source files.
     </description>
     <summary>
        Quickly build cross-platform apps in C# with the MVVM pattern and Xamarin.
