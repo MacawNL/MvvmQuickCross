@@ -7,10 +7,9 @@
     xmlns:vm="using:SampleApp.Shared.ViewModels.Design"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance IsDesignTimeCreatable=True, Type=vm:SampleItemListViewModelDesign}"
-    Width="Auto" Height="Auto" d:DesignWidth="480" FontSize="24"
-    >
+    Width="480" FontSize="24" Background="Gray" >
 
-    <Grid x:Name="PageRoot" Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
+    <Grid x:Name="PageRoot" Background="{StaticResource ApplicationPageBackgroundThemeBrush}" >
         <Grid.RowDefinitions>
             <RowDefinition />
             <RowDefinition Height="50" />

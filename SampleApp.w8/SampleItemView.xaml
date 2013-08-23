@@ -8,8 +8,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance IsDesignTimeCreatable=True, Type=vm:SampleItemViewModelDesign}"
-    Width="Auto" Height="Auto" d:DesignWidth="480" FontSize="24"
->
+    Width="480" FontSize="24">
+    
     <Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}" >
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="150" />
@@ -21,9 +21,9 @@
             <RowDefinition />
             <RowDefinition Height="50" />
         </Grid.RowDefinitions>
-        <TextBlock Grid.Column="0" Grid.Row="0" Text="Title:"/>
+        <TextBlock Grid.Column="0" Grid.Row="0" Text="Title:" VerticalAlignment="Center"/>
         <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding Title, Mode=TwoWay}" FontSize="24"/>
-        <TextBlock Grid.Column="0" Grid.Row="1" Text="Description:"/>
+        <TextBlock Grid.Column="0" Grid.Row="1" Text="Description:" VerticalAlignment="Center"/>
         <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding Description, Mode=TwoWay}" FontSize="24"/>
         <StackPanel Orientation="Horizontal" Grid.Row="3">
             <Button Content="Back" Click="Button_Click" />

@@ -103,6 +103,9 @@
     <None Include="MvvmQuickCross\MvvmQuickCross.snippet" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MvvmQuickCross\Templates\I_APPNAME_Navigator.cs" />
+    <Compile Include="MvvmQuickCross\Templates\ViewModels\_VIEWNAME_ViewModel.cs" />
+    <Compile Include="MvvmQuickCross\Templates\_APPNAME_Application.cs" />
     <Compile Include="SampleAppApplication.cs" />
     <Compile Include="ISampleAppNavigator.cs" />
     <Compile Include="Models\SampleItem.cs" />

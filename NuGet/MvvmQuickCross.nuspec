@@ -25,6 +25,9 @@
     <file src="..\SampleApp.Shared\MvvmQuickCross\RelayCommand.cs" target="content\MvvmQuickCross\RelayCommand.cs" />
     <file src="..\SampleApp.Shared\MvvmQuickCross\ViewModelBase.cs" target="content\MvvmQuickCross\ViewModelBase.cs" />
     <file src="..\SampleApp.Shared\MvvmQuickCross\MvvmQuickCross.snippet" target="content\MvvmQuickCross\MvvmQuickCross.snippet" />
+    <file src="..\SampleApp.Shared\MvvmQuickCross\Templates\_APPNAME_Application.cs" target="content\_APPNAME_Application.cs" />
+    <file src="..\SampleApp.Shared\MvvmQuickCross\Templates\I_APPNAME_Navigator.cs" target="content\I_APPNAME_Navigator.cs" />
+    <file src="..\SampleApp.Shared\MvvmQuickCross\Templates\ViewModels\_VIEWNAME_ViewModel.cs" target="content\ViewModels\_VIEWNAME_ViewModel.cs" />
     <file src="Install.ps1" target="tools\Install.ps1" />
   </files>
 </package>
