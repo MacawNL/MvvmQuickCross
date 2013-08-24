@@ -8,7 +8,7 @@ MvvmQuickCross is a cross-platform MVVM pattern to quickly build native iOS, And
 
 MvvmQuickCross aims to deliver the benefit of data binding and design-time data to speed up development, while eliminating the coding overhead that data binding brings - by using code snippets - on all platforms.
 
-MvvmQuickCross also aims to maximize the amount of shared code across platforms - including navigation logic, with a specific Application+Navigator pattern.
+MvvmQuickCross also aims to maximize the percentage of shared code across platforms, including navigation logic, with a specific Application+Navigator pattern.
 
 MvvmQuickCross is lightweight and easy to modify: it adds no binaries, just one Visual Studio C# code snippets file and a few C# source files.
 
@@ -25,6 +25,6 @@ MvvmQuickCross is lightweight and easy to modify: it adds no binaries, just one 
 	
 	**Note** do not select the MvvmQuickCross folder itself as the location to import snippets **to**; that may prevent the snippets to be imported correctly, as this would mean copying the snippets file over itself.
 
-4. Start coding, following the guidance in the files ViewModels\\\_VIEWNAME\_ViewModel.cs, *\_APPNAME\_*Application.cs and I*\_APPNAME\_*Navigator.cs in your class library project, and the SampleApp example in this GitHub repository
+4. Start coding, following the guidance in the files ViewModels\\\_VIEWNAME\_ViewModel.cs, \_APPNAME\_Application.cs and I\_APPNAME\_Navigator.cs in your class library project, and the SampleApp example in this GitHub repository
 
 To code your app for other platforms, create a new solution for each platform, with a class library project for that platform and an application project for that platform, just like you did for the first platform. Then add all code files from the existing class library project to the class library project for the new platform. Then code the views, navigator and other platform specific service implementations in the application project.
