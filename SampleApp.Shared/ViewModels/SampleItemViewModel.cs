@@ -49,7 +49,7 @@ namespace SampleApp.Shared.ViewModels
             {
                 _itemService.UpdateItem(new SampleItem() { Id = _itemId, Title = this.Title, Description = this.Description });
             }
-            SampleAppApplication.Current.ContinueToSampleItemList();
+            SampleAppApplication.Instance.ContinueToSampleItemList();
         }
     }
 }

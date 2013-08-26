@@ -8,8 +8,8 @@ namespace MvvmQuickCross.Templates
     {
         private I_APPNAME_Navigator _navigator;
 
-        public _APPNAME_Application(I_APPNAME_Navigator navigator, TaskScheduler uiTaskScheduler = null)
-            : base(uiTaskScheduler)
+        public _APPNAME_Application(I_APPNAME_Navigator navigator, object currentNavigationContext = null, TaskScheduler uiTaskScheduler = null)
+            : base(currentNavigationContext, uiTaskScheduler)
         {
             // Services that have a platform-specific implementation, such as the navigator,
             // are instantiated in a platform-specific project and passed to this application 
@@ -19,7 +19,7 @@ namespace MvvmQuickCross.Templates
             // TODO: Create instances for all services that have a cross-platform implementation
         }
 
-        new public static _APPNAME_Application Current { get { return (_APPNAME_Application)ApplicationBase.Current; } }
+        new public static _APPNAME_Application Instance { get { return (_APPNAME_Application)ApplicationBase.Instance; } }
 
         /* TODO: For each view model, add a public property with a private setter like this:
            public _VIEWNAME_ViewModel _VIEWNAME_ViewModel { get; private set; }

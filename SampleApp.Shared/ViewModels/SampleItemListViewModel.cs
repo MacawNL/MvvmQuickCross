@@ -33,12 +33,12 @@ namespace SampleApp.Shared.ViewModels
         private void ViewItem(object parameter)
         {
             var item = (SampleItem)parameter;
-            if (item != null) SampleAppApplication.Current.ContinueToSampleItem(item);
+            if (item != null) SampleAppApplication.Instance.ContinueToSampleItem(item);
         }
 
         private void AddItem()
         {
-            SampleAppApplication.Current.ContinueToSampleItem();
+            SampleAppApplication.Instance.ContinueToSampleItem();
         }
 
         private void RemoveItem(object parameter)

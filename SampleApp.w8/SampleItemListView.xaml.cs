@@ -14,7 +14,7 @@ namespace SampleApp
         public SampleItemListView()
         {
             this.InitializeComponent();
-            DataContext = SampleAppApplication.Current.SampleItemListViewModel;
+            DataContext = SampleAppApplication.Instance.SampleItemListViewModel;
         }
 
         /// <summary>

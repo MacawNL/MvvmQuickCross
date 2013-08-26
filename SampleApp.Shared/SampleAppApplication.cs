@@ -3,6 +3,7 @@ using MvvmQuickCross;
 using SampleApp.Shared.Models;
 using SampleApp.Shared.Services;
 using SampleApp.Shared.ViewModels;
+using System;
 
 namespace SampleApp.Shared
 {
@@ -11,8 +12,8 @@ namespace SampleApp.Shared
         private ISampleAppNavigator _navigator;
         private SampleItemService _itemService;
 
-        public SampleAppApplication(ISampleAppNavigator navigator, TaskScheduler uiTaskScheduler = null)
-            : base(uiTaskScheduler)
+        public SampleAppApplication(ISampleAppNavigator navigator, object currentNavigationContext = null, TaskScheduler uiTaskScheduler = null)
+            : base(currentNavigationContext, uiTaskScheduler)
         {
             // TODO: create instances for all services that have a cross-platform implementation
             // (services that have a platform-specific implementation, such as the navigator,
@@ -23,7 +24,7 @@ namespace SampleApp.Shared
             _itemService = new SampleItemService();
         }
 
-        new public static SampleAppApplication Current { get { return (SampleAppApplication)ApplicationBase.Current; } }
+        new public static SampleAppApplication Instance { get { return (SampleAppApplication)ApplicationBase.Instance; } }
 
         public SampleItemListViewModel SampleItemListViewModel { get; private set; }
         public SampleItemViewModel SampleItemViewModel { get; private set; }
