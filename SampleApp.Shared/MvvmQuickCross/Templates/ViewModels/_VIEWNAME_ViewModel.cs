@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if TEMPLATE // To add a new view model class: copy this file, then in the copy remove the enclosing #if TEMPLATE ... #endif lines and replace _VIEWMODEL_ with the view model name.
+using System;
 using MvvmQuickCross;
 
 namespace MvvmQuickCross.Templates.ViewModels
@@ -8,7 +9,6 @@ namespace MvvmQuickCross.Templates.ViewModels
         public _VIEWMODEL_ViewModel()
         {
             // TODO: pass any services that this model needs as contructor parameters. 
-            // To support design-time data in VS, either make all parameters for this constructor optional or add a protected contructor without parameters.
         }
 
         #region Data-bindable properties and commands
@@ -17,7 +17,8 @@ namespace MvvmQuickCross.Templates.ViewModels
     }
 }
 
-// VS Design-time data support
+// Design data support
+#if DEBUG
 namespace MvvmQuickCross.Templates.ViewModels.Design
 {
     public class _VIEWMODEL_ViewModelDesign : _VIEWMODEL_ViewModel
@@ -28,3 +29,6 @@ namespace MvvmQuickCross.Templates.ViewModels.Design
         }
     }
 }
+#endif
+
+#endif // TEMPLATE
