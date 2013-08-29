@@ -113,6 +113,7 @@
     <Compile Include="AuctionView.xaml.cs">
       <DependentUpon>AuctionView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="CloudAuctionNavigator.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>

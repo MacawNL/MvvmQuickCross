@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CloudAuction.Shared;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -24,6 +25,7 @@ namespace CloudAuction
         public AuctionView()
         {
             this.InitializeComponent();
+            DataContext = CloudAuctionApplication.Instance.AuctionViewModel;
         }
 
         /// <summary>

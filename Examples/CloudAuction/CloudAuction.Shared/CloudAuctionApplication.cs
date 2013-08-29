@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MvvmQuickCross;
+using CloudAuction.Shared.ViewModels;
+using CloudAuction.Shared.ViewModels.Design;
 
 namespace CloudAuction.Shared
 {
@@ -35,5 +37,13 @@ namespace CloudAuction.Shared
                 }
          * The skipNavigation parameter is needed in cases where the OS has already navigated to the view for you;
          * in that case you only need to initialize the view model. */
+
+        public AuctionViewModel AuctionViewModel { get; private set; }
+
+        public void ContinueToAuction(bool skipNavigation = false)
+        {
+            if (AuctionViewModel == null) AuctionViewModel = new AuctionViewModelDesign();
+            if (!skipNavigation) RunOnUIThread(() => _navigator.NavigateToAuctionView(CurrentNavigationContext));
+        }
     }
 }
