@@ -20,5 +20,10 @@ namespace CloudAuction
         {
             Navigate(navigationContext, typeof(OrderView));
         }
+
+        public void NavigateToOrderResultView(object navigationContext)
+        {
+            OrderResultView.Show();
+        }
     }
 }

@@ -42,23 +42,23 @@
         <ComboBox ItemsSource="{Binding Titles}" SelectedItem="{Binding Title, Mode=TwoWay}" Grid.Row="3" Grid.Column="1"  FontSize="24" />
 
         <TextBlock Text="Name" Grid.Row="4" VerticalAlignment="Center" Margin="0,6,0,0" />
-        <TextBox Text="{Binding FirstName}" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3" FontSize="24" />
-        <TextBox Text="{Binding MiddleName}" Grid.Row="5" Grid.Column="1" FontSize="24" />
-        <TextBox Text="{Binding LastName}" Grid.Row="5" Grid.Column="2" Grid.ColumnSpan="2" FontSize="24" />
+        <TextBox Text="{Binding FirstName, Mode=TwoWay}" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3" FontSize="24" />
+        <TextBox Text="{Binding MiddleName, Mode=TwoWay}" Grid.Row="5" Grid.Column="1" FontSize="24" />
+        <TextBox Text="{Binding LastName, Mode=TwoWay}" Grid.Row="5" Grid.Column="2" Grid.ColumnSpan="2" FontSize="24" />
 
         <TextBlock Text="Address" Grid.Row="6" VerticalAlignment="Center" Margin="0,6,0,0" />
-        <TextBox Text="{Binding Street}" Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="3" FontSize="24" />
-        <TextBox Text="{Binding Zip}" Grid.Row="7" Grid.Column="1" FontSize="24" />
-        <TextBox Text="{Binding City}" Grid.Row="7" Grid.Column="2" Grid.ColumnSpan="2" FontSize="24" />
-        <TextBox Text="{Binding Country}" Grid.Row="8" Grid.Column="1" Grid.ColumnSpan="3" FontSize="24" />
+        <TextBox Text="{Binding Street, Mode=TwoWay}" Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="3" FontSize="24" />
+        <TextBox Text="{Binding Zip, Mode=TwoWay}" Grid.Row="7" Grid.Column="1" FontSize="24" />
+        <TextBox Text="{Binding City, Mode=TwoWay}" Grid.Row="7" Grid.Column="2" Grid.ColumnSpan="2" FontSize="24" />
+        <TextBox Text="{Binding Country, Mode=TwoWay}" Grid.Row="8" Grid.Column="1" Grid.ColumnSpan="3" FontSize="24" />
 
         <TextBlock Text="Email" Grid.Row="9" VerticalAlignment="Center" Margin="0,6,0,0" />
-        <TextBox Text="{Binding Email}" Grid.Row="9" Grid.Column="1" Grid.ColumnSpan="3" FontSize="24" />
+        <TextBox Text="{Binding Email, Mode=TwoWay}" Grid.Row="9" Grid.Column="1" Grid.ColumnSpan="3" FontSize="24" />
 
         <TextBlock Text="Mobile" Grid.Row="10" VerticalAlignment="Center" Margin="0,6,0,0" />
-        <TextBox Text="{Binding Mobile}" Grid.Row="10" Grid.Column="1" Grid.ColumnSpan="3" FontSize="24" />
+        <TextBox Text="{Binding Mobile, Mode=TwoWay}" Grid.Row="10" Grid.Column="1" Grid.ColumnSpan="3" FontSize="24" />
 
         <TextBlock Text="Phone" Grid.Row="11" VerticalAlignment="Center" Margin="0,6,0,0" />
-        <TextBox Text="{Binding Phone}" Grid.Row="11" Grid.Column="1" Grid.ColumnSpan="3" FontSize="24" />
+        <TextBox Text="{Binding Phone, Mode=TwoWay}" Grid.Row="11" Grid.Column="1" Grid.ColumnSpan="3" FontSize="24" />
     </Grid>
 </Page>

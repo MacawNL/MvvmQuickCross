@@ -40,6 +40,7 @@ namespace CloudAuction.Shared
 
         public AuctionViewModel AuctionViewModel { get; private set; }
         public OrderViewModel OrderViewModel { get; private set; }
+        public OrderResultViewModel OrderResultViewModel { get; private set; }
 
         public void ContinueToAuction()
         {
@@ -47,11 +48,18 @@ namespace CloudAuction.Shared
             RunOnUIThread(() => _navigator.NavigateToAuctionView(CurrentNavigationContext));
         }
 
-        public void ContinueToOrder(int lotId)
+        public void ContinueToOrder(Bid bid)
         {
             if (OrderViewModel == null) OrderViewModel = new OrderViewModelDesign();
-            OrderViewModel.Initialize(lotId); // Pass the Id of the auction lot that bid is placed on.
+            OrderViewModel.Initialize(bid);
             RunOnUIThread(() => _navigator.NavigateToOrderView(CurrentNavigationContext));
+        }
+
+        public void ContinueToOrderResult(Bid bid)
+        {
+            if (OrderResultViewModel == null) OrderResultViewModel = new OrderResultViewModel();
+            OrderResultViewModel.Initialize(bid);
+            RunOnUIThread(() => _navigator.NavigateToOrderResultView(CurrentNavigationContext));
         }
     }
 }

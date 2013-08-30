@@ -10,8 +10,6 @@ namespace CloudAuction.Shared.ViewModels
             // TODO: pass any services that this model needs as contructor parameters. 
         }
 
-        private int _lotId;
-
         #region Data-bindable properties and commands
         public string Name /* One-way data-bindable property generated with propdb1 snippet. Keep on one line - see http://goo.gl/Yg6QMd for why. */ { get { return _Name; } protected set { if (_Name != value) { _Name = value; RaisePropertyChanged(PROPERTYNAME_Name); } } } private string _Name; public const string PROPERTYNAME_Name = "Name";
         public string Intro /* One-way data-bindable property generated with propdb1 snippet. Keep on one line - see http://goo.gl/Yg6QMd for why. */ { get { return _Intro; } protected set { if (_Intro != value) { _Intro = value; RaisePropertyChanged(PROPERTYNAME_Intro); } } } private string _Intro; public const string PROPERTYNAME_Intro = "Intro";
@@ -35,7 +33,7 @@ namespace CloudAuction.Shared.ViewModels
 
         private void PlaceBid()
         {
-            CloudAuctionApplication.Instance.ContinueToOrder(_lotId);
+            CloudAuctionApplication.Instance.ContinueToOrder(new Bid { LotId = 1, Price = CurrentPrice, ProductName = Name });
         }
     }
 }

@@ -114,6 +114,7 @@
       <DependentUpon>AuctionView.xaml</DependentUpon>
     </Compile>
     <Compile Include="CloudAuctionNavigator.cs" />
+    <Compile Include="OrderResultView.cs" />
     <Compile Include="OrderView.xaml.cs">
       <DependentUpon>OrderView.xaml</DependentUpon>
     </Compile>

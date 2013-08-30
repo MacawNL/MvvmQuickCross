@@ -11,10 +11,9 @@ namespace CloudAuction.Shared.ViewModels
             // TODO: pass any services that this model needs as contructor parameters. 
         }
 
-        public void Initialize(int lotId)
-        {
-            // TODO: Implement Initialize()
-        }
+        private Bid _bid;
+
+        public void Initialize(Bid bid) { _bid = bid; }
 
         #region Data-bindable properties and commands
         public string[] DeliveryLocations /* One-way data-bindable property generated with propdb1 snippet. Keep on one line - see http://goo.gl/Yg6QMd for why. */ { get { return _DeliveryLocations; } protected set { if (_DeliveryLocations != value) { _DeliveryLocations = value; RaisePropertyChanged(PROPERTYNAME_DeliveryLocations); } } } private string[] _DeliveryLocations; public const string PROPERTYNAME_DeliveryLocations = "DeliveryLocations";
@@ -43,7 +42,7 @@ namespace CloudAuction.Shared.ViewModels
 
         private void Confirm()
         {
-            throw new NotImplementedException(); // TODO: Implement Confirm()
+            CloudAuctionApplication.Instance.ContinueToOrderResult(_bid);
         }
     }
 }

@@ -7,5 +7,6 @@
          */
         void NavigateToAuctionView(object navigationContext);
         void NavigateToOrderView(object navigationContext);
+        void NavigateToOrderResultView(object navigationContext);
     }
 }
