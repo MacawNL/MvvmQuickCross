@@ -13,9 +13,11 @@ MvvmQuickCross also aims to maximize the percentage of shared code across platfo
 MvvmQuickCross is lightweight and easy to modify: it adds no binaries, just one Visual Studio C# code snippets file and a few C# source files.
 
 ## Getting Started
-**Note: For a detailed step-by-step example with full source code, see [here](http://vincenth.net/blog/archive/2013/08/30/creating-a-cross-platform-native-app-using-mvvmquickcross-and-xamarin-part-1-cross-platform-code-and-windows-8-app.aspx).**
+**Note: for a detailed step-by-step guide on how to build the CloudAuction example app that can be found in this repository, see [here](http://vincenth.net/blog/archive/2013/08/30/creating-a-cross-platform-native-app-using-mvvmquickcross-and-xamarin-part-1-cross-platform-code-and-windows-8-app.aspx).**
 
-**A short overview will be posted and linked to from here shortly (eta Sept 7, 2013)**
+**A quickstart and an overview will be posted and linked to from here shortly (eta Sept 7, 2013)**
+
+The high-level steps for creating a cross-platforn app are:
 
 1. In Visual Studio, create a solution for the platform (Windows Store, Windows Phone, Android, iOS) that you are most productive with. Add a class library project for that platform and an application project for that platform. Reference the class library from the application project.
 
@@ -27,6 +29,6 @@ MvvmQuickCross is lightweight and easy to modify: it adds no binaries, just one 
 	
 	**Note** do not select the MvvmQuickCross folder itself as the location to import snippets **to**; that may prevent the snippets to be imported correctly, as this would mean copying the snippets file over itself.
 
-4. Start coding, following the guidance in the files ViewModels\\\_VIEWNAME\_ViewModel.cs, \_APPNAME\_Application.cs and I\_APPNAME\_Navigator.cs in your class library project, and the SampleApp example in this GitHub repository
+4. Start coding, following the guidance in the files ViewModels\\\_VIEWNAME\_ViewModel.cs, \_APPNAME\_Application.cs and I\_APPNAME\_Navigator.cs in your class library project, and the SampleApp and CloudAuction example apps in this GitHub repository
 
 To code your app for other platforms, create a new solution for each platform, with a class library project for that platform and an application project for that platform, just like you did for the first platform. Then add all code files from the existing class library project to the class library project for the new platform. Then code the views, navigator and platform specific service implementations in the application project.
