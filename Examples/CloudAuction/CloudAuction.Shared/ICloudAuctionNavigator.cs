@@ -6,5 +6,6 @@
                 void NavigateTo_VIEWNAME_View(object navigationContext);
          */
         void NavigateToAuctionView(object navigationContext);
+        void NavigateToOrderView(object navigationContext);
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CloudAuction.Shared;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -33,6 +34,11 @@ namespace CloudAuction
             this.Suspending += OnSuspending;
         }
 
+        public static CloudAuctionApplication EnsureCloudAuctionApplication(Frame navigationContext)
+        {
+            return CloudAuctionApplication.Instance ?? new CloudAuctionApplication(new CloudAuctionNavigator(), navigationContext);
+        }
+
         /// <summary>
         /// Invoked when the application is launched normally by the end user.  Other entry points
         /// will be used when the application is launched to open a specific file, to display
@@ -59,15 +65,14 @@ namespace CloudAuction
                 Window.Current.Content = rootFrame;
             }
 
+            EnsureCloudAuctionApplication(rootFrame);
+
             if (rootFrame.Content == null)
             {
                 // When the navigation stack isn't restored navigate to the first page,
                 // configuring the new page by passing required information as a navigation
                 // parameter
-                if (!rootFrame.Navigate(typeof(MainPage), args.Arguments))
-                {
-                    throw new Exception("Failed to create initial page");
-                }
+                CloudAuctionApplication.Instance.ContinueToAuction();
             }
             // Ensure the current window is active
             Window.Current.Activate();

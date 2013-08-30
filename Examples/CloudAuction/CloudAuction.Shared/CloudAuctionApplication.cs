@@ -39,11 +39,19 @@ namespace CloudAuction.Shared
          * in that case you only need to initialize the view model. */
 
         public AuctionViewModel AuctionViewModel { get; private set; }
+        public OrderViewModel OrderViewModel { get; private set; }
 
-        public void ContinueToAuction(bool skipNavigation = false)
+        public void ContinueToAuction()
         {
             if (AuctionViewModel == null) AuctionViewModel = new AuctionViewModelDesign();
-            if (!skipNavigation) RunOnUIThread(() => _navigator.NavigateToAuctionView(CurrentNavigationContext));
+            RunOnUIThread(() => _navigator.NavigateToAuctionView(CurrentNavigationContext));
+        }
+
+        public void ContinueToOrder(int lotId)
+        {
+            if (OrderViewModel == null) OrderViewModel = new OrderViewModelDesign();
+            OrderViewModel.Initialize(lotId); // Pass the Id of the auction lot that bid is placed on.
+            RunOnUIThread(() => _navigator.NavigateToOrderView(CurrentNavigationContext));
         }
     }
 }

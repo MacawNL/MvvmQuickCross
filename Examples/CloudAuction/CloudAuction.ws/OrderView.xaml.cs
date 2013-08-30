@@ -3,12 +3,12 @@ using CloudAuction.Shared;
 
 namespace CloudAuction
 {
-    public sealed partial class AuctionView : Page
+    public sealed partial class OrderView : Page
     {
-        public AuctionView()
+        public OrderView()
         {
             this.InitializeComponent();
-            DataContext = CloudAuctionApplication.Instance.AuctionViewModel;
+            DataContext = CloudAuctionApplication.Instance.OrderViewModel;
         }
     }
 }
