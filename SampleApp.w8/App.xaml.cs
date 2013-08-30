@@ -23,9 +23,9 @@ namespace SampleApp
             this.Suspending += OnSuspending;
         }
 
-        public static SampleAppApplication EnsureApplication(Frame rootFrame)
+        public static SampleAppApplication EnsureSampleAppApplication(Frame navigationContext)
         {
-            return SampleAppApplication.Instance ?? new SampleAppApplication(new SampleAppNavigator(), rootFrame);
+            return SampleAppApplication.Instance ?? new SampleAppApplication(new SampleAppNavigator(), navigationContext);
         }
 
         /// <summary>
@@ -54,12 +54,14 @@ namespace SampleApp
                 Window.Current.Content = rootFrame;
             }
 
+            EnsureSampleAppApplication(rootFrame);
+
             if (rootFrame.Content == null)
             {
                 // When the navigation stack isn't restored navigate to the first page,
                 // configuring the new page by passing required information as a navigation
                 // parameter
-                EnsureApplication(rootFrame).ContinueToSampleItemList();
+                SampleAppApplication.Instance.ContinueToSampleItemList();
             }
             // Ensure the current window is active
             Window.Current.Activate();

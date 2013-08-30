@@ -33,7 +33,11 @@ namespace CloudAuction.Shared.ViewModels
 
         private void PlaceBid()
         {
-            CloudAuctionApplication.Instance.ContinueToOrder(new Bid { LotId = 1, Price = CurrentPrice, ProductName = Name });
+            CloudAuctionApplication.Instance.ContinueToOrder(new Bid { 
+                LotId = 1, 
+                Price = CurrentPrice, 
+                ProductName = Name 
+            });
         }
     }
 }

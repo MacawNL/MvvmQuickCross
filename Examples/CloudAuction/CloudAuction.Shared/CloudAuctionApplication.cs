@@ -26,6 +26,9 @@ namespace CloudAuction.Shared
         /* TODO: For each view model, add a public property with a private setter like this:
            public _VIEWNAME_ViewModel _VIEWNAME_ViewModel { get; private set; }
          */
+        public AuctionViewModel AuctionViewModel { get; private set; }
+        public OrderViewModel OrderViewModel { get; private set; }
+        public OrderResultViewModel OrderResultViewModel { get; private set; }
 
         /* TODO: For each view, add a method (with any parameters needed) to initialize its view model
          * and then navigate to the view using the navigator, like this:
@@ -38,28 +41,24 @@ namespace CloudAuction.Shared
          * The skipNavigation parameter is needed in cases where the OS has already navigated to the view for you;
          * in that case you only need to initialize the view model. */
 
-        public AuctionViewModel AuctionViewModel { get; private set; }
-        public OrderViewModel OrderViewModel { get; private set; }
-        public OrderResultViewModel OrderResultViewModel { get; private set; }
-
-        public void ContinueToAuction()
+        public void ContinueToAuction(bool skipNavigation = false)
         {
             if (AuctionViewModel == null) AuctionViewModel = new AuctionViewModelDesign();
-            RunOnUIThread(() => _navigator.NavigateToAuctionView(CurrentNavigationContext));
+            if (!skipNavigation) RunOnUIThread(() => _navigator.NavigateToAuctionView(CurrentNavigationContext));
         }
 
-        public void ContinueToOrder(Bid bid)
+        public void ContinueToOrder(Bid bid, bool skipNavigation = false)
         {
             if (OrderViewModel == null) OrderViewModel = new OrderViewModelDesign();
             OrderViewModel.Initialize(bid);
-            RunOnUIThread(() => _navigator.NavigateToOrderView(CurrentNavigationContext));
+            if (!skipNavigation) RunOnUIThread(() => _navigator.NavigateToOrderView(CurrentNavigationContext));
         }
 
-        public void ContinueToOrderResult(Bid bid)
+        public void ContinueToOrderResult(Bid bid, bool skipNavigation = false)
         {
             if (OrderResultViewModel == null) OrderResultViewModel = new OrderResultViewModel();
             OrderResultViewModel.Initialize(bid);
-            RunOnUIThread(() => _navigator.NavigateToOrderResultView(CurrentNavigationContext));
+            if (!skipNavigation) RunOnUIThread(() => _navigator.NavigateToOrderResultView(CurrentNavigationContext));
         }
     }
 }

@@ -13,7 +13,9 @@ MvvmQuickCross also aims to maximize the percentage of shared code across platfo
 MvvmQuickCross is lightweight and easy to modify: it adds no binaries, just one Visual Studio C# code snippets file and a few C# source files.
 
 ## Getting Started
-**Note: detailed step-by-step guidance will be posted, and linked to, from here when version 1.0 is published (eta Sept 1, 2013)**
+**Note: For a detailed step-by-step example with full source code, see [here](http://vincenth.net/blog/archive/2013/08/30/creating-a-cross-platform-native-app-using-mvvmquickcross-and-xamarin-part-1-cross-platform-code-and-windows-8-app.aspx).**
+
+**A short overview will be posted and linked to from here shortly (eta Sept 7, 2013)**
 
 1. In Visual Studio, create a solution for the platform (Windows Store, Windows Phone, Android, iOS) that you are most productive with. Add a class library project for that platform and an application project for that platform. Reference the class library from the application project.
 

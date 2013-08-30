@@ -11,7 +11,7 @@ namespace CloudAuction.Shared.ViewModels
             // TODO: pass any services that this model needs as contructor parameters. 
         }
 
-#region Data-bindable properties and commands
+        #region Data-bindable properties and commands
         // TODO: Generate data-bindable properties and commands here with prop* and cmd* code snippets
         #endregion
     }
