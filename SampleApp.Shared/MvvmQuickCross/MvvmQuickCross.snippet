@@ -35,9 +35,9 @@
   </CodeSnippet>
   <CodeSnippet Format="1.0.0">
     <Header>
-      <Title>MvvmQuickCross One-Way Bindable ObservableCollection Viewmodel Property</Title>
+      <Title>MvvmQuickCross One-Way Bindable Collection Viewmodel Property</Title>
       <Author>Vincent Hoogendoorn</Author>
-      <Description>Adds a one-way data-bindable ObservableCollection property and a corresponding HasItems property to a Viewmodel in MvvmQuickCross  (snippet version: 1.0)</Description>
+      <Description>Adds a one-way data-bindable Collection property, a corresponding HasItems property and an UpdateHasItems() method to a Viewmodel in MvvmQuickCross  (snippet version: 1.1)</Description>
       <Shortcut>propdbcol</Shortcut>
       <SnippetTypes>
         <SnippetType>Expansion</SnippetType>
@@ -45,6 +45,11 @@
     </Header>
     <Snippet>
       <Declarations>
+        <Literal>
+          <ID>collectiontype</ID>
+          <ToolTip>Collection type</ToolTip>
+          <Default>ObservableCollection</Default>
+        </Literal>
         <Literal>
           <ID>elementtype</ID>
           <ToolTip>Collection element type</ToolTip>
@@ -57,7 +62,7 @@
         </Literal>
       </Declarations>
       <Code Language="csharp">
-        <![CDATA[public ObservableCollection<$elementtype$> $property$ /* One-way data-bindable property generated with propdbcol snippet. Keep on one line - see http://goo.gl/Yg6QMd for why. */ { get { return _$property$; } protected set { if (_$property$ != value) { _$property$ = value; RaisePropertyChanged(PROPERTYNAME_$property$); Update$property$HasItems(); } } } private ObservableCollection<$elementtype$> _$property$; public const string PROPERTYNAME_$property$ = "$property$";
+        <![CDATA[public $collectiontype$<$elementtype$> $property$ /* One-way data-bindable property generated with propdbcol snippet. Keep on one line - see http://goo.gl/Yg6QMd for why. */ { get { return _$property$; } protected set { if (_$property$ != value) { _$property$ = value; RaisePropertyChanged(PROPERTYNAME_$property$); Update$property$HasItems(); } } } private $collectiontype$<$elementtype$> _$property$; public const string PROPERTYNAME_$property$ = "$property$";
   public bool $property$HasItems /* One-way data-bindable property generated with propdbcol snippet. Keep on one line - see http://goo.gl/Yg6QMd for why. */ { get { return _$property$HasItems; } protected set { if (_$property$HasItems != value) { _$property$HasItems = value; RaisePropertyChanged(PROPERTYNAME_$property$HasItems); } } } private bool _$property$HasItems; public const string PROPERTYNAME_$property$HasItems = "$property$HasItems";
   protected void Update$property$HasItems() /* Helper method generated with propdbcol snippet. Keep on one line - see http://goo.gl/Yg6QMd for why. */ { $property$HasItems = _$property$ != null && _$property$.Count > 0; }
 	$end$]]>

@@ -40,7 +40,7 @@ namespace MvvmQuickCross
 #else
         public event PropertyChangedEventHandler PropertyChanged;
 
-        protected virtual void RaisePropertyChanged(string propertyName = null)
+        protected virtual void RaisePropertyChanged(string propertyName)
         {
             var handler = PropertyChanged;
             if (handler != null) ApplicationBase.RunOnUIThread(() => handler(this, new PropertyChangedEventArgs(propertyName)));
