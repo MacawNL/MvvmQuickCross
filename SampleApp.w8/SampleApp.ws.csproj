@@ -143,9 +143,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SampleApp.Shared\SampleApp.Shared.w8.csproj">
+    <ProjectReference Include="..\SampleApp.Shared\SampleApp.Shared.ws.csproj">
       <Project>{3c1b89c8-2834-49d6-a0ef-6013593f4652}</Project>
-      <Name>SampleApp.Shared.w8</Name>
+      <Name>SampleApp.Shared.ws</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '11.0' ">
