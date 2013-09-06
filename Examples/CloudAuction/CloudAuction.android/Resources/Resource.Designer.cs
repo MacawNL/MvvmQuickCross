@@ -75,40 +75,40 @@ namespace CloudAuction
 		{
 			
 			// aapt resource value: 0x7f070007
-			public const int AvailableCountTextView = 2131165191;
+			public const int AuctionViewAvailableCount = 2131165191;
 			
 			// aapt resource value: 0x7f070008
-			public const int ConditionTextView = 2131165192;
+			public const int AuctionViewCondition = 2131165192;
 			
 			// aapt resource value: 0x7f070004
-			public const int CurrentPriceTextView = 2131165188;
+			public const int AuctionViewCurrentPrice = 2131165188;
 			
 			// aapt resource value: 0x7f070003
-			public const int DescriptionTextView = 2131165187;
+			public const int AuctionViewDescription = 2131165187;
 			
 			// aapt resource value: 0x7f070002
-			public const int ImageMultiImageView = 2131165186;
+			public const int AuctionViewImage = 2131165186;
 			
 			// aapt resource value: 0x7f070001
-			public const int IntroTextView = 2131165185;
+			public const int AuctionViewIntro = 2131165185;
 			
 			// aapt resource value: 0x7f070006
-			public const int ListPriceTextView = 2131165190;
+			public const int AuctionViewListPrice = 2131165190;
+			
+			// aapt resource value: 0x7f070000
+			public const int AuctionViewName = 2131165184;
+			
+			// aapt resource value: 0x7f07000a
+			public const int AuctionViewPlaceBid = 2131165194;
+			
+			// aapt resource value: 0x7f070005
+			public const int AuctionViewTimePercentageRemaining = 2131165189;
+			
+			// aapt resource value: 0x7f070009
+			public const int AuctionViewTimeRemaining = 2131165193;
 			
 			// aapt resource value: 0x7f07000c
 			public const int LogoutMenuItem = 2131165196;
-			
-			// aapt resource value: 0x7f070000
-			public const int NameTextView = 2131165184;
-			
-			// aapt resource value: 0x7f07000a
-			public const int PlaceBidButton = 2131165194;
-			
-			// aapt resource value: 0x7f070005
-			public const int TimePercentageRemainingProgressBar = 2131165189;
-			
-			// aapt resource value: 0x7f070009
-			public const int TimeRemainingTextView = 2131165193;
 			
 			// aapt resource value: 0x7f07000b
 			public const int mainFragmentContainer = 2131165195;

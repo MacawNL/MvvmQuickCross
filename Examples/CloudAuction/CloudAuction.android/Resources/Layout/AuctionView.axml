@@ -17,7 +17,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_span="4"
-                android:id="@+id/NameTextView"
+                android:id="@+id/AuctionViewName"
                 android:tag="Name" />
         </TableRow>
         <TableRow
@@ -29,7 +29,7 @@
                 android:layout_height="wrap_content"
                 android:layout_span="4"
                 android:tag="Intro"
-                android:id="@+id/IntroTextView" />
+                android:id="@+id/AuctionViewIntro" />
         </TableRow>
         <TableRow
             android:paddingBottom="20dp">
@@ -39,7 +39,7 @@
                 android:layout_height="wrap_content"
                 android:layout_span="2"
                 android:tag="Image"
-                android:id="@+id/ImageMultiImageView" />
+                android:id="@+id/AuctionViewImage" />
             <TextView
                 android:text="This compact and powerful camera has an amazing 32x intelligent zoom and 16x optical zoom. Combine this huge zoom reach with the 24mm ultra wide angle and you have a camera that you can use fo*"
                 android:textAppearance="?android:attr/textAppearanceSmall"
@@ -47,7 +47,7 @@
                 android:layout_height="wrap_content"
                 android:layout_span="2"
                 android:tag="Description"
-                android:id="@+id/DescriptionTextView" />
+                android:id="@+id/AuctionViewDescription" />
         </TableRow>
         <TableRow
             android:paddingBottom="10dp">
@@ -61,7 +61,7 @@
                 android:layout_gravity="right"
                 android:layout_span="2"
                 android:tag="CurrentPrice"
-                android:id="@+id/CurrentPriceTextView" />
+                android:id="@+id/AuctionViewCurrentPrice" />
         </TableRow>
         <TableRow
             android:paddingBottom="10dp">
@@ -70,7 +70,7 @@
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_span="4"
                 android:tag="TimePercentageRemaining"
-                android:id="@+id/TimePercentageRemainingProgressBar" />
+                android:id="@+id/AuctionViewTimePercentageRemaining" />
         </TableRow>
         <TableRow>
             <TextView
@@ -101,33 +101,33 @@
                 android:paddingRight="5dp"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:tag="ListPrice"
-                android:id="@+id/ListPriceTextView" />
+                android:id="@+id/AuctionViewListPrice" />
             <TextView
                 android:text="4*"
                 android:layout_gravity="center_horizontal"
                 android:paddingRight="5dp"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:tag="AvailableCount"
-                android:id="@+id/AvailableCountTextView" />
+                android:id="@+id/AuctionViewAvailableCount" />
             <TextView
                 android:text="Damage*"
                 android:layout_gravity="center_horizontal"
                 android:paddingRight="5dp"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:tag="Condition"
-                android:id="@+id/ConditionTextView" />
+                android:id="@+id/AuctionViewCondition" />
             <TextView
                 android:text="00:01:1*"
                 android:layout_gravity="center_horizontal"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:tag="TimeRemaining"
-                android:id="@+id/TimeRemainingTextView" />
+                android:id="@+id/AuctionViewTimeRemaining" />
         </TableRow>
         <TableRow>
             <Button
                 android:text="Place Bid Now"
                 android:layout_span="4"
-                android:id="@+id/PlaceBidButton" />
+                android:id="@+id/AuctionViewPlaceBid" />
         </TableRow>
     </TableLayout>
 </LinearLayout>

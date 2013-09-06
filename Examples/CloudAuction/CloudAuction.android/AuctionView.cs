@@ -12,14 +12,15 @@ using Android.Views;
 using Android.Widget;
 using CloudAuction.Shared;
 using CloudAuction.Shared.ViewModels;
+using System.Reflection;
 
 namespace CloudAuction
 {
     public class AuctionView : Fragment
     {
-        private View ThisView;
-        private AuctionViewModel ViewModel;
-        private TextView NameTextView, IntroTextView, DescriptionTextView;
+        private bool areHandlersAdded;
+        private View thisView;
+        private AuctionViewModel viewModel;
 
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
@@ -27,14 +28,10 @@ namespace CloudAuction
 
             var view = inflater.Inflate(Resource.Layout.AuctionView, container, false);
 
-            NameTextView = view.FindViewById<TextView>(Resource.Id.NameTextView);
-            IntroTextView = view.FindViewById<TextView>(Resource.Id.IntroTextView);
-            DescriptionTextView = view.FindViewById<TextView>(Resource.Id.DescriptionTextView);
-
-            ThisView = view;
-            ViewModel = CloudAuctionApplication.Instance.AuctionViewModel;
+            thisView = view;
+            viewModel = CloudAuctionApplication.Instance.AuctionViewModel;
+            UpdateView<AuctionViewModel>(view, viewModel); 
             AddHandlers();
-
 
             return view;
         }
@@ -53,34 +50,83 @@ namespace CloudAuction
 
         private void AddHandlers()
         {
-            ViewModel.PropertyChanged += AuctionViewModel_PropertyChanged;
+            if (areHandlersAdded) return;
+            viewModel.PropertyChanged += AuctionViewModel_PropertyChanged;
+            areHandlersAdded = true;
         }
 
         private void RemoveHandlers()
         {
-            ViewModel.PropertyChanged -= AuctionViewModel_PropertyChanged;
+            if (!areHandlersAdded) return;
+            viewModel.PropertyChanged -= AuctionViewModel_PropertyChanged;
+            areHandlersAdded = false;
         }
 
         void AuctionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             switch (e.PropertyName)
             {
-                case AuctionViewModel.PROPERTYNAME_Name : NameTextView.Text  = ViewModel.Name ; break;
-                case AuctionViewModel.PROPERTYNAME_Intro: IntroTextView.Text = ViewModel.Intro; break;
                 default:
-            //        case (typeof())
-            //TextView : (TextView) .TextAlignmentCenter = 
-            //        ctrl.propname = value
-
-            //        int id = Resources.GetIdentifier(e.PropertyName, "", "");
-                    
-            //        DescriptionTextView.Text += " " + e.PropertyName + (v == null ? " found." : " not found.");
-            //         TODO: ***HERE View == null? No exception? solve that
-            //        if (v is TextView)
-            //        {
-            //            ((TextView)v).Text = e.PropertyName;
-            //        }
+                    UpdateViewModelPropertyInView<AuctionViewModel>(thisView, "AuctionView", e.PropertyName, viewModel);
+                    // UpdateViewModelPropertyInView<AuctionViewModel>(thisView, "", e.PropertyName, viewModel, useTagInsteadOfId: true);
                     break;
+            }
+        }
+
+        public class DataBinding
+        {
+            public View View;
+            public PropertyInfo ViewModelPropertyInfo;
+            public int? ResourceId;
+        }
+
+        private Dictionary<string, DataBinding> dataBindings = new Dictionary<string,DataBinding>();
+
+        private void UpdateViewModelPropertyInView<T>(View view, string prefix, string propertyName, T viewModel)
+        {
+            string name = prefix + propertyName;
+
+            DataBinding binding;
+            if (!dataBindings.TryGetValue(name, out binding))
+            {
+                binding = new DataBinding();
+                var fieldInfo = typeof(Resource.Id).GetField(name);
+                if (fieldInfo != null)
+                {
+                    binding.ViewModelPropertyInfo = typeof(T).GetProperty(propertyName);
+                    binding.ResourceId = (int)fieldInfo.GetValue(null);
+                    binding.View = view.FindViewById(binding.ResourceId.Value);
+                }
+                dataBindings.Add(name, binding);
+            }
+
+            UpdateView<T>(binding, viewModel);
+        }
+
+        private void UpdateView<T>(DataBinding binding, T viewModel)
+        {
+            if (binding.View != null)
+            {
+                string viewTypeName = binding.View.GetType().Name;
+                switch (viewTypeName)
+                {
+                    case "TextView": ((TextView)binding.View).Text = (string)binding.ViewModelPropertyInfo.GetValue(viewModel); break;
+                    default: throw new NotImplementedException("View type not implemented: " + viewTypeName);
+                }
+            }
+        }
+
+        private void UpdateView<T>(View view, T viewModel)
+        {
+            foreach (var item in dataBindings)
+            {
+                var binding = item.Value;
+                if (binding.ResourceId.HasValue)
+                {
+                    binding.View = view.FindViewById(binding.ResourceId.Value);
+                }
+
+                UpdateView<T>(binding, viewModel);
             }
         }
     }

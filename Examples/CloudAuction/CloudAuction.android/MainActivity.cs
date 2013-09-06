@@ -12,9 +12,32 @@ namespace CloudAuction
     [Activity(Label = "CloudAuction", MainLauncher = true, Icon = "@drawable/icon")]
     public class MainActivity : Activity
     {
-        private bool AreHandlersAdded;
-        private ActionBar.Tab AuctionTab, ProductsTab, HelpTab;
-        private Fragment AuctionFragment, ProductsFragment, HelpFragment;
+        private bool areHandlersAdded;
+        private ActionBar.Tab auctionTab, productsTab, helpTab;
+        private Fragment auctionFragment, productsFragment, helpFragment;
+
+        private CloudAuctionApplication EnsureApplication()
+        {
+            return CloudAuctionApplication.Instance ?? new CloudAuctionApplication(new CloudAuctionNavigator());
+        }
+
+        private void EnsureHandlersAdded()
+        {
+            if (areHandlersAdded) return;
+            auctionTab.TabSelected += AuctionTab_TabSelected;
+            productsTab.TabSelected += ProductsTab_TabSelected;
+            helpTab.TabSelected += HelpTab_TabSelected;
+            areHandlersAdded = true;
+        }
+
+        private void EnsureHandlersRemoved()
+        {
+            if (!areHandlersAdded) return;
+            auctionTab.TabSelected -= AuctionTab_TabSelected;
+            productsTab.TabSelected -= ProductsTab_TabSelected;
+            helpTab.TabSelected -= HelpTab_TabSelected;
+            areHandlersAdded = false;
+        }
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -27,20 +50,20 @@ namespace CloudAuction
             CloudAuctionApplication.Instance.CurrentNavigationContext = this;
             CloudAuctionApplication.Instance.ContinueToAuction(skipNavigation: true);
 
-            AuctionTab = ActionBar.NewTab().SetText("Auction");
-            AuctionFragment = new AuctionView();
+            auctionTab = ActionBar.NewTab().SetText("Auction");
+            auctionFragment = new AuctionView();
 
-            ProductsTab = ActionBar.NewTab().SetText("Products");
-            ProductsFragment = new Fragment();
+            productsTab = ActionBar.NewTab().SetText("Products");
+            productsFragment = new Fragment();
 
-            HelpTab = ActionBar.NewTab().SetText("Help");
-            HelpFragment = new Fragment();
+            helpTab = ActionBar.NewTab().SetText("Help");
+            helpFragment = new Fragment();
 
-            AddHandlers();
+            EnsureHandlersAdded();
 
-            ActionBar.AddTab(AuctionTab);
-            ActionBar.AddTab(ProductsTab);
-            ActionBar.AddTab(HelpTab);
+            ActionBar.AddTab(auctionTab);
+            ActionBar.AddTab(productsTab);
+            ActionBar.AddTab(helpTab);
 
             //// Get our button from the layout resource,
             //// and attach an event to it
@@ -51,51 +74,29 @@ namespace CloudAuction
         protected override void OnResume()
         {
             base.OnResume();
-            AddHandlers();
+            EnsureHandlersAdded();
         }
 
         protected override void OnPause()
         {
-            RemoveHandlers();
+            EnsureHandlersRemoved();
             base.OnPause();
-        }
-
-        private void AddHandlers()
-        {
-            if (AreHandlersAdded) return;
-            AuctionTab.TabSelected += AuctionTab_TabSelected;
-            ProductsTab.TabSelected += ProductsTab_TabSelected;
-            HelpTab.TabSelected += HelpTab_TabSelected;
-            AreHandlersAdded = true;
-        }
-
-        private void RemoveHandlers()
-        {
-            if (!AreHandlersAdded) return;
-            AuctionTab.TabSelected -= AuctionTab_TabSelected;
-            ProductsTab.TabSelected -= ProductsTab_TabSelected;
-            HelpTab.TabSelected -= HelpTab_TabSelected;
-            AreHandlersAdded = false;
         }
 
         private void AuctionTab_TabSelected(object sender, ActionBar.TabEventArgs e)
         {
-            e.FragmentTransaction.Add(Resource.Id.mainFragmentContainer, AuctionFragment);
+            e.FragmentTransaction.Replace(Resource.Id.mainFragmentContainer, auctionFragment);
+            // TODO: Check if we should also use .Remove in TabUnselected event? E.g. see http://arvid-g.de/12/android-4-actionbar-with-tabs-example
         }
 
         void ProductsTab_TabSelected(object sender, ActionBar.TabEventArgs e)
         {
-            e.FragmentTransaction.Add(Resource.Id.mainFragmentContainer, ProductsFragment);
+            e.FragmentTransaction.Replace(Resource.Id.mainFragmentContainer, productsFragment);
         }
 
         void HelpTab_TabSelected(object sender, ActionBar.TabEventArgs e)
         {
-            e.FragmentTransaction.Add(Resource.Id.mainFragmentContainer, HelpFragment);
-        }
-
-        private CloudAuctionApplication EnsureApplication()
-        {
-            return CloudAuctionApplication.Instance ?? new CloudAuctionApplication(new CloudAuctionNavigator());
+            e.FragmentTransaction.Replace(Resource.Id.mainFragmentContainer, helpFragment);
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)
