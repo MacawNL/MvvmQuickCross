@@ -66,9 +66,11 @@ namespace CloudAuction
         {
             switch (e.PropertyName)
             {
+                case AuctionViewModel.PROPERTYNAME_Image:
+                case AuctionViewModel.PROPERTYNAME_TimePercentageRemaining:
+                    break;
                 default:
                     UpdateViewModelPropertyInView<AuctionViewModel>(thisView, "AuctionView", e.PropertyName, viewModel);
-                    // UpdateViewModelPropertyInView<AuctionViewModel>(thisView, "", e.PropertyName, viewModel, useTagInsteadOfId: true);
                     break;
             }
         }
@@ -111,7 +113,7 @@ namespace CloudAuction
                 switch (viewTypeName)
                 {
                     case "TextView": ((TextView)binding.View).Text = (string)binding.ViewModelPropertyInfo.GetValue(viewModel); break;
-                    default: throw new NotImplementedException("View type not implemented: " + viewTypeName);
+                    //default: throw new NotImplementedException("View type not implemented: " + viewTypeName);
                 }
             }
         }
