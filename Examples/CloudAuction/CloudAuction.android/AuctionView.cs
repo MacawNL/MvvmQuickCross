@@ -64,15 +64,7 @@ namespace CloudAuction
 
         void AuctionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            switch (e.PropertyName)
-            {
-                case AuctionViewModel.PROPERTYNAME_Image:
-                case AuctionViewModel.PROPERTYNAME_TimePercentageRemaining:
-                    break;
-                default:
-                    UpdateViewModelPropertyInView<AuctionViewModel>(thisView, "AuctionView", e.PropertyName, viewModel);
-                    break;
-            }
+            UpdateViewModelPropertyInView<AuctionViewModel>(thisView, "AuctionView", e.PropertyName, viewModel);
         }
 
         public class DataBinding
@@ -109,11 +101,28 @@ namespace CloudAuction
         {
             if (binding.View != null)
             {
-                string viewTypeName = binding.View.GetType().Name;
+                string viewTypeName = binding.View.GetType().FullName;
+                object value = binding.ViewModelPropertyInfo.GetValue(viewModel);
+
                 switch (viewTypeName)
                 {
-                    case "TextView": ((TextView)binding.View).Text = (string)binding.ViewModelPropertyInfo.GetValue(viewModel); break;
-                    //default: throw new NotImplementedException("View type not implemented: " + viewTypeName);
+                    case "Android.Widget.TextView": 
+                        ((Android.Widget.TextView)binding.View).Text = value.ToString();
+                        break;
+
+                    case "Android.Widget.ProgressBar":
+                        ((Android.Widget.ProgressBar)binding.View).Progress = (int)value;
+                        break;
+
+                    case "Macaw.UIComponents.MultiImageView":
+                        if (value is Uri) value = ((Uri)value).AbsoluteUri;
+                        var multiImageView = (Macaw.UIComponents.MultiImageView)binding.View;
+                        multiImageView.LoadImageList(new[] { (string)value });
+                        multiImageView.LoadImage();
+                        break;
+
+                    default: 
+                        throw new NotImplementedException("View type not implemented: " + viewTypeName);
                 }
             }
         }
