@@ -65,6 +65,7 @@
     <AndroidResource Include="Resources\Layout\Main.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
+    <None Include="Resources\Layout\Copy of AuctionView.axml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Layout\AuctionView.axml" />
