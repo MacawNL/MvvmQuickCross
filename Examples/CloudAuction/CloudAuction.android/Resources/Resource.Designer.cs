@@ -104,8 +104,11 @@ namespace CloudAuction
 			// aapt resource value: 0x7f060009
 			public const int AuctionViewTimeRemaining = 2131099657;
 			
+			// aapt resource value: 0x7f06000d
+			public const int LogoutMenuItem = 2131099661;
+			
 			// aapt resource value: 0x7f06000c
-			public const int LogoutMenuItem = 2131099660;
+			public const int editText1 = 2131099660;
 			
 			// aapt resource value: 0x7f06000b
 			public const int mainFragmentContainer = 2131099659;
@@ -128,6 +131,9 @@ namespace CloudAuction
 			
 			// aapt resource value: 0x7f030001
 			public const int Main = 2130903041;
+			
+			// aapt resource value: 0x7f030002
+			public const int OrderView = 2130903042;
 			
 			static Layout()
 			{

@@ -65,7 +65,9 @@
     <AndroidResource Include="Resources\Layout\Main.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
-    <None Include="Resources\Layout\Copy of AuctionView.axml" />
+    <AndroidResource Include="Resources\Layout\OrderView.axml">
+      <SubType>AndroidResource</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Layout\AuctionView.axml" />
@@ -93,6 +95,9 @@
       <Project>{09906bcd-2848-4963-bfdb-41959323f4c0}</Project>
       <Name>CloudAuction.Shared.android</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="MvvmQuickCross\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

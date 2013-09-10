@@ -59,6 +59,7 @@ namespace CloudAuction
         {
             if (!areHandlersAdded) return;
             viewModel.PropertyChanged -= AuctionViewModel_PropertyChanged;
+            RemoveDataBindingHandlers();
             areHandlersAdded = false;
         }
 
@@ -69,6 +70,8 @@ namespace CloudAuction
 
         public class DataBinding
         {
+            public enum BindingMode { OneWay, OneTime, TwoWay };
+            public BindingMode Mode;
             public View View;
             public PropertyInfo ViewModelPropertyInfo;
             public int? ResourceId;
@@ -90,11 +93,62 @@ namespace CloudAuction
                     binding.ViewModelPropertyInfo = typeof(T).GetProperty(propertyName);
                     binding.ResourceId = (int)fieldInfo.GetValue(null);
                     binding.View = view.FindViewById(binding.ResourceId.Value);
+                    if (binding.View != null && binding.View.Tag != null)
+                    {
+                        string tag = binding.View.Tag.ToString();
+                        if (tag.Contains("TwoWay"))
+                        {
+                            AddTwoWayHandler(binding);
+                            binding.Mode = DataBinding.BindingMode.TwoWay;
+                        }
+                    }
                 }
                 dataBindings.Add(name, binding);
             }
 
             UpdateView<T>(binding, viewModel);
+        }
+
+        private void AddTwoWayHandler(DataBinding binding)
+        {
+            string viewTypeName = binding.View.GetType().FullName;
+            switch (viewTypeName)
+            {
+                case "Android.Widget.EditText":
+                    ((Android.Widget.EditText)binding.View).TextChanged += AuctionView_TextChanged;
+                    break;
+                default:
+                    throw new NotImplementedException("View type not implemented: " + viewTypeName);
+            }
+        }
+
+        private void RemoveTwoWayHandler(DataBinding binding)
+        {
+            string viewTypeName = binding.View.GetType().FullName;
+            switch (viewTypeName)
+            {
+                case "Android.Widget.EditText":
+                    ((Android.Widget.EditText)binding.View).TextChanged -= AuctionView_TextChanged;
+                    break;
+                default:
+                    throw new NotImplementedException("View type not implemented: " + viewTypeName);
+            }
+        }
+
+        private void RemoveDataBindingHandlers()  // TODO: How do we re-add after we have removed handlers?
+        {
+            foreach (var item in dataBindings)
+            {
+                var binding = item.Value;
+                if (binding.Mode == DataBinding.BindingMode.TwoWay) RemoveTwoWayHandler(binding);
+            }
+        }
+
+        void AuctionView_TextChanged(object sender, Android.Text.TextChangedEventArgs e)
+        {
+            var view = (View)sender;
+            var binding = dataBindings.First((b) => { return Object.ReferenceEquals(b.Value.View, sender); });
+            binding.Value.ViewModelPropertyInfo.SetValue(viewModel, e.Text.ToString());
         }
 
         private void UpdateView<T>(DataBinding binding, T viewModel)

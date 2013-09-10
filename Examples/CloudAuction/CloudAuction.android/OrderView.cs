@@ -7,42 +7,19 @@ using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Runtime;
+using Android.Util;
 using Android.Views;
 using Android.Widget;
 
 namespace CloudAuction
 {
-    [Activity(Label = "My Activity")]
-    public class OrderView : Activity
+    public class OrderView : Fragment
     {
-        protected override void OnCreate(Bundle bundle)
+        public override void OnCreate(Bundle savedInstanceState)
         {
-            base.OnCreate(bundle);
-            SetContentView(Resource.Layout.Main);
-            //Button button = FindViewById<Button>(Resource.Id.MyButton);
-            // Resources: add layout
-            // event handler op buttons
-            // Create your application here
-        }
+            base.OnCreate(savedInstanceState);
 
-        protected override void OnResume()
-        {
-            base.OnResume();
-            AddHandlers();
-        }
-
-        protected override void OnPause()
-        {
-            RemoveHandlers();
-            base.OnPause();
-        }
-
-        private void AddHandlers()
-        {
-        }
-
-        private void RemoveHandlers()
-        {
+            // Create your fragment here
         }
     }
 }
