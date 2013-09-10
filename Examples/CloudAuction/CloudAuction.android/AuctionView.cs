@@ -118,7 +118,7 @@ namespace CloudAuction
                         if (value is Uri) value = ((Uri)value).AbsoluteUri;
                         var multiImageView = (Macaw.UIComponents.MultiImageView)binding.View;
                         multiImageView.LoadImageList(new[] { (string)value });
-                        multiImageView.LoadImage();
+                        multiImageView.LoadImage(); // TODO: Fix hang on no connection; Fix this LoadImage call shoudl not be needed.
                         break;
 
                     default: 
