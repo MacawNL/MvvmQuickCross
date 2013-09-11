@@ -30,9 +30,9 @@ namespace CloudAuction
 
             thisView = view;
             viewModel = CloudAuctionApplication.Instance.AuctionViewModel;
-            UpdateView<AuctionViewModel>(view, viewModel); 
             AddHandlers();
-
+            viewModel.NotifyAllPropertiesChanged();
+                        
             return view;
         }
 
