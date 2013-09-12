@@ -117,6 +117,6 @@
         <Button
             android:text="Place Bid Now"
             android:layout_span="5"
-            android:id="@+id/AuctionViewPlaceBid" />
+            android:id="@+id/AuctionViewPlaceBidCommand" />
     </TableRow>
 </TableLayout>

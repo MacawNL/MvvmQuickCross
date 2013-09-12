@@ -99,7 +99,7 @@ namespace CloudAuction
 			public const int AuctionViewName = 2131165184;
 			
 			// aapt resource value: 0x7f07000a
-			public const int AuctionViewPlaceBid = 2131165194;
+			public const int AuctionViewPlaceBidCommand = 2131165194;
 			
 			// aapt resource value: 0x7f070005
 			public const int AuctionViewTimePercentageRemaining = 2131165189;

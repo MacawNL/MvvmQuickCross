@@ -27,7 +27,7 @@ namespace MvvmQuickCross
             // TODO: add platform-specific check that _uiTaskScheduler can access the UI thread - e.g. try something that requires UI acces and catch the exception, rethrow with clear error message.
         }
 
-        protected static ApplicationBase Instance { get { return _instance; } }
+        public static ApplicationBase Instance { get { return _instance; } }
 
         public static Task RunOnUIThread(Action action)
         {

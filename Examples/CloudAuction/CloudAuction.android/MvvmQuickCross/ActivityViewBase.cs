@@ -11,6 +11,7 @@ namespace MvvmQuickCross
 
         protected void Initialize(View view, ViewModelType viewModel, string idPrefix = null)
         {
+            ApplicationBase.Instance.CurrentNavigationContext = this;
             Bindings = new ViewDataBindings(view, viewModel, idPrefix ?? this.GetType().Name);
             ViewModel = viewModel;
             EnsureHandlersAreAdded();
