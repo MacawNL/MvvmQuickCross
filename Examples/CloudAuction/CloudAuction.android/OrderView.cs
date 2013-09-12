@@ -24,17 +24,5 @@ namespace CloudAuction
             SetContentView(Resource.Layout.OrderView);
             Initialize(FindViewById(Resource.Id.OrderView), CloudAuctionApplication.Instance.OrderViewModel);
         }
-
-        protected override void OnPause()
-        {
-            EnsureHandlersAreRemoved();
-            base.OnPause();
-        }
-
-        protected override void OnResume()
-        {
-            base.OnResume();
-            EnsureHandlersAreAdded();
-        }
     }
 }

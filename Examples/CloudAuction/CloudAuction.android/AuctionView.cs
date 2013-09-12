@@ -28,18 +28,6 @@ namespace CloudAuction
             CloudAuctionApplication.Instance.ContinueToOrder(null);
         }
 
-        public override void OnPause()
-        {
-            EnsureHandlersAreRemoved();
-            base.OnPause();
-        }
-
-        public override void OnResume()
-        {
-            base.OnResume();
-            EnsureHandlersAreAdded();
-        }
-
         protected override void AddHandlers()
         {
             base.AddHandlers();

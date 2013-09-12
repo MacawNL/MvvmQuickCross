@@ -8,6 +8,7 @@ namespace MvvmQuickCross
     {
 #if __ANDROID__ || __IOS__
         private List<string> propertyNames;
+        private List<string> commandNames;
 
         public void RaisePropertiesChanged()
         {
@@ -22,8 +23,25 @@ namespace MvvmQuickCross
                     }
                 }
             }
-
             foreach (string propertyName in propertyNames) RaisePropertyChanged(propertyName);
+        }
+
+        public List<string> CommandNames
+        {
+            get
+            {
+                if (commandNames == null) {
+                    commandNames = new List<string>();
+                    foreach (var propertyInfo in this.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
+                    {
+                        if (propertyInfo.PropertyType == typeof(RelayCommand))
+                        {
+                            commandNames.Add(propertyInfo.Name);
+                        }
+                    }
+                }
+                return commandNames;
+            }
         }
 #endif
         public event PropertyChangedEventHandler PropertyChanged;

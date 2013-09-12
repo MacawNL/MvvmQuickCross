@@ -1,14 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
 using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
 using Android.Views;
-using Android.Widget;
 
 namespace MvvmQuickCross
 {
@@ -43,14 +34,26 @@ namespace MvvmQuickCross
             Bindings.UpdateView(propertyName);
         }
 
-        protected void EnsureHandlersAreAdded()
+        protected override void OnPause()
+        {
+            EnsureHandlersAreRemoved();
+            base.OnPause();
+        }
+
+        protected override void OnResume()
+        {
+            base.OnResume();
+            EnsureHandlersAreAdded();
+        }
+
+        private void EnsureHandlersAreAdded()
         {
             if (areHandlersAdded) return;
             AddHandlers();
             areHandlersAdded = true;
         }
 
-        protected void EnsureHandlersAreRemoved()
+        private void EnsureHandlersAreRemoved()
         {
             if (!areHandlersAdded) return;
             RemoveHandlers();
