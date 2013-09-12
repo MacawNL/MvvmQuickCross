@@ -1,34 +1,28 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 using Android.App;
 using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
 using CloudAuction.Shared;
 
 namespace CloudAuction
 {
-    class CloudAuctionNavigator : ICloudAuctionNavigator
+    public class CloudAuctionNavigator : ICloudAuctionNavigator
     {
-        private void Navigate(Activity navigationContext, Type type)
+        private void Navigate(object navigationContext, Type type)
         {
-            var intent = new Intent(navigationContext, type);
-            navigationContext.StartActivity(intent);
+            var activity = (Activity)navigationContext;
+            var intent = new Intent(activity, type);
+            activity.StartActivity(intent);
         }
 
         public void NavigateToAuctionView(object navigationContext)
         {
-            Navigate((Activity)navigationContext, typeof(AuctionView));
+            Navigate(navigationContext, typeof(AuctionView));
         }
 
         public void NavigateToOrderView(object navigationContext)
         {
-            throw new NotImplementedException();
+            Navigate(navigationContext, typeof(OrderView));
         }
 
         public void NavigateToOrderResultView(object navigationContext)

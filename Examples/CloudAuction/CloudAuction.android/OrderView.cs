@@ -7,19 +7,34 @@ using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Runtime;
-using Android.Util;
 using Android.Views;
 using Android.Widget;
+using MvvmQuickCross;
+using CloudAuction.Shared.ViewModels;
+using CloudAuction.Shared;
 
 namespace CloudAuction
 {
-    public class OrderView : Fragment
+    [Activity(Label = "Order View")]
+    public class OrderView : ActivityViewBase<OrderViewModel>
     {
-        public override void OnCreate(Bundle savedInstanceState)
+        protected override void OnCreate(Bundle bundle)
         {
-            base.OnCreate(savedInstanceState);
+            base.OnCreate(bundle);
+            SetContentView(Resource.Layout.OrderView);
+            Initialize(FindViewById(Resource.Id.OrderView), CloudAuctionApplication.Instance.OrderViewModel);
+        }
 
-            // Create your fragment here
+        protected override void OnPause()
+        {
+            EnsureHandlersAreRemoved();
+            base.OnPause();
+        }
+
+        protected override void OnResume()
+        {
+            base.OnResume();
+            EnsureHandlersAreAdded();
         }
     }
 }

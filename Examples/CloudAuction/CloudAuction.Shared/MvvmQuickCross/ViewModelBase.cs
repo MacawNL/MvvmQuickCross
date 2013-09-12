@@ -9,7 +9,7 @@ namespace MvvmQuickCross
 #if __ANDROID__ || __IOS__
         private List<string> propertyNames;
 
-        public void NotifyAllPropertiesChanged()
+        public void RaisePropertiesChanged()
         {
             if (propertyNames == null)
             {

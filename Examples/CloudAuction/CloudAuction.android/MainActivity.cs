@@ -9,7 +9,7 @@ using CloudAuction.Shared;
 
 namespace CloudAuction
 {
-    [Activity(Label = "CloudAuction", MainLauncher = true, Icon = "@drawable/icon")]
+    [Activity(Label = "Cloud Auction", MainLauncher = true, Icon = "@drawable/icon")]
     public class MainActivity : Activity
     {
         private bool areHandlersAdded;
