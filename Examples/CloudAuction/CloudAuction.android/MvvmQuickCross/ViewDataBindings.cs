@@ -8,10 +8,17 @@ using CloudAuction;
 
 namespace MvvmQuickCross
 {
+    public enum BindingMode { OneWay, TwoWay, Command };
+
+    public class BindingParameters
+    {
+        public string propertyName;
+        public BindingMode mode = BindingMode.OneWay;
+        public View view;
+    }
+
     public class ViewDataBindings
     {
-        public enum BindingMode { OneWay, TwoWay, Command };
-
         private class DataBinding
         {
             public BindingMode Mode;
@@ -96,26 +103,9 @@ namespace MvvmQuickCross
             }
         }
 
-        public class PropertyBindingParameters
+        public void AddBindings(BindingParameters[] bindingsParameters)
         {
-            public string propertyName;
-            public BindingMode mode = BindingMode.OneWay;
-            public View view;
-        }
-
-        public void AddPropertyBinding(string propertyName, BindingMode mode = BindingMode.OneWay, View view = null)
-        {
-            AddBinding(propertyName, mode, view);
-        }
-
-        public void AddPropertyBindings(PropertyBindingParameters[] propertyBindingsParameters)
-        {
-            foreach (var p in propertyBindingsParameters) AddPropertyBinding(p.propertyName, p.mode, p.view);
-        }
-
-        public void AddCommandBinding(string commandName, View view)
-        {
-            AddBinding(commandName, BindingMode.Command, view);
+            if (bindingsParameters != null) foreach (var bp in bindingsParameters) AddBinding(bp.propertyName, bp.mode, bp.view);
         }
 
         private string IdName(string name) { return idPrefix + name; }

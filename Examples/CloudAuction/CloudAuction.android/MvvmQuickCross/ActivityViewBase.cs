@@ -9,14 +9,15 @@ namespace MvvmQuickCross
         protected ViewModelType ViewModel { get; private set; }
         protected ViewDataBindings Bindings { get; private set; }
 
-        protected void Initialize(View view, ViewModelType viewModel, string idPrefix = null)
+        protected void Initialize(View rootView, ViewModelType viewModel, BindingParameters[] bindingsParameters = null, string idPrefix = null)
         {
             ApplicationBase.Instance.CurrentNavigationContext = this;
-            Bindings = new ViewDataBindings(view, viewModel, idPrefix ?? this.GetType().Name);
+            Bindings = new ViewDataBindings(rootView, viewModel, idPrefix ?? this.GetType().Name);
             ViewModel = viewModel;
             EnsureHandlersAreAdded();
-            Bindings.EnsureCommandBindings();
-            ViewModel.RaisePropertiesChanged();
+            Bindings.AddBindings(bindingsParameters); // First add any bindings that were specified in code 
+            Bindings.EnsureCommandBindings();  // Then add any command bindings that were not specified in code (based on the Id naming convention)
+            ViewModel.RaisePropertiesChanged(); // Finally add any property bindings that were not specified in code (based on the Id naming convention), and update the root view with the current property values
         }
 
         protected virtual void AddHandlers()
