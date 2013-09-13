@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 
 using Android.Views;
+using Android.Widget;
 
 namespace MvvmQuickCross
 {
@@ -14,6 +15,68 @@ namespace MvvmQuickCross
         public string propertyName;
         public BindingMode mode = BindingMode.OneWay;
         public View view;
+    }
+
+    public interface DataBindableAdapter
+    {
+        int GetItemPosition(object item);
+        object GetItemAsObject(int position);
+    }
+
+    public class DataBindableListAdapter<T> : BaseAdapter, DataBindableAdapter
+    {
+        private readonly LayoutInflater layoutInflater;
+        private readonly int viewResourceId;
+        protected readonly List<T> objects;
+
+        public DataBindableListAdapter(LayoutInflater layoutInflater, int viewResourceId, List<T> objects)
+        {
+            this.layoutInflater = layoutInflater;
+            this.viewResourceId = viewResourceId;
+            this.objects = objects;
+        }
+
+        public int GetItemPosition(object item)
+        {
+            return objects.IndexOf((T)item);
+        }
+
+        public object GetItemAsObject(int position)
+        {
+            return objects[position];
+        }
+
+        public override int Count
+        {
+            get { return objects.Count; }
+        }
+
+        public override Java.Lang.Object GetItem(int position)
+        {
+            return position;
+        }
+
+        public override long GetItemId(int position)
+        {
+            return position;
+        }
+
+        public override View GetView(int position, View convertView, ViewGroup parent)
+        {
+            return convertView ?? layoutInflater.Inflate(viewResourceId, parent, false);
+        }
+    }
+
+    public class DataBindableTextListAdapter<T> : DataBindableListAdapter<T>
+    {
+        public DataBindableTextListAdapter(LayoutInflater layoutInflater, int viewResourceId, List<T> objects) : base(layoutInflater, viewResourceId, objects) { }
+
+        public override View GetView(int position, View convertView, ViewGroup parent)
+        {
+            var view = (TextView)base.GetView(position, convertView, parent);
+            view.Text = objects[position].ToString();
+            return view;
+        }
     }
 
     public class ViewDataBindings
@@ -165,7 +228,7 @@ namespace MvvmQuickCross
             switch (viewTypeName)
             {
                 case "Android.Widget.Button":
-                    ((Android.Widget.Button)binding.View).Click += Button_Click;
+                    ((Button)binding.View).Click += Button_Click;
                     break;
                 default:
                     throw new NotImplementedException("View type not implemented: " + viewTypeName);
@@ -179,7 +242,7 @@ namespace MvvmQuickCross
             switch (viewTypeName)
             {
                 case "Android.Widget.Button":
-                    ((Android.Widget.Button)binding.View).Click -= Button_Click;
+                    ((Button)binding.View).Click -= Button_Click;
                     break;
                 default:
                     throw new NotImplementedException("View type not implemented: " + viewTypeName);
@@ -188,7 +251,7 @@ namespace MvvmQuickCross
 
         private void Button_Click(object sender, EventArgs e)
         {
-            var view = (Android.Widget.Button)sender;
+            var view = (Button)sender;
             var binding = FindBindingForView(view);
             if (binding != null)
             {
@@ -212,13 +275,22 @@ namespace MvvmQuickCross
                 {
                     case "Android.Widget.TextView":
                     case "Android.Widget.EditText":
-                        var view = (Android.Widget.TextView)binding.View;
+                        var textView = (TextView)binding.View;
                         string text = value.ToString();
-                        if (view.Text != text) view.Text = text;
+                        if (textView.Text != text) textView.Text = text;
                         break;
 
                     case "Android.Widget.ProgressBar":
-                        ((Android.Widget.ProgressBar)binding.View).Progress = (int)value;
+                        ((ProgressBar)binding.View).Progress = (int)value;
+                        break;
+
+                    case "Android.Widget.Spinner":
+                        var spinner = (Spinner)binding.View;
+                        if (spinner.Adapter is DataBindableAdapter) {
+                            var adapter = (DataBindableAdapter)spinner.Adapter;
+                            int position = adapter.GetItemPosition(value);
+                            if (spinner.SelectedItemPosition != position) spinner.SetSelection(position);
+                        }
                         break;
 
                     case "Macaw.UIComponents.MultiImageView":
@@ -245,7 +317,11 @@ namespace MvvmQuickCross
             switch (viewTypeName)
             {
                 case "Android.Widget.EditText":
-                    ((Android.Widget.EditText)binding.View).AfterTextChanged += EditText_AfterTextChanged;
+                    ((EditText)binding.View).AfterTextChanged += EditText_AfterTextChanged;
+                    break;
+                case "Android.Widget.Spinner":
+                    var spinner = (Spinner)binding.View;
+                    spinner.ItemSelected += Spinner_ItemSelected;
                     break;
                 default:
                     throw new NotImplementedException("View type not implemented: " + viewTypeName);
@@ -259,7 +335,11 @@ namespace MvvmQuickCross
             switch (viewTypeName)
             {
                 case "Android.Widget.EditText":
-                    ((Android.Widget.EditText)binding.View).AfterTextChanged -= EditText_AfterTextChanged;
+                    ((EditText)binding.View).AfterTextChanged -= EditText_AfterTextChanged;
+                    break;
+                case "Android.Widget.Spinner":
+                    var spinner = (Spinner)binding.View;
+                    spinner.ItemSelected -= Spinner_ItemSelected;
                     break;
                 default:
                     throw new NotImplementedException("View type not implemented: " + viewTypeName);
@@ -268,11 +348,25 @@ namespace MvvmQuickCross
 
         void EditText_AfterTextChanged(object sender, Android.Text.AfterTextChangedEventArgs e)
         {
-            var view = (Android.Widget.EditText)sender;
+            var view = (EditText)sender;
             var binding = FindBindingForView(view);
             if (binding != null)
             {
                 binding.ViewModelPropertyInfo.SetValue(viewModel, view.Text);
+            }
+        }
+
+        void Spinner_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)
+        {
+            if (e.Position >= 0)
+            {
+                var view = (Spinner)sender;
+                var binding = FindBindingForView(view);
+                if (binding != null)
+                {
+                    var adapter = (DataBindableAdapter)view.Adapter;
+                    binding.ViewModelPropertyInfo.SetValue(viewModel, adapter.GetItemAsObject(e.Position));
+                }
             }
         }
 
