@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reflection;
 
 using Android.Views;
-using CloudAuction;
 
 namespace MvvmQuickCross
 {
@@ -27,14 +26,16 @@ namespace MvvmQuickCross
             public int? ResourceId;
         }
 
+        private Type resourceIdType;
         private readonly View rootView;
         private readonly ViewModelBase viewModel;
         private readonly string idPrefix;
 
         private Dictionary<string, DataBinding> dataBindings = new Dictionary<string, DataBinding>();
 
-        public ViewDataBindings(View rootView, ViewModelBase viewModel, string idPrefix)
+        public ViewDataBindings(Type resourceIdType, View rootView, ViewModelBase viewModel, string idPrefix)
         {
+            this.resourceIdType = resourceIdType;
             this.rootView = rootView;
             this.viewModel = viewModel;
             this.idPrefix = idPrefix;
@@ -119,7 +120,7 @@ namespace MvvmQuickCross
             binding.Mode = mode;
             binding.ViewModelPropertyInfo = viewModel.GetType().GetProperty(propertyName);
 
-            var fieldInfo = typeof(Resource.Id).GetField(idName);
+            var fieldInfo = resourceIdType.GetField(idName);
             if (fieldInfo != null)
             {
                 binding.ResourceId = (int)fieldInfo.GetValue(null);

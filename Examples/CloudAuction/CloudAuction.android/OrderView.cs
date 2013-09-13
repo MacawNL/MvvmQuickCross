@@ -22,7 +22,7 @@ namespace CloudAuction
         {
             base.OnCreate(bundle);
             SetContentView(Resource.Layout.OrderView);
-            Initialize(FindViewById(Resource.Id.OrderView), CloudAuctionApplication.Instance.OrderViewModel);
+            Initialize(typeof(Resource.Id), FindViewById(Resource.Id.OrderView), CloudAuctionApplication.Instance.OrderViewModel);
         }
     }
 }
