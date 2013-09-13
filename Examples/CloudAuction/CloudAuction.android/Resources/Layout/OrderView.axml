@@ -10,12 +10,12 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/OrderViewFirstName"
-        android:tag="TwoWay" />
+        android:tag="BindingMode=TwoWay" />
     <EditText
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/OrderViewLastName"
-        android:tag="TwoWay" />
+        android:tag="BindingMode=TwoWay" />
     <Button
         android:text="Cancel"
         android:layout_width="fill_parent"

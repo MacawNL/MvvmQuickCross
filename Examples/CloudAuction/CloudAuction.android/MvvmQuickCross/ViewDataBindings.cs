@@ -10,7 +10,7 @@ namespace MvvmQuickCross
 {
     public class ViewDataBindings
     {
-        public enum BindingMode { OneWay, OneTime, TwoWay, Command };
+        public enum BindingMode { OneWay, TwoWay, Command };
 
         private class DataBinding
         {
@@ -40,7 +40,7 @@ namespace MvvmQuickCross
                 DataBinding binding;
                 if (!dataBindings.TryGetValue(IdName(commandName), out binding))
                 {
-                    AddBinding(commandName, isCommand: true);
+                    AddBinding(commandName, BindingMode.Command);
                 }
             }
         }
@@ -64,7 +64,7 @@ namespace MvvmQuickCross
             DataBinding binding;
             if (!dataBindings.TryGetValue(IdName(propertyName), out binding))
             {
-                binding = AddBinding(propertyName, isCommand: false);
+                binding = AddBinding(propertyName);
             }
 
             if (binding != null) UpdateView(binding);
@@ -96,25 +96,37 @@ namespace MvvmQuickCross
             }
         }
 
-        public void AddPropertyBinding(string propertyName, View view)
+        public class PropertyBindingParameters
         {
-            AddBinding(propertyName, false, view);
+            public string propertyName;
+            public BindingMode mode = BindingMode.OneWay;
+            public View view;
+        }
+
+        public void AddPropertyBinding(string propertyName, BindingMode mode = BindingMode.OneWay, View view = null)
+        {
+            AddBinding(propertyName, mode, view);
+        }
+
+        public void AddPropertyBindings(PropertyBindingParameters[] propertyBindingsParameters)
+        {
+            foreach (var p in propertyBindingsParameters) AddPropertyBinding(p.propertyName, p.mode, p.view);
         }
 
         public void AddCommandBinding(string commandName, View view)
         {
-            AddBinding(commandName, true, view);
+            AddBinding(commandName, BindingMode.Command, view);
         }
 
         private string IdName(string name) { return idPrefix + name; }
 
-        private DataBinding AddBinding(string propertyName, bool isCommand, View view = null)
+        private DataBinding AddBinding(string propertyName, BindingMode mode = BindingMode.OneWay, View view = null)
         {
             string idName = (view != null) ? view.Id.ToString() : IdName(propertyName);
 
             var binding = new DataBinding();
             binding.View = view;
-            binding.Mode = isCommand ? BindingMode.Command : BindingMode.OneWay;
+            binding.Mode = mode;
             binding.ViewModelPropertyInfo = viewModel.GetType().GetProperty(propertyName);
 
             var fieldInfo = typeof(Resource.Id).GetField(idName);
@@ -129,10 +141,10 @@ namespace MvvmQuickCross
 
             if (binding.View == null) return null;
 
-            if (!isCommand && binding.View.Tag != null)
+            if (binding.View.Tag != null)
             {
                 string tag = binding.View.Tag.ToString();
-                if (tag.Contains("TwoWay"))
+                if (tag.Contains("BindingMode=TwoWay"))
                 {
                     binding.Mode = BindingMode.TwoWay;
                 }
@@ -146,6 +158,11 @@ namespace MvvmQuickCross
 
             dataBindings.Add(idName, binding);
             return binding;
+        }
+
+        private DataBinding FindBindingForView(View view)
+        {
+            return dataBindings.FirstOrDefault(i => object.ReferenceEquals(i.Value.View, view)).Value;
         }
 
         #region View types that support command binding
@@ -180,7 +197,8 @@ namespace MvvmQuickCross
 
         private void Button_Click(object sender, EventArgs e)
         {
-            var binding = dataBindings.FirstOrDefault(i => object.ReferenceEquals(i.Value.View, sender)).Value;
+            var view = (Android.Widget.Button)sender;
+            var binding = FindBindingForView(view);
             if (binding != null)
             {
                 var command = (RelayCommand)binding.ViewModelPropertyInfo.GetValue(viewModel);
@@ -203,7 +221,9 @@ namespace MvvmQuickCross
                 {
                     case "Android.Widget.TextView":
                     case "Android.Widget.EditText":
-                        ((Android.Widget.TextView)binding.View).Text = value.ToString();
+                        var view = (Android.Widget.TextView)binding.View;
+                        string text = value.ToString();
+                        if (view.Text != text) view.Text = text;
                         break;
 
                     case "Android.Widget.ProgressBar":
@@ -234,7 +254,7 @@ namespace MvvmQuickCross
             switch (viewTypeName)
             {
                 case "Android.Widget.EditText":
-                    ((Android.Widget.EditText)binding.View).FocusChange += TextView_FocusChange;
+                    ((Android.Widget.EditText)binding.View).AfterTextChanged += EditText_AfterTextChanged;
                     break;
                 default:
                     throw new NotImplementedException("View type not implemented: " + viewTypeName);
@@ -248,22 +268,20 @@ namespace MvvmQuickCross
             switch (viewTypeName)
             {
                 case "Android.Widget.EditText":
-                    ((Android.Widget.EditText)binding.View).FocusChange -= TextView_FocusChange;
+                    ((Android.Widget.EditText)binding.View).AfterTextChanged -= EditText_AfterTextChanged;
                     break;
                 default:
                     throw new NotImplementedException("View type not implemented: " + viewTypeName);
             }
         }
 
-        private void TextView_FocusChange(object sender, View.FocusChangeEventArgs e)
+        void EditText_AfterTextChanged(object sender, Android.Text.AfterTextChangedEventArgs e)
         {
-            if (!e.HasFocus)
+            var view = (Android.Widget.EditText)sender;
+            var binding = FindBindingForView(view);
+            if (binding != null)
             {
-                var binding = dataBindings.FirstOrDefault(i => object.ReferenceEquals(i.Value.View, sender)).Value;
-                if (binding != null)
-                {
-                    binding.ViewModelPropertyInfo.SetValue(viewModel, ((Android.Widget.TextView)binding.View).Text);
-                }
+                binding.ViewModelPropertyInfo.SetValue(viewModel, view.Text);
             }
         }
 
