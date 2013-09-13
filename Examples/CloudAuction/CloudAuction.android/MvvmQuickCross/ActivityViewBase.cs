@@ -15,6 +15,7 @@ namespace MvvmQuickCross
             Bindings = new ViewDataBindings(view, viewModel, idPrefix ?? this.GetType().Name);
             ViewModel = viewModel;
             EnsureHandlersAreAdded();
+            Bindings.EnsureCommandBindings();
             ViewModel.RaisePropertiesChanged();
         }
 

@@ -10,14 +10,13 @@ namespace CloudAuction
     {
         private void Navigate(object navigationContext, Type type)
         {
-            var activity = (Activity)navigationContext;
-            var intent = new Intent(activity, type);
-            activity.StartActivity(intent); // TODO: ***HERE what do we do when activity is already started? And fix cancel button getting two click handlers
+            var context = (Context)navigationContext;
+            context.StartActivity(type);
         }
 
         public void NavigateToAuctionView(object navigationContext)
         {
-            Navigate(navigationContext, typeof(AuctionView));
+            Navigate(navigationContext, typeof(MainActivity));
         }
 
         public void NavigateToOrderView(object navigationContext)

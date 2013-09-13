@@ -20,30 +20,27 @@ namespace MvvmQuickCross
             public int? ResourceId;
         }
 
-        private readonly View view;
+        private readonly View rootView;
         private readonly ViewModelBase viewModel;
         private readonly string idPrefix;
 
         private Dictionary<string, DataBinding> dataBindings = new Dictionary<string, DataBinding>();
 
-        public ViewDataBindings(View view, ViewModelBase viewModel, string idPrefix)
+        public ViewDataBindings(View rootView, ViewModelBase viewModel, string idPrefix)
         {
-            this.view = view;
+            this.rootView = rootView;
             this.viewModel = viewModel;
             this.idPrefix = idPrefix;
-            UpdateCommandBindings();
         }
 
-        private void UpdateCommandBindings()
+        public void EnsureCommandBindings()
         {
             foreach (string commandName in viewModel.CommandNames)
             {
-                string name = idPrefix + commandName;
-
                 DataBinding binding;
-                if (!dataBindings.TryGetValue(name, out binding))
+                if (!dataBindings.TryGetValue(IdName(commandName), out binding))
                 {
-                    binding = AddBinding(commandName, name, binding, isCommand: true);
+                    AddBinding(commandName, isCommand: true);
                 }
             }
         }
@@ -55,7 +52,7 @@ namespace MvvmQuickCross
                 var binding = item.Value;
                 if (binding.ResourceId.HasValue)
                 {
-                    binding.View = view.FindViewById(binding.ResourceId.Value);
+                    binding.View = rootView.FindViewById(binding.ResourceId.Value);
                 }
 
                 UpdateView(binding);
@@ -64,72 +61,13 @@ namespace MvvmQuickCross
 
         public void UpdateView(string propertyName)
         {
-            string name = idPrefix + propertyName;
-
             DataBinding binding;
-            if (!dataBindings.TryGetValue(name, out binding))
+            if (!dataBindings.TryGetValue(IdName(propertyName), out binding))
             {
-                binding = AddBinding(propertyName, name, binding);
+                binding = AddBinding(propertyName, isCommand: false);
             }
 
-            UpdateView(binding);
-        }
-
-        private DataBinding AddBinding(string propertyName, string name, DataBinding binding, bool isCommand = false)
-        {
-            binding = new DataBinding();
-            binding.Mode = isCommand ? BindingMode.Command : BindingMode.OneWay;
-            binding.ViewModelPropertyInfo = viewModel.GetType().GetProperty(propertyName);
-            var fieldInfo = typeof(Resource.Id).GetField(name);
-            if (fieldInfo != null)
-            {
-                binding.ResourceId = (int)fieldInfo.GetValue(null);
-                binding.View = view.FindViewById(binding.ResourceId.Value);
-
-                if (binding.View != null)
-                {
-                    if (!isCommand && binding.View.Tag != null)
-                    {
-                        string tag = binding.View.Tag.ToString();
-                        if (tag.Contains("TwoWay"))
-                        {
-                            binding.Mode = BindingMode.TwoWay;
-                        }
-                    }
-
-                    switch (binding.Mode)
-                    {
-                        case BindingMode.TwoWay: AddTwoWayHandler(binding); break;
-                        case BindingMode.Command: AddCommandHandler(binding); break;
-                    }
-                }
-            }
-            dataBindings.Add(name, binding);
-            return binding;
-        }
-
-        private void AddCommandHandler(DataBinding binding)
-        {
-            if (binding.View == null) return;
-            string viewTypeName = binding.View.GetType().FullName;
-            switch (viewTypeName)
-            {
-                case "Android.Widget.Button":
-                    ((Android.Widget.Button)binding.View).Click += Button_Click;
-                    break;
-                default:
-                    throw new NotImplementedException("View type not implemented: " + viewTypeName);
-            }
-        }
-
-        private void Button_Click(object sender, EventArgs e)
-        {
-            var binding = dataBindings.First(i => object.ReferenceEquals(i.Value.View, sender)).Value;
-            if (binding != null)
-            {
-                var command = (RelayCommand)binding.ViewModelPropertyInfo.GetValue(viewModel);
-                command.Execute(null);
-            }
+            if (binding != null) UpdateView(binding);
         }
 
         public void RemoveHandlers()
@@ -142,6 +80,87 @@ namespace MvvmQuickCross
                     case BindingMode.TwoWay: RemoveTwoWayHandler(binding); break;
                     case BindingMode.Command: RemoveCommandHandler(binding); break;
                 }
+            }
+        }
+
+        public void AddHandlers()
+        {
+            foreach (var item in dataBindings)
+            {
+                var binding = item.Value;
+                switch (binding.Mode)
+                {
+                    case BindingMode.TwoWay: AddTwoWayHandler(binding); break;
+                    case BindingMode.Command: AddCommandHandler(binding); break;
+                }
+            }
+        }
+
+        public void AddPropertyBinding(string propertyName, View view)
+        {
+            AddBinding(propertyName, false, view);
+        }
+
+        public void AddCommandBinding(string commandName, View view)
+        {
+            AddBinding(commandName, true, view);
+        }
+
+        private string IdName(string name) { return idPrefix + name; }
+
+        private DataBinding AddBinding(string propertyName, bool isCommand, View view = null)
+        {
+            string idName = (view != null) ? view.Id.ToString() : IdName(propertyName);
+
+            var binding = new DataBinding();
+            binding.View = view;
+            binding.Mode = isCommand ? BindingMode.Command : BindingMode.OneWay;
+            binding.ViewModelPropertyInfo = viewModel.GetType().GetProperty(propertyName);
+
+            var fieldInfo = typeof(Resource.Id).GetField(idName);
+            if (fieldInfo != null)
+            {
+                binding.ResourceId = (int)fieldInfo.GetValue(null);
+                if (binding.View == null)
+                {
+                    binding.View = rootView.FindViewById(binding.ResourceId.Value);
+                }
+            }
+
+            if (binding.View == null) return null;
+
+            if (!isCommand && binding.View.Tag != null)
+            {
+                string tag = binding.View.Tag.ToString();
+                if (tag.Contains("TwoWay"))
+                {
+                    binding.Mode = BindingMode.TwoWay;
+                }
+            }
+
+            switch (binding.Mode)
+            {
+                case BindingMode.TwoWay: AddTwoWayHandler(binding); break;
+                case BindingMode.Command: AddCommandHandler(binding); break;
+            }
+
+            dataBindings.Add(idName, binding);
+            return binding;
+        }
+
+        #region View types that support command binding
+
+        private void AddCommandHandler(DataBinding binding)
+        {
+            if (binding.View == null) return;
+            string viewTypeName = binding.View.GetType().FullName;
+            switch (viewTypeName)
+            {
+                case "Android.Widget.Button":
+                    ((Android.Widget.Button)binding.View).Click += Button_Click;
+                    break;
+                default:
+                    throw new NotImplementedException("View type not implemented: " + viewTypeName);
             }
         }
 
@@ -159,18 +178,19 @@ namespace MvvmQuickCross
             }
         }
 
-        public void AddHandlers()
+        private void Button_Click(object sender, EventArgs e)
         {
-            foreach (var item in dataBindings)
+            var binding = dataBindings.FirstOrDefault(i => object.ReferenceEquals(i.Value.View, sender)).Value;
+            if (binding != null)
             {
-                var binding = item.Value;
-                switch (binding.Mode)
-                {
-                    case BindingMode.TwoWay: AddTwoWayHandler(binding); break;
-                    case BindingMode.Command: AddCommandHandler(binding); break;
-                }
+                var command = (RelayCommand)binding.ViewModelPropertyInfo.GetValue(viewModel);
+                command.Execute(null);
             }
         }
+
+        #endregion View types that support command binding
+
+        #region View types that support one-way data binding
 
         private void UpdateView(DataBinding binding)
         {
@@ -202,6 +222,10 @@ namespace MvvmQuickCross
                 }
             }
         }
+
+        #endregion View types that support one-way data binding
+
+        #region View types that support two-way data binding
 
         private void AddTwoWayHandler(DataBinding binding)
         {
@@ -235,12 +259,14 @@ namespace MvvmQuickCross
         {
             if (!e.HasFocus)
             {
-                var binding = dataBindings.First(i => object.ReferenceEquals(i.Value.View, sender)).Value;
+                var binding = dataBindings.FirstOrDefault(i => object.ReferenceEquals(i.Value.View, sender)).Value;
                 if (binding != null)
                 {
                     binding.ViewModelPropertyInfo.SetValue(viewModel, ((Android.Widget.TextView)binding.View).Text);
                 }
             }
         }
+
+        #endregion View types that support two-way data binding
     }
 }
