@@ -107,20 +107,26 @@ namespace CloudAuction
 			// aapt resource value: 0x7f070009
 			public const int AuctionViewTimeRemaining = 2131165193;
 			
-			// aapt resource value: 0x7f070010
-			public const int LogoutMenuItem = 2131165200;
+			// aapt resource value: 0x7f070012
+			public const int LogoutMenuItem = 2131165202;
 			
 			// aapt resource value: 0x7f07000c
 			public const int OrderView = 2131165196;
 			
-			// aapt resource value: 0x7f07000f
-			public const int OrderViewCancelCommand = 2131165199;
+			// aapt resource value: 0x7f070010
+			public const int OrderViewCancelCommand = 2131165200;
 			
 			// aapt resource value: 0x7f07000d
-			public const int OrderViewFirstName = 2131165197;
+			public const int OrderViewDeliveryLocation = 2131165197;
 			
 			// aapt resource value: 0x7f07000e
-			public const int OrderViewLastName = 2131165198;
+			public const int OrderViewFirstName = 2131165198;
+			
+			// aapt resource value: 0x7f07000f
+			public const int OrderViewLastName = 2131165199;
+			
+			// aapt resource value: 0x7f070011
+			public const int TextViewItem = 2131165201;
 			
 			// aapt resource value: 0x7f07000b
 			public const int mainFragmentContainer = 2131165195;
@@ -146,6 +152,9 @@ namespace CloudAuction
 			
 			// aapt resource value: 0x7f030002
 			public const int OrderView = 2130903042;
+			
+			// aapt resource value: 0x7f030003
+			public const int TextViewItem = 2130903043;
 			
 			static Layout()
 			{

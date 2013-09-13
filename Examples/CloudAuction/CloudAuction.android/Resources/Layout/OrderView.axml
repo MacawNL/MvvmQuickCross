@@ -6,6 +6,11 @@
     android:layout_height="fill_parent"
     android:minWidth="25px"
     android:minHeight="25px">
+    <Spinner
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/OrderViewDeliveryLocation"
+        android:tag="BindingMode=TwoWay,ItemsSource=DeliveryLocations" />
     <EditText
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
