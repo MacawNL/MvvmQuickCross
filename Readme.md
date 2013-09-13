@@ -15,7 +15,7 @@ MvvmQuickCross is lightweight and easy to modify: it adds no binaries, just one 
 ## Getting Started
 **Note: for a detailed step-by-step guide on how to build the CloudAuction example app that can be found in this repository, see [here](http://vincenth.net/blog/archive/2013/08/30/creating-a-cross-platform-native-app-using-mvvmquickcross-and-xamarin-part-1-cross-platform-code-and-windows-8-app.aspx).**
 
-**A quickstart and an overview will be posted and linked to from here shortly (eta Sept 14, 2013)**
+**Coming up next: Android data binding helpers, example app and guidance (will be posted and linked to from here shortly, eta Sept 17, 2013)**
 
 The high-level steps for creating a cross-platforn app are:
 
