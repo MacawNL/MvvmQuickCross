@@ -7,7 +7,7 @@ using Android.Widget;
 
 namespace MvvmQuickCross
 {
-    public interface DataBindableAdapter // TODO: maybe eliminate? But good for extensibility
+    public interface DataBindableAdapter
     {
         int GetItemPosition(object item);
         object GetItemAsObject(int position);
@@ -63,7 +63,7 @@ namespace MvvmQuickCross
             this.viewResourceId = viewResourceId;
             this.objects = objects;
             this.objectValueResourceId = objectValueResourceId;
-            this.idPrefix = idPrefix ?? this.GetType().Name;
+            this.idPrefix = idPrefix ?? this.GetType().Name + "_";
 
             if (!objectValueResourceId.HasValue)
             {

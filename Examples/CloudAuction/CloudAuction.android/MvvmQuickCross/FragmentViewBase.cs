@@ -13,7 +13,7 @@ namespace MvvmQuickCross
 
         protected void Initialize(Type resourceIdType, View rootView, ViewModelType viewModel, BindingParameters[] bindingsParameters = null, string idPrefix = null)
         {
-            Bindings = new ViewDataBindings(resourceIdType, rootView, viewModel, idPrefix ?? this.GetType().Name);
+            Bindings = new ViewDataBindings(resourceIdType, rootView, viewModel, idPrefix ?? this.GetType().Name + "_");
             ViewModel = viewModel;
             EnsureHandlersAreAdded();
             Bindings.AddBindings(bindingsParameters); // First add any bindings that were specified in code 

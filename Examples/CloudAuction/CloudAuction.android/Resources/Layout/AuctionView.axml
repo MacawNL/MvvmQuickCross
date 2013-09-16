@@ -8,7 +8,7 @@
             android:text="PANASONIC DMC-TZ25E*"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:layout_span="5"
-            android:id="@+id/AuctionViewName" />
+            android:id="@+id/AuctionView_Name" />
     </TableRow>
     <TableRow
         android:paddingBottom="10dp">
@@ -16,7 +16,7 @@
             android:text="Versatile, with 32x intelligent..*"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:layout_span="5"
-            android:id="@+id/AuctionViewIntro" />
+            android:id="@+id/AuctionView_Intro" />
     </TableRow>
     <TableRow
         android:layout_height="wrap_content"
@@ -27,14 +27,14 @@
             android:paddingTop="5dp"
             android:layout_gravity="top"
             android:layout_height="100dp"
-            android:id="@+id/AuctionViewImage" />
+            android:id="@+id/AuctionView_Image" />
         <TextView
             android:text="This compact and powerful camera has an amazing 32x intelligent zoom and 16x optical zoom. Combine this huge zoom reach with the 24mm ultra wide angle and you have a camera that you can use fo*"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:layout_gravity="top"
             android:layout_height="wrap_content"
             android:layout_span="3"
-            android:id="@+id/AuctionViewDescription" />
+            android:id="@+id/AuctionView_Description" />
     </TableRow>
     <TableRow
         android:layout_height="wrap_content"
@@ -48,7 +48,7 @@
             android:text="$ 148,0*"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:id="@+id/AuctionViewCurrentPrice" />
+            android:id="@+id/AuctionView_CurrentPrice" />
     </TableRow>
     <TableRow
         android:paddingBottom="10dp">
@@ -56,7 +56,7 @@
             android:progress="50"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_span="5"
-            android:id="@+id/AuctionViewTimePercentageRemaining" />
+            android:id="@+id/AuctionView_TimePercentageRemaining" />
     </TableRow>
     <TableRow>
         <TextView
@@ -91,32 +91,32 @@
             android:layout_gravity="center_horizontal"
             android:paddingRight="5dp"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:id="@+id/AuctionViewListPrice" />
+            android:id="@+id/AuctionView_ListPrice" />
         <TextView
             android:text="4*"
             android:layout_weight="1"
             android:layout_gravity="center_horizontal"
             android:paddingRight="5dp"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:id="@+id/AuctionViewAvailableCount" />
+            android:id="@+id/AuctionView_AvailableCount" />
         <TextView
             android:text="Damage*"
             android:layout_weight="1"
             android:layout_gravity="center_horizontal"
             android:paddingRight="5dp"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:id="@+id/AuctionViewCondition" />
+            android:id="@+id/AuctionView_Condition" />
         <TextView
             android:text="00:01:1*"
             android:layout_weight="1"
             android:layout_gravity="center_horizontal"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:id="@+id/AuctionViewTimeRemaining" />
+            android:id="@+id/AuctionView_TimeRemaining" />
     </TableRow>
     <TableRow>
         <Button
             android:text="Place Bid Now"
             android:layout_span="5"
-            android:id="@+id/AuctionViewPlaceBidCommand" />
+            android:id="@+id/AuctionView_PlaceBidCommand" />
     </TableRow>
 </TableLayout>

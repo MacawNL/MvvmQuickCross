@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 
 using Android.Views;
+using System.Text.RegularExpressions;
 
 namespace MvvmQuickCross
 {
@@ -135,7 +136,7 @@ namespace MvvmQuickCross
             if (binding.View.Tag != null)
             {
                 string tag = binding.View.Tag.ToString();
-                if (tag.Contains("BindingMode=TwoWay"))
+                if (tag.Contains("Binding{Mode=TwoWay}"))
                 {
                     binding.Mode = BindingMode.TwoWay;
                 }
@@ -154,6 +155,11 @@ namespace MvvmQuickCross
         private DataBinding FindBindingForView(View view)
         {
             return dataBindings.FirstOrDefault(i => object.ReferenceEquals(i.Value.View, view)).Value;
+        }
+
+        private void UpdateView(DataBinding binding)
+        {
+            UpdateView(binding.View, binding.ViewModelPropertyInfo.GetValue(viewModel));
         }
     }
 }
