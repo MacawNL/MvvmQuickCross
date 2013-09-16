@@ -53,13 +53,10 @@ namespace CloudAuction
 			public const int magnify = 2130837505;
 			
 			// aapt resource value: 0x7f020002
-			public const int monoandroidsplash = 2130837506;
+			public const int slider_blt_grn = 2130837506;
 			
 			// aapt resource value: 0x7f020003
-			public const int slider_blt_grn = 2130837507;
-			
-			// aapt resource value: 0x7f020004
-			public const int slider_blt_trans = 2130837508;
+			public const int slider_blt_trans = 2130837507;
 			
 			static Drawable()
 			{
@@ -74,62 +71,62 @@ namespace CloudAuction
 		public partial class Id
 		{
 			
-			// aapt resource value: 0x7f070007
-			public const int AuctionViewAvailableCount = 2131165191;
+			// aapt resource value: 0x7f060007
+			public const int AuctionViewAvailableCount = 2131099655;
 			
-			// aapt resource value: 0x7f070008
-			public const int AuctionViewCondition = 2131165192;
+			// aapt resource value: 0x7f060008
+			public const int AuctionViewCondition = 2131099656;
 			
-			// aapt resource value: 0x7f070004
-			public const int AuctionViewCurrentPrice = 2131165188;
+			// aapt resource value: 0x7f060004
+			public const int AuctionViewCurrentPrice = 2131099652;
 			
-			// aapt resource value: 0x7f070003
-			public const int AuctionViewDescription = 2131165187;
+			// aapt resource value: 0x7f060003
+			public const int AuctionViewDescription = 2131099651;
 			
-			// aapt resource value: 0x7f070002
-			public const int AuctionViewImage = 2131165186;
+			// aapt resource value: 0x7f060002
+			public const int AuctionViewImage = 2131099650;
 			
-			// aapt resource value: 0x7f070001
-			public const int AuctionViewIntro = 2131165185;
+			// aapt resource value: 0x7f060001
+			public const int AuctionViewIntro = 2131099649;
 			
-			// aapt resource value: 0x7f070006
-			public const int AuctionViewListPrice = 2131165190;
+			// aapt resource value: 0x7f060006
+			public const int AuctionViewListPrice = 2131099654;
 			
-			// aapt resource value: 0x7f070000
-			public const int AuctionViewName = 2131165184;
+			// aapt resource value: 0x7f060000
+			public const int AuctionViewName = 2131099648;
 			
-			// aapt resource value: 0x7f07000a
-			public const int AuctionViewPlaceBidCommand = 2131165194;
+			// aapt resource value: 0x7f06000a
+			public const int AuctionViewPlaceBidCommand = 2131099658;
 			
-			// aapt resource value: 0x7f070005
-			public const int AuctionViewTimePercentageRemaining = 2131165189;
+			// aapt resource value: 0x7f060005
+			public const int AuctionViewTimePercentageRemaining = 2131099653;
 			
-			// aapt resource value: 0x7f070009
-			public const int AuctionViewTimeRemaining = 2131165193;
+			// aapt resource value: 0x7f060009
+			public const int AuctionViewTimeRemaining = 2131099657;
 			
-			// aapt resource value: 0x7f070012
-			public const int LogoutMenuItem = 2131165202;
+			// aapt resource value: 0x7f060012
+			public const int LogoutMenuItem = 2131099666;
 			
-			// aapt resource value: 0x7f07000c
-			public const int OrderView = 2131165196;
+			// aapt resource value: 0x7f06000c
+			public const int OrderView = 2131099660;
 			
-			// aapt resource value: 0x7f070010
-			public const int OrderViewCancelCommand = 2131165200;
+			// aapt resource value: 0x7f060010
+			public const int OrderViewCancelCommand = 2131099664;
 			
-			// aapt resource value: 0x7f07000d
-			public const int OrderViewDeliveryLocation = 2131165197;
+			// aapt resource value: 0x7f06000d
+			public const int OrderViewDeliveryLocation = 2131099661;
 			
-			// aapt resource value: 0x7f07000e
-			public const int OrderViewFirstName = 2131165198;
+			// aapt resource value: 0x7f06000e
+			public const int OrderViewFirstName = 2131099662;
 			
-			// aapt resource value: 0x7f07000f
-			public const int OrderViewLastName = 2131165199;
+			// aapt resource value: 0x7f06000f
+			public const int OrderViewLastName = 2131099663;
 			
-			// aapt resource value: 0x7f070011
-			public const int TextViewItem = 2131165201;
+			// aapt resource value: 0x7f060011
+			public const int TextViewItem = 2131099665;
 			
-			// aapt resource value: 0x7f07000b
-			public const int mainFragmentContainer = 2131165195;
+			// aapt resource value: 0x7f06000b
+			public const int mainFragmentContainer = 2131099659;
 			
 			static Id()
 			{
@@ -169,8 +166,8 @@ namespace CloudAuction
 		public partial class Menu
 		{
 			
-			// aapt resource value: 0x7f060000
-			public const int MainMenu = 2131099648;
+			// aapt resource value: 0x7f050000
+			public const int MainMenu = 2131034112;
 			
 			static Menu()
 			{
@@ -185,14 +182,14 @@ namespace CloudAuction
 		public partial class String
 		{
 			
-			// aapt resource value: 0x7f050001
-			public const int ApplicationName = 2131034113;
+			// aapt resource value: 0x7f040001
+			public const int ApplicationName = 2130968577;
 			
-			// aapt resource value: 0x7f050000
-			public const int Hello = 2131034112;
+			// aapt resource value: 0x7f040000
+			public const int Hello = 2130968576;
 			
-			// aapt resource value: 0x7f050002
-			public const int Logout = 2131034114;
+			// aapt resource value: 0x7f040002
+			public const int Logout = 2130968578;
 			
 			static String()
 			{
@@ -200,22 +197,6 @@ namespace CloudAuction
 			}
 			
 			private String()
-			{
-			}
-		}
-		
-		public partial class Style
-		{
-			
-			// aapt resource value: 0x7f040000
-			public const int Mono_Android_Theme_Splash = 2130968576;
-			
-			static Style()
-			{
-				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
-			}
-			
-			private Style()
 			{
 			}
 		}

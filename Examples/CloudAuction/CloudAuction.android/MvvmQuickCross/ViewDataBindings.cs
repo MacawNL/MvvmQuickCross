@@ -17,56 +17,7 @@ namespace MvvmQuickCross
         public View view;
     }
 
-    public interface DataBindableAdapter
-    {
-        int GetItemPosition(object item);
-        object GetItemAsObject(int position);
-    }
-
-    public class DataBindableListAdapter<T> : BaseAdapter, DataBindableAdapter
-    {
-        private readonly LayoutInflater layoutInflater;
-        private readonly int viewResourceId;
-        protected readonly List<T> objects;
-
-        public DataBindableListAdapter(LayoutInflater layoutInflater, int viewResourceId, List<T> objects)
-        {
-            this.layoutInflater = layoutInflater;
-            this.viewResourceId = viewResourceId;
-            this.objects = objects;
-        }
-
-        public int GetItemPosition(object item)
-        {
-            return objects.IndexOf((T)item);
-        }
-
-        public object GetItemAsObject(int position)
-        {
-            return objects[position];
-        }
-
-        public override int Count
-        {
-            get { return objects.Count; }
-        }
-
-        public override Java.Lang.Object GetItem(int position)
-        {
-            return position;
-        }
-
-        public override long GetItemId(int position)
-        {
-            return position;
-        }
-
-        public override View GetView(int position, View convertView, ViewGroup parent)
-        {
-            return convertView ?? layoutInflater.Inflate(viewResourceId, parent, false);
-        }
-    }
-
+/*
     public class DataBindableTextListAdapter<T> : DataBindableListAdapter<T>
     {
         public DataBindableTextListAdapter(LayoutInflater layoutInflater, int viewResourceId, List<T> objects) : base(layoutInflater, viewResourceId, objects) { }
@@ -78,7 +29,7 @@ namespace MvvmQuickCross
             return view;
         }
     }
-
+*/
     public class ViewDataBindings
     {
         private class DataBinding
@@ -263,29 +214,32 @@ namespace MvvmQuickCross
         #endregion View types that support command binding
 
         #region View types that support one-way data binding
-
         private void UpdateView(DataBinding binding)
         {
-            if (binding.View != null)
+            UpdateView(binding.View, binding.ViewModelPropertyInfo.GetValue(viewModel));
+        }
+
+        public static void UpdateView(View view, object value)
+        {
+            if (view != null)
             {
-                string viewTypeName = binding.View.GetType().FullName;
-                object value = binding.ViewModelPropertyInfo.GetValue(viewModel);
+                string viewTypeName = view.GetType().FullName;
 
                 switch (viewTypeName)
                 {
                     case "Android.Widget.TextView":
                     case "Android.Widget.EditText":
-                        var textView = (TextView)binding.View;
+                        var textView = (TextView)view;
                         string text = value.ToString();
                         if (textView.Text != text) textView.Text = text;
                         break;
 
                     case "Android.Widget.ProgressBar":
-                        ((ProgressBar)binding.View).Progress = (int)value;
+                        ((ProgressBar)view).Progress = (int)value;
                         break;
 
                     case "Android.Widget.Spinner":
-                        var spinner = (Spinner)binding.View;
+                        var spinner = (Spinner)view;
                         if (spinner.Adapter is DataBindableAdapter) {
                             var adapter = (DataBindableAdapter)spinner.Adapter;
                             int position = adapter.GetItemPosition(value);
@@ -295,7 +249,7 @@ namespace MvvmQuickCross
 
                     case "Macaw.UIComponents.MultiImageView":
                         if (value is Uri) value = ((Uri)value).AbsoluteUri;
-                        var multiImageView = (Macaw.UIComponents.MultiImageView)binding.View;
+                        var multiImageView = (Macaw.UIComponents.MultiImageView)view;
                         multiImageView.LoadImageList(new[] { (string)value });
                         multiImageView.LoadImage(); // TODO: Fix hang on no connection; Fix this LoadImage call shoudl not be needed.
                         break;
