@@ -24,18 +24,11 @@ namespace CloudAuction
             SetContentView(Resource.Layout.OrderView);
 
             var spinner = FindViewById<Spinner>(Resource.Id.OrderView_DeliveryLocation);
-            spinner.Adapter = new DataBindableToStringListAdapter<string>(
-                layoutInflater:         LayoutInflater, 
-                viewResourceId:         Resource.Layout.TextListItem, 
-                objectValueResourceId:  Resource.Id.TextListItem
-            );
+            spinner.Adapter = new DataBindableToStringListAdapter<string>(LayoutInflater, Resource.Layout.TextListItem, Resource.Id.TextListItem);
 
             /* Specify binding in code:
-            var bindingParameters = new BindingParameters { 
-                mode = BindingMode.TwoWay, 
-                view = spinner, 
-                propertyName = OrderViewModel.PROPERTYNAME_DeliveryLocation,
-                listPropertyName = OrderViewModel.PROPERTYNAME_DeliveryLocations
+            var bindingsParameters = new BindingParameters[] {
+               new BindingParameters { BindingMode.TwoWay, spinner, OrderViewModel.PROPERTYNAME_DeliveryLocation, OrderViewModel.PROPERTYNAME_DeliveryLocations }
             };
             */
 
@@ -43,7 +36,7 @@ namespace CloudAuction
                 resourceIdType:     typeof(Resource.Id), 
                 rootView:           FindViewById(Resource.Id.OrderView), 
                 viewModel:          CloudAuctionApplication.Instance.OrderViewModel
-                /*, bindingsParameters: new BindingParameters[] { bindingParameters } */
+                /*, bindingsParameters */
             );
         }
     }
