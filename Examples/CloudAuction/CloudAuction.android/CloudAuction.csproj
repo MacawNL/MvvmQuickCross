@@ -58,7 +58,7 @@
     <Compile Include="MvvmQuickCross\ActivityViewBase.cs" />
     <Compile Include="MvvmQuickCross\FragmentViewBase.cs" />
     <Compile Include="MvvmQuickCross\DataBindableListAdapter.cs" />
-    <Compile Include="MvvmQuickCross\ViewDataBindings.Controls.cs" />
+    <Compile Include="MvvmQuickCross\ViewDataBindings.UI.cs" />
     <Compile Include="OrderView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
@@ -73,7 +73,7 @@
     <AndroidResource Include="Resources\Layout\OrderView.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\Layout\TextViewItem.axml">
+    <AndroidResource Include="Resources\Layout\TextListItem.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
   </ItemGroup>

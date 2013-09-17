@@ -1,10 +1,12 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
 using Android.Views;
 using System.Text.RegularExpressions;
+using Android.Widget;
 
 namespace MvvmQuickCross
 {
@@ -13,6 +15,7 @@ namespace MvvmQuickCross
     public class BindingParameters
     {
         public string propertyName;
+        public string listPropertyName;
         public BindingMode mode = BindingMode.OneWay;
         public View view;
     }
@@ -25,6 +28,9 @@ namespace MvvmQuickCross
             public View View;
             public PropertyInfo ViewModelPropertyInfo;
             public int? ResourceId;
+
+            public PropertyInfo ViewModelListPropertyInfo;
+            public IDataBindableListAdapter ListAdapter;
         }
 
         private Type resourceIdType;
@@ -71,12 +77,25 @@ namespace MvvmQuickCross
         public void UpdateView(string propertyName)
         {
             DataBinding binding;
-            if (!dataBindings.TryGetValue(IdName(propertyName), out binding))
+            if (dataBindings.TryGetValue(IdName(propertyName), out binding))
             {
-                binding = AddBinding(propertyName);
+                UpdateView(binding);
+                return;
             }
 
-            if (binding != null) UpdateView(binding);
+            binding = FindBindingForListProperty(propertyName);
+            if (binding != null)
+            {
+                UpdateList(binding);
+                return;
+            }
+
+            binding = AddBinding(propertyName);
+            if (binding != null)
+            {
+                UpdateList(binding);
+                UpdateView(binding);
+            }
         }
 
         public void RemoveHandlers()
@@ -84,6 +103,7 @@ namespace MvvmQuickCross
             foreach (var item in dataBindings)
             {
                 var binding = item.Value;
+                RemoveListHandlers(binding);
                 switch (binding.Mode)
                 {
                     case BindingMode.TwoWay: RemoveTwoWayHandler(binding); break;
@@ -97,6 +117,7 @@ namespace MvvmQuickCross
             foreach (var item in dataBindings)
             {
                 var binding = item.Value;
+                AddListHandlers(binding);
                 switch (binding.Mode)
                 {
                     case BindingMode.TwoWay: AddTwoWayHandler(binding); break;
@@ -105,14 +126,32 @@ namespace MvvmQuickCross
             }
         }
 
+        private void RemoveListHandlers(DataBinding binding)
+        {
+            if (binding != null && binding.ListAdapter != null) binding.ListAdapter.RemoveHandlers();
+        }
+
+        private void AddListHandlers(DataBinding binding)
+        {
+            if (binding != null && binding.ListAdapter != null) binding.ListAdapter.AddHandlers();
+        }
+
         public void AddBindings(BindingParameters[] bindingsParameters)
         {
-            if (bindingsParameters != null) foreach (var bp in bindingsParameters) AddBinding(bp.propertyName, bp.mode, bp.view);
+            if (bindingsParameters != null)
+            {
+                foreach (var bp in bindingsParameters)
+                {
+                    if (bp.view != null && FindBindingForView(bp.view) != null) throw new ArgumentException("Cannot add binding because a binding already exists for the view with Id " + bp.view.Id.ToString());
+                    if (dataBindings.ContainsKey(IdName(bp.propertyName))) throw new ArgumentException("Cannot add binding because a binding already exists for the view with Id " + IdName(bp.propertyName));
+                    AddBinding(bp.propertyName, bp.mode, bp.listPropertyName, bp.view);
+                }
+            }
         }
 
         private string IdName(string name) { return idPrefix + name; }
 
-        private DataBinding AddBinding(string propertyName, BindingMode mode = BindingMode.OneWay, View view = null)
+        private DataBinding AddBinding(string propertyName, BindingMode mode = BindingMode.OneWay, string listPropertyName = null, View view = null)
         {
             string idName = (view != null) ? view.Id.ToString() : IdName(propertyName);
 
@@ -120,6 +159,8 @@ namespace MvvmQuickCross
             binding.View = view;
             binding.Mode = mode;
             binding.ViewModelPropertyInfo = viewModel.GetType().GetProperty(propertyName);
+            if (listPropertyName == null) listPropertyName = propertyName + "List";
+            binding.ViewModelListPropertyInfo = viewModel.GetType().GetProperty(listPropertyName);
 
             var fieldInfo = resourceIdType.GetField(idName);
             if (fieldInfo != null)
@@ -140,6 +181,13 @@ namespace MvvmQuickCross
                 {
                     binding.Mode = BindingMode.TwoWay;
                 }
+                // TODO: get list property name override from tag
+            }
+
+            if (binding.View is AdapterView)
+            {
+                var pi = binding.View.GetType().GetProperty("Adapter", BindingFlags.Public | BindingFlags.Instance);
+                if (pi != null) binding.ListAdapter = pi.GetValue(binding.View) as IDataBindableListAdapter;
             }
 
             switch (binding.Mode)
@@ -157,9 +205,22 @@ namespace MvvmQuickCross
             return dataBindings.FirstOrDefault(i => object.ReferenceEquals(i.Value.View, view)).Value;
         }
 
+        private DataBinding FindBindingForListProperty(string propertyName)
+        {
+            return dataBindings.FirstOrDefault(i => i.Value.ViewModelListPropertyInfo != null && i.Value.ViewModelListPropertyInfo.Name == propertyName).Value;
+        }
+
         private void UpdateView(DataBinding binding)
         {
             UpdateView(binding.View, binding.ViewModelPropertyInfo.GetValue(viewModel));
+        }
+
+        private void UpdateList(DataBinding binding)
+        {
+            if (binding.ViewModelListPropertyInfo != null && binding.ListAdapter != null)
+            {
+                binding.ListAdapter.SetList((IList)binding.ViewModelListPropertyInfo.GetValue(viewModel));
+            }
         }
     }
 }

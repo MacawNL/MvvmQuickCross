@@ -1,22 +1,27 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 
 using Android.Views;
 using Android.Widget;
+using System.Collections.Specialized;
 
 namespace MvvmQuickCross
 {
-    public interface DataBindableAdapter
+    public interface IDataBindableListAdapter
     {
         int GetItemPosition(object item);
         object GetItemAsObject(int position);
+        void SetList(IList list);
+        void AddHandlers();
+        void RemoveHandlers();
     }
 
     public class DataBindableToStringListAdapter<T> : DataBindableListAdapter<T>
     {
-        public DataBindableToStringListAdapter(LayoutInflater layoutInflater, int viewResourceId, int objectValueResourceId, IList<T> objects, string idPrefix = null)
-            : base(layoutInflater, viewResourceId, objectValueResourceId, objects, idPrefix)
+        public DataBindableToStringListAdapter(LayoutInflater layoutInflater, int viewResourceId, int objectValueResourceId, string idPrefix = null)
+            : base(layoutInflater, viewResourceId, objectValueResourceId, idPrefix)
         { }
 
         protected override void UpdateView(View view, T value)
@@ -25,7 +30,7 @@ namespace MvvmQuickCross
         }
     }
 
-    public class DataBindableListAdapter<T> : BaseAdapter, DataBindableAdapter
+    public class DataBindableListAdapter<T> : BaseAdapter, IDataBindableListAdapter
     {
         private class ItemDataBinding
         {
@@ -34,7 +39,7 @@ namespace MvvmQuickCross
             public readonly int ResourceId;
 
             public string Name { get { return (ObjectPropertyInfo != null) ? ObjectPropertyInfo.Name : ObjectFieldInfo.Name; } }
-            public object GetValue(T item) { return (ObjectPropertyInfo != null) ? ObjectPropertyInfo.GetValue(item) : ObjectFieldInfo.GetValue(item); }
+            public object GetValue(object item) { return (ObjectPropertyInfo != null) ? ObjectPropertyInfo.GetValue(item) : ObjectFieldInfo.GetValue(item); }
 
             public ItemDataBinding(PropertyInfo objectPropertyInfo, int resourceId)
             {
@@ -49,19 +54,19 @@ namespace MvvmQuickCross
             }
         }
 
-        private readonly Type resourceIdType;
         private readonly LayoutInflater layoutInflater;
         private readonly int viewResourceId;
-        protected readonly IList<T> objects;
+        private IList list;
+        private readonly Type resourceIdType;
         private readonly int? objectValueResourceId;
         private readonly string idPrefix;
         private readonly List<ItemDataBinding> itemDataBindings;
 
-        private DataBindableListAdapter(LayoutInflater layoutInflater, int viewResourceId, IList<T> objects, Type resourceIdType = null, int? objectValueResourceId = null, string idPrefix = null)
+        private DataBindableListAdapter(LayoutInflater layoutInflater, int viewResourceId, Type resourceIdType = null, int? objectValueResourceId = null, string idPrefix = null)
         {
             this.layoutInflater = layoutInflater;
             this.viewResourceId = viewResourceId;
-            this.objects = objects;
+            this.resourceIdType = resourceIdType;
             this.objectValueResourceId = objectValueResourceId;
             this.idPrefix = idPrefix ?? this.GetType().Name + "_";
 
@@ -83,27 +88,61 @@ namespace MvvmQuickCross
             }
         }
 
-        public DataBindableListAdapter(LayoutInflater layoutInflater, int viewResourceId, int objectValueResourceId, IList<T> objects, string idPrefix = null)
-            : this(layoutInflater, viewResourceId, objects, null, objectValueResourceId, idPrefix)
+        public DataBindableListAdapter(LayoutInflater layoutInflater, int viewResourceId, int objectValueResourceId, string idPrefix = null)
+            : this(layoutInflater, viewResourceId, null, objectValueResourceId, idPrefix)
         { }
 
-        public DataBindableListAdapter(LayoutInflater layoutInflater, int viewResourceId, Type resourceIdType, IList<T> objects, string idPrefix = null)
-            : this(layoutInflater, viewResourceId, objects, resourceIdType, null, idPrefix)
+        public DataBindableListAdapter(LayoutInflater layoutInflater, int viewResourceId, Type resourceIdType, string idPrefix = null)
+            : this(layoutInflater, viewResourceId, resourceIdType, null, idPrefix)
         { }
+
+        private void AddListHandler()
+        {
+            if (list is INotifyCollectionChanged)
+            {
+                ((INotifyCollectionChanged)list).CollectionChanged += DataBindableListAdapter_CollectionChanged;
+            }
+        }
+
+        private void RemoveListHandler()
+        {
+            if (list is INotifyCollectionChanged)
+            {
+                ((INotifyCollectionChanged)list).CollectionChanged -= DataBindableListAdapter_CollectionChanged;
+            }
+        }
+
+        public virtual void AddHandlers() { AddListHandler(); }
+
+        public virtual void RemoveHandlers() { RemoveListHandler(); }
+
+        void DataBindableListAdapter_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            // TODO: Check if this should & can be optimized, see for details documentation at http://blog.stephencleary.com/2009/07/interpreting-notifycollectionchangedeve.html
+            NotifyDataSetChanged();
+        }
 
         public int GetItemPosition(object item)
         {
-            return objects.IndexOf((T)item);
+            return (list == null) ? -1 : list.IndexOf(item);
         }
 
         public object GetItemAsObject(int position)
         {
-            return objects[position];
+            return (list == null) ? null : list[position];
+        }
+
+        public void SetList(IList list)
+        {
+            RemoveListHandler();
+            this.list = list;
+            AddListHandler();
+            NotifyDataSetChanged();
         }
 
         public override int Count
         {
-            get { return objects.Count; }
+            get { return (list == null) ? 0 : list.Count; }
         }
 
         public override Java.Lang.Object GetItem(int position)
@@ -133,11 +172,16 @@ namespace MvvmQuickCross
         public override View GetView(int position, View convertView, ViewGroup parent)
         {
             var rootView = convertView ?? layoutInflater.Inflate(viewResourceId, parent, false);
-            if (objectValueResourceId.HasValue)
+            if (list != null)
             {
-                UpdateView(rootView.FindViewById(objectValueResourceId.Value), objects[position]);
-            } else {
-                foreach (var idb in itemDataBindings) UpdateView(rootView.FindViewById(idb.ResourceId), (T)idb.GetValue(objects[position]));
+                if (objectValueResourceId.HasValue)
+                {
+                    UpdateView(rootView.FindViewById(objectValueResourceId.Value), (T)list[position]);
+                }
+                else
+                {
+                    foreach (var idb in itemDataBindings) UpdateView(rootView.FindViewById(idb.ResourceId), (T)idb.GetValue(list[position]));
+                }
             }
             return rootView;
         }

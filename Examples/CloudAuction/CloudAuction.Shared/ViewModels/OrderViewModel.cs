@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using MvvmQuickCross;
+using System.Collections.Generic;
 
 namespace CloudAuction.Shared.ViewModels
 {
@@ -16,10 +17,16 @@ namespace CloudAuction.Shared.ViewModels
         public void Initialize(Bid bid) { _bid = bid; }
 
         #region Data-bindable properties and commands
-        public string[] DeliveryLocations /* One-way data-bindable property generated with propdb1 snippet. Keep on one line - see http://goo.gl/Yg6QMd for why. */ { get { return _DeliveryLocations; } protected set { if (_DeliveryLocations != value) { _DeliveryLocations = value; RaisePropertyChanged(PROPERTYNAME_DeliveryLocations); } } } private string[] _DeliveryLocations; public const string PROPERTYNAME_DeliveryLocations = "DeliveryLocations";
+        public ObservableCollection<string> DeliveryLocationList /* One-way data-bindable property generated with propdbcol snippet. Keep on one line - see http://goo.gl/Yg6QMd for why. */ { get { return _DeliveryLocationList; } protected set { if (_DeliveryLocationList != value) { _DeliveryLocationList = value; RaisePropertyChanged(PROPERTYNAME_DeliveryLocationList); UpdateDeliveryLocationListHasItems(); } } } private ObservableCollection<string> _DeliveryLocationList; public const string PROPERTYNAME_DeliveryLocationList = "DeliveryLocationList";
+        public bool DeliveryLocationListHasItems /* One-way data-bindable property generated with propdbcol snippet. Keep on one line - see http://goo.gl/Yg6QMd for why. */ { get { return _DeliveryLocationListHasItems; } protected set { if (_DeliveryLocationListHasItems != value) { _DeliveryLocationListHasItems = value; RaisePropertyChanged(PROPERTYNAME_DeliveryLocationListHasItems); } } } private bool _DeliveryLocationListHasItems; public const string PROPERTYNAME_DeliveryLocationListHasItems = "DeliveryLocationListHasItems";
+        protected void UpdateDeliveryLocationListHasItems() /* Helper method generated with propdbcol snippet. Keep on one line - see http://goo.gl/Yg6QMd for why. */ { DeliveryLocationListHasItems = _DeliveryLocationList != null && _DeliveryLocationList.Count > 0; }
         public string DeliveryLocation /* Two-way data-bindable property generated with propdb2 snippet. Keep on one line - see http://goo.gl/Yg6QMd for why. */ { get { return _DeliveryLocation; } set { if (_DeliveryLocation != value) { _DeliveryLocation = value; RaisePropertyChanged(PROPERTYNAME_DeliveryLocation); } } } private string _DeliveryLocation; public const string PROPERTYNAME_DeliveryLocation = "DeliveryLocation";
-        public string[] Titles /* One-way data-bindable property generated with propdb1 snippet. Keep on one line - see http://goo.gl/Yg6QMd for why. */ { get { return _Titles; } protected set { if (_Titles != value) { _Titles = value; RaisePropertyChanged(PROPERTYNAME_Titles); } } } private string[] _Titles; public const string PROPERTYNAME_Titles = "Titles";
+
+        public ObservableCollection<string> TitleList /* One-way data-bindable property generated with propdbcol snippet. Keep on one line - see http://goo.gl/Yg6QMd for why. */ { get { return _TitleList; } protected set { if (_TitleList != value) { _TitleList = value; RaisePropertyChanged(PROPERTYNAME_TitleList); UpdateTitleListHasItems(); } } } private ObservableCollection<string> _TitleList; public const string PROPERTYNAME_TitleList = "TitleList";
+        public bool TitleListHasItems /* One-way data-bindable property generated with propdbcol snippet. Keep on one line - see http://goo.gl/Yg6QMd for why. */ { get { return _TitleListHasItems; } protected set { if (_TitleListHasItems != value) { _TitleListHasItems = value; RaisePropertyChanged(PROPERTYNAME_TitleListHasItems); } } } private bool _TitleListHasItems; public const string PROPERTYNAME_TitleListHasItems = "TitleListHasItems";
+        protected void UpdateTitleListHasItems() /* Helper method generated with propdbcol snippet. Keep on one line - see http://goo.gl/Yg6QMd for why. */ { TitleListHasItems = _TitleList != null && _TitleList.Count > 0; }
         public string Title /* Two-way data-bindable property generated with propdb2 snippet. Keep on one line - see http://goo.gl/Yg6QMd for why. */ { get { return _Title; } set { if (_Title != value) { _Title = value; RaisePropertyChanged(PROPERTYNAME_Title); } } } private string _Title; public const string PROPERTYNAME_Title = "Title";
+
         public string FirstName /* Two-way data-bindable property generated with propdb2 snippet. Keep on one line - see http://goo.gl/Yg6QMd for why. */ { get { return _FirstName; } set { if (_FirstName != value) { _FirstName = value; RaisePropertyChanged(PROPERTYNAME_FirstName); } } } private string _FirstName; public const string PROPERTYNAME_FirstName = "FirstName";
         public string MiddleName /* Two-way data-bindable property generated with propdb2 snippet. Keep on one line - see http://goo.gl/Yg6QMd for why. */ { get { return _MiddleName; } set { if (_MiddleName != value) { _MiddleName = value; RaisePropertyChanged(PROPERTYNAME_MiddleName); } } } private string _MiddleName; public const string PROPERTYNAME_MiddleName = "MiddleName";
         public string LastName /* Two-way data-bindable property generated with propdb2 snippet. Keep on one line - see http://goo.gl/Yg6QMd for why. */ { get { return _LastName; } set { if (_LastName != value) { _LastName = value; RaisePropertyChanged(PROPERTYNAME_LastName); } } } private string _LastName; public const string PROPERTYNAME_LastName = "LastName";
@@ -55,10 +62,10 @@ namespace CloudAuction.Shared.ViewModels.Design
     {
         public OrderViewModelDesign()
         {
-            DeliveryLocations = new string[] { "At home", "Pickup" };
-            DeliveryLocation = DeliveryLocations[0];
-            Titles = new string[] { "Mr.", "Ms." };
-            Title = Titles[0];
+            DeliveryLocationList = new ObservableCollection<string>(new string[] { "At home", "Pickup" });
+            DeliveryLocation = DeliveryLocationList[0];
+            TitleList = new ObservableCollection<string>(new string[] { "Mr.", "Ms." });
+            Title = TitleList[0];
             FirstName = "First name";
             MiddleName = "Mid";
             LastName = "Last name";
