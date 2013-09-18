@@ -77,9 +77,6 @@
     <AndroidResource Include="Resources\Layout\TextListItem.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\Layout\DeliveryLocationListItem.axml">
-      <SubType>AndroidResource</SubType>
-    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Layout\AuctionView.axml" />
