@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
@@ -16,18 +15,6 @@ namespace MvvmQuickCross
         void SetList(IList list);
         void AddHandlers();
         void RemoveHandlers();
-    }
-
-    public class DataBindableToStringListAdapter<T> : DataBindableListAdapter<T>
-    {
-        public DataBindableToStringListAdapter(LayoutInflater layoutInflater, int viewResourceId, int objectValueResourceId, string idPrefix = null)
-            : base(layoutInflater, viewResourceId, objectValueResourceId, idPrefix)
-        { }
-
-        protected override void UpdateView(View view, T value)
-        {
-            ViewDataBindings.UpdateView(view, value.ToString());
-        }
     }
 
     public class DataBindableListAdapter<T> : BaseAdapter, IDataBindableListAdapter
@@ -55,46 +42,36 @@ namespace MvvmQuickCross
         }
 
         private readonly LayoutInflater layoutInflater;
-        private readonly int viewResourceId;
+        private readonly int itemTemplateResourceId;
         private IList list;
-        private readonly Type resourceIdType;
-        private readonly int? objectValueResourceId;
+        private readonly int? itemValueResourceId;
         private readonly string idPrefix;
         private readonly List<ItemDataBinding> itemDataBindings;
 
-        private DataBindableListAdapter(LayoutInflater layoutInflater, int viewResourceId, Type resourceIdType = null, int? objectValueResourceId = null, string idPrefix = null)
+        public DataBindableListAdapter(LayoutInflater layoutInflater, int itemTemplateResourceId, int? itemValueResourceId = null, string idPrefix = null)
         {
             this.layoutInflater = layoutInflater;
-            this.viewResourceId = viewResourceId;
-            this.resourceIdType = resourceIdType;
-            this.objectValueResourceId = objectValueResourceId;
+            this.itemTemplateResourceId = itemTemplateResourceId;
+            this.itemValueResourceId = itemValueResourceId;
             this.idPrefix = idPrefix ?? this.GetType().Name + "_";
 
-            if (!objectValueResourceId.HasValue)
+            if (!itemValueResourceId.HasValue)
             {
                 itemDataBindings = new List<ItemDataBinding>();
 
                 foreach (var pi in typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance))
                 {
-                    var resourceId = ResourceId(IdName(pi.Name));
+                    var resourceId = AndroidApplication.FindResourceId(IdName(pi.Name));
                     if (resourceId.HasValue) itemDataBindings.Add(new ItemDataBinding(pi, resourceId.Value));
                 }
 
                 foreach (var fi in typeof(T).GetFields(BindingFlags.Public | BindingFlags.Instance))
                 {
-                    var resourceId = ResourceId(IdName(fi.Name));
+                    var resourceId = AndroidApplication.FindResourceId(IdName(fi.Name));
                     if (resourceId.HasValue) itemDataBindings.Add(new ItemDataBinding(fi, resourceId.Value));
                 }
             }
         }
-
-        public DataBindableListAdapter(LayoutInflater layoutInflater, int viewResourceId, int objectValueResourceId, string idPrefix = null)
-            : this(layoutInflater, viewResourceId, null, objectValueResourceId, idPrefix)
-        { }
-
-        public DataBindableListAdapter(LayoutInflater layoutInflater, int viewResourceId, Type resourceIdType, string idPrefix = null)
-            : this(layoutInflater, viewResourceId, resourceIdType, null, idPrefix)
-        { }
 
         private void AddListHandler()
         {
@@ -118,8 +95,7 @@ namespace MvvmQuickCross
 
         void DataBindableListAdapter_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            // TODO: Check if this should & can be optimized, see for details documentation at http://blog.stephencleary.com/2009/07/interpreting-notifycollectionchangedeve.html
-            NotifyDataSetChanged();
+            NotifyDataSetChanged(); // TODO: Check if this should & can be optimized, see for details documentation at http://blog.stephencleary.com/2009/07/interpreting-notifycollectionchangedeve.html
         }
 
         public int GetItemPosition(object item)
@@ -157,13 +133,6 @@ namespace MvvmQuickCross
 
         private string IdName(string name) { return idPrefix + name; }
 
-        private int? ResourceId(string resourceName)
-        {
-            var fieldInfo = resourceIdType.GetField(IdName(resourceName));
-            if (fieldInfo == null) return null;
-            return (int)fieldInfo.GetValue(null);
-        }
-
         protected virtual void UpdateView(View view, T value)
         {
             ViewDataBindings.UpdateView(view, value);
@@ -171,12 +140,12 @@ namespace MvvmQuickCross
 
         public override View GetView(int position, View convertView, ViewGroup parent)
         {
-            var rootView = convertView ?? layoutInflater.Inflate(viewResourceId, parent, false);
+            var rootView = convertView ?? layoutInflater.Inflate(itemTemplateResourceId, parent, false);
             if (list != null)
             {
-                if (objectValueResourceId.HasValue)
+                if (itemValueResourceId.HasValue)
                 {
-                    UpdateView(rootView.FindViewById(objectValueResourceId.Value), (T)list[position]);
+                    UpdateView(rootView.FindViewById(itemValueResourceId.Value), (T)list[position]);
                 }
                 else
                 {

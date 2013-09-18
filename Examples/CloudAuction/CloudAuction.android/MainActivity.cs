@@ -6,6 +6,7 @@ using Android.Views;
 using Android.Widget;
 using Android.OS;
 using CloudAuction.Shared;
+using MvvmQuickCross;
 
 namespace CloudAuction
 {
@@ -47,6 +48,7 @@ namespace CloudAuction
             ActionBar.NavigationMode = ActionBarNavigationMode.Tabs;
 
             EnsureApplication();
+            AndroidApplication.Initialize(typeof(Resource));
             CloudAuctionApplication.Instance.CurrentNavigationContext = this;
             CloudAuctionApplication.Instance.ContinueToAuction(skipNavigation: true);
 

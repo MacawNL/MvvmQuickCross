@@ -5,7 +5,6 @@ using System.Linq;
 using System.Reflection;
 
 using Android.Views;
-using System.Text.RegularExpressions;
 using Android.Widget;
 
 namespace MvvmQuickCross
@@ -33,18 +32,18 @@ namespace MvvmQuickCross
             public IDataBindableListAdapter ListAdapter;
         }
 
-        private Type resourceIdType;
         private readonly View rootView;
         private readonly ViewModelBase viewModel;
+        private readonly LayoutInflater layoutInflater;
         private readonly string idPrefix;
 
         private Dictionary<string, DataBinding> dataBindings = new Dictionary<string, DataBinding>();
 
-        public ViewDataBindings(Type resourceIdType, View rootView, ViewModelBase viewModel, string idPrefix)
+        public ViewDataBindings(View rootView, ViewModelBase viewModel, LayoutInflater layoutInflater, string idPrefix)
         {
-            this.resourceIdType = resourceIdType;
             this.rootView = rootView;
             this.viewModel = viewModel;
+            this.layoutInflater = layoutInflater;
             this.idPrefix = idPrefix;
         }
 
@@ -154,40 +153,47 @@ namespace MvvmQuickCross
         private DataBinding AddBinding(string propertyName, BindingMode mode = BindingMode.OneWay, string listPropertyName = null, View view = null)
         {
             string idName = (view != null) ? view.Id.ToString() : IdName(propertyName);
+            int? resourceId = AndroidApplication.FindResourceId(idName);
+            if (view == null && resourceId.HasValue) view = rootView.FindViewById(resourceId.Value);
+            if (view == null) return null;
 
-            var binding = new DataBinding();
-            binding.View = view;
-            binding.Mode = mode;
-            binding.ViewModelPropertyInfo = viewModel.GetType().GetProperty(propertyName);
-            if (listPropertyName == null) listPropertyName = propertyName + "List";
-            binding.ViewModelListPropertyInfo = viewModel.GetType().GetProperty(listPropertyName);
-
-            var fieldInfo = resourceIdType.GetField(idName);
-            if (fieldInfo != null)
+            bool itemIsValue = false;
+            string itemTemplateName = null, itemValueId = null;
+            if (view.Tag != null)
             {
-                binding.ResourceId = (int)fieldInfo.GetValue(null);
-                if (binding.View == null)
-                {
-                    binding.View = rootView.FindViewById(binding.ResourceId.Value);
-                }
-            }
-
-            if (binding.View == null) return null;
-
-            if (binding.View.Tag != null)
-            {
-                string tag = binding.View.Tag.ToString();
+                string tag = view.Tag.ToString();
+                // Get optional parameters from tag: Binding{[Value=]propertyName, Mode=OneWay|TwoWay|Command, List{ItemsSource=listPropertyName, ItemIsValue, ItemTemplate=listItemTemplateName, ItemValueId=listItemValueId}}
+                // Defaults: 
+                //   mode = BindingMode.OneWay
+                //   listPropertyName = propertyName + "List"
+                //   listItemTemplateName = listPropertyName + "Item"
                 if (tag.Contains("Binding{Mode=TwoWay}"))
                 {
-                    binding.Mode = BindingMode.TwoWay;
+                    mode = BindingMode.TwoWay;
                 }
-                // TODO: get list property name override from tag
+                // TODO: get parameters from tag
             }
+
+            var binding = new DataBinding { View = view, ResourceId = resourceId, Mode = mode, ViewModelPropertyInfo = viewModel.GetType().GetProperty(propertyName) };
 
             if (binding.View is AdapterView)
             {
+                if (listPropertyName == null) listPropertyName = propertyName + "List";
+                binding.ViewModelListPropertyInfo = viewModel.GetType().GetProperty(listPropertyName);
+
                 var pi = binding.View.GetType().GetProperty("Adapter", BindingFlags.Public | BindingFlags.Instance);
-                if (pi != null) binding.ListAdapter = pi.GetValue(binding.View) as IDataBindableListAdapter;
+                if (pi != null)
+                {
+                    var adapter = pi.GetValue(binding.View) as IDataBindableListAdapter;
+                    if (adapter == null) {
+                        if (itemTemplateName == null) itemTemplateName = listPropertyName + "Item";
+                        if (itemIsValue && itemValueId == null) itemValueId = itemTemplateName;
+                        int? itemTemplateResourceId = AndroidApplication.FindResourceId(itemTemplateName, AndroidApplication.Category.Layout);
+                        int? itemValueResourceId = AndroidApplication.FindResourceId(itemValueId);
+                        if (itemTemplateResourceId.HasValue) adapter = new DataBindableListAdapter<object>(layoutInflater, itemTemplateResourceId.Value, itemValueResourceId);
+                    }
+                    binding.ListAdapter = adapter;
+                }
             }
 
             switch (binding.Mode)

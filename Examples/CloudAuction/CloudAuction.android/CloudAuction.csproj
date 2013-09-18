@@ -58,6 +58,7 @@
     <Compile Include="MvvmQuickCross\ActivityViewBase.cs" />
     <Compile Include="MvvmQuickCross\FragmentViewBase.cs" />
     <Compile Include="MvvmQuickCross\DataBindableListAdapter.cs" />
+    <Compile Include="MvvmQuickCross\AndroidApplication.cs" />
     <Compile Include="MvvmQuickCross\ViewDataBindings.UI.cs" />
     <Compile Include="OrderView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

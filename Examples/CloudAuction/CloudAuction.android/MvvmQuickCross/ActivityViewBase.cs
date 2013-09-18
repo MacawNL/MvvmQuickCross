@@ -1,5 +1,3 @@
-using System;
-
 using Android.App;
 using Android.Views;
 
@@ -11,10 +9,10 @@ namespace MvvmQuickCross
         protected ViewModelType ViewModel { get; private set; }
         protected ViewDataBindings Bindings { get; private set; }
 
-        protected void Initialize(Type resourceIdType, View rootView, ViewModelType viewModel, BindingParameters[] bindingsParameters = null, string idPrefix = null)
+        protected void Initialize(View rootView, ViewModelType viewModel, BindingParameters[] bindingsParameters = null, string idPrefix = null)
         {
             ApplicationBase.Instance.CurrentNavigationContext = this;
-            Bindings = new ViewDataBindings(resourceIdType, rootView, viewModel, idPrefix ?? this.GetType().Name + "_");
+            Bindings = new ViewDataBindings(rootView, viewModel, LayoutInflater, idPrefix ?? this.GetType().Name + "_");
             ViewModel = viewModel;
             EnsureHandlersAreAdded();
             Bindings.AddBindings(bindingsParameters); // First add any bindings that were specified in code 

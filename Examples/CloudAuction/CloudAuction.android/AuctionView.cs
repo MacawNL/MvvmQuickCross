@@ -16,7 +16,7 @@ namespace CloudAuction
         {
             base.OnCreateView(inflater, container, savedInstanceState);
             var view = inflater.Inflate(Resource.Layout.AuctionView, container, false);
-            Initialize(typeof(Resource.Id), view, CloudAuctionApplication.Instance.AuctionViewModel);
+            Initialize(view, CloudAuctionApplication.Instance.AuctionViewModel, inflater);
             return view;
         }
     }
