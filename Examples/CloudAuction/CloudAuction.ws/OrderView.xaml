@@ -36,11 +36,11 @@
         <Button Content="Confirm" Command="{Binding ConfirmCommand}" Grid.Row="0" Grid.Column="3" HorizontalAlignment="Right" FontSize="18"/>
 
         <TextBlock Text="Deliver" Grid.Row="1" VerticalAlignment="Center"  />
-        <ComboBox ItemsSource="{Binding DeliveryLocations}" 
+        <ComboBox ItemsSource="{Binding DeliveryLocationList}" 
                   SelectedItem="{Binding DeliveryLocation, Mode=TwoWay}" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" FontSize="24" />
 
         <TextBlock Text="Title" Grid.Row="3" VerticalAlignment="Center" Margin="0,6,0,0" />
-        <ComboBox ItemsSource="{Binding Titles}" 
+        <ComboBox ItemsSource="{Binding TitleList}" 
                   SelectedItem="{Binding Title, Mode=TwoWay}" Grid.Row="3" Grid.Column="1"  FontSize="24" />
 
         <TextBlock Text="Name" Grid.Row="4" VerticalAlignment="Center" Margin="0,6,0,0" />
