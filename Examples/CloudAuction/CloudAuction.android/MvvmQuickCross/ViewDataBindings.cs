@@ -6,6 +6,7 @@ using System.Reflection;
 
 using Android.Views;
 using Android.Widget;
+using System.Text.RegularExpressions;
 
 namespace MvvmQuickCross
 {
@@ -161,17 +162,49 @@ namespace MvvmQuickCross
             string itemTemplateName = null, itemValueId = null;
             if (view.Tag != null)
             {
-                string tag = view.Tag.ToString();
-                // Get optional parameters from tag: Binding{[Value=]propertyName, Mode=OneWay|TwoWay|Command, List{ItemsSource=listPropertyName, ItemIsValue, ItemTemplate=listItemTemplateName, ItemValueId=listItemValueId}}
+                // Get optional parameters from tag:
+                // {Binding propertyName, Mode=OneWay|TwoWay|Command} {List ItemsSource=listPropertyName, ItemIsValue=true, ItemTemplate=listItemTemplateName, ItemValueId=listItemValueId}
                 // Defaults: 
                 //   mode = BindingMode.OneWay
                 //   listPropertyName = propertyName + "List"
                 //   listItemTemplateName = listPropertyName + "Item"
-                if (tag.Contains("Binding{Mode=TwoWay}"))
+                string tag = view.Tag.ToString();
+                if (tag != null && tag.Contains("{Binding"))
                 {
-                    mode = BindingMode.TwoWay;
+                    var match = Regex.Match(tag, @"{Binding\s+((?<assignment>[^,{}]+),?)+\s*}(\s*{List\s+((?<assignment>[^,{}]+),?)+\s*})?");
+                    if (match.Success)
+                    {
+                        var gc = match.Groups["assignment"];
+                        if (gc != null)
+                        {
+                            var cc = gc.Captures;
+                            if (cc != null)
+                            {
+                                for (int i = 0; i < cc.Count; i++)
+                                {
+                                    string[] assignmentElements = cc[i].Value.Split('=');
+                                    if (assignmentElements.Length == 1)
+                                    {
+                                        propertyName = assignmentElements[0].Trim();
+                                    }
+                                    else if (assignmentElements.Length == 2)
+                                    {
+                                        string name = assignmentElements[0].Trim();
+                                        string value = assignmentElements[1].Trim();
+                                        switch (name)
+                                        {
+                                            case "Mode": Enum.TryParse<BindingMode>(value, true, out mode); break;
+                                            case "ItemsSource": listPropertyName = value; break;
+                                            case "ItemIsValue": Boolean.TryParse(value, out itemIsValue); break;
+                                            case "ItemTemplate": itemTemplateName = value; break;
+                                            case "ItemValueId": itemValueId = value; break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
-                // TODO: get parameters from tag
             }
 
             var binding = new DataBinding { View = view, ResourceId = resourceId, Mode = mode, ViewModelPropertyInfo = viewModel.GetType().GetProperty(propertyName) };
@@ -190,7 +223,11 @@ namespace MvvmQuickCross
                         if (itemIsValue && itemValueId == null) itemValueId = itemTemplateName;
                         int? itemTemplateResourceId = AndroidApplication.FindResourceId(itemTemplateName, AndroidApplication.Category.Layout);
                         int? itemValueResourceId = AndroidApplication.FindResourceId(itemValueId);
-                        if (itemTemplateResourceId.HasValue) adapter = new DataBindableListAdapter<object>(layoutInflater, itemTemplateResourceId.Value, itemValueResourceId);
+                        if (itemTemplateResourceId.HasValue)
+                        {
+                            adapter = new DataBindableListAdapter<object>(layoutInflater, itemTemplateResourceId.Value, itemValueResourceId);
+                            pi.SetValue(binding.View, adapter);
+                        }
                     }
                     binding.ListAdapter = adapter;
                 }

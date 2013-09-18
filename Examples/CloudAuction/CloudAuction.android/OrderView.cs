@@ -23,8 +23,10 @@ namespace CloudAuction
             base.OnCreate(bundle);
             SetContentView(Resource.Layout.OrderView);
 
+            /* Specify adapter in code:
             var spinner = FindViewById<Spinner>(Resource.Id.OrderView_DeliveryLocation);
             spinner.Adapter = new DataBindableListAdapter<string>(LayoutInflater, Resource.Layout.TextListItem, Resource.Id.TextListItem);
+            */
 
             /* Specify binding in code:
             var bindingsParameters = new BindingParameters[] {

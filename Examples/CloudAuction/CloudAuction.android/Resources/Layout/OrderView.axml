@@ -10,25 +10,25 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/OrderView_DeliveryLocation"
-        android:tag="Binding{Mode=TwoWay}" />
+        android:tag="{Binding Mode=TwoWay} {List ItemIsValue=true, ItemTemplate=TextListItem}" />
     <EditText
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:label="First name"
         android:id="@+id/OrderView_FirstName"
-        android:tag="Binding{Mode=TwoWay}" />
+        android:tag="{Binding Mode=TwoWay}" />
     <EditText
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:label="Middle name"
         android:id="@+id/OrderView_MiddleName"
-        android:tag="Binding{Mode=TwoWay}" />
+        android:tag="{Binding Mode=TwoWay}" />
     <EditText
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:label="Last name"
         android:id="@+id/OrderView_LastName"
-        android:tag="Binding{Mode=TwoWay}" />
+        android:tag="{Binding Mode=TwoWay}" />
     <Button
         android:text="Cancel"
         android:layout_width="fill_parent"
