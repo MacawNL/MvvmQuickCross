@@ -17,15 +17,10 @@ namespace MvvmQuickCross
             string viewTypeName = binding.View.GetType().FullName;
             switch (viewTypeName)
             {
-                case "Android.Widget.Button":
-                    binding.View.Click += View_Click;
-                    break;
-                case "Android.Widget.Spinner":
-                case "Android.Widget.ListView":
-                    ((AdapterView)binding.View).ItemSelected += AdapterView_ItemSelected;
-                    break;
-                default:
-                    throw new NotImplementedException("View type not implemented: " + viewTypeName);
+                case "Android.Widget.Button": binding.View.Click += View_Click; break;
+                case "Android.Widget.Spinner": ((AdapterView)binding.View).ItemSelected += AdapterView_ItemSelected; break;
+                case "Android.Widget.ListView": ((AdapterView)binding.View).ItemClick += AdapterView_ItemClick; break;
+                default: throw new NotImplementedException("View type not implemented: " + viewTypeName);
             }
         }
 
@@ -35,15 +30,10 @@ namespace MvvmQuickCross
             string viewTypeName = binding.View.GetType().FullName;
             switch (viewTypeName)
             {
-                case "Android.Widget.Button":
-                    binding.View.Click -= View_Click;
-                    break;
-                case "Android.Widget.Spinner":
-                case "Android.Widget.ListView":
-                    ((AdapterView)binding.View).ItemSelected -= AdapterView_ItemSelected;
-                    break;
-                default:
-                    throw new NotImplementedException("View type not implemented: " + viewTypeName);
+                case "Android.Widget.Button": binding.View.Click -= View_Click; break;
+                case "Android.Widget.Spinner": ((AdapterView)binding.View).ItemSelected -= AdapterView_ItemSelected; break;
+                case "Android.Widget.ListView": ((AdapterView)binding.View).ItemClick -= AdapterView_ItemClick; break;
+                default: throw new NotImplementedException("View type not implemented: " + viewTypeName);
             }
         }
 
@@ -115,16 +105,10 @@ namespace MvvmQuickCross
             string viewTypeName = binding.View.GetType().FullName;
             switch (viewTypeName)
             {
-                case "Android.Widget.EditText":
-                    ((TextView)binding.View).AfterTextChanged += TextView_AfterTextChanged;
-                    break;
-                case "Android.Widget.Spinner":
-                case "Android.Widget.ListView":
-                    var adapterView = (AdapterView)binding.View;
-                    adapterView.ItemSelected += AdapterView_ItemSelected;
-                    break;
-                default:
-                    throw new NotImplementedException("View type not implemented: " + viewTypeName);
+                case "Android.Widget.EditText": ((TextView)binding.View).AfterTextChanged += TextView_AfterTextChanged; break;
+                case "Android.Widget.Spinner":  ((AdapterView)binding.View).ItemSelected += AdapterView_ItemSelected; break;
+                case "Android.Widget.ListView": ((AdapterView)binding.View).ItemClick += AdapterView_ItemClick; break;
+                default: throw new NotImplementedException("View type not implemented: " + viewTypeName);
             }
         }
 
@@ -134,16 +118,10 @@ namespace MvvmQuickCross
             string viewTypeName = binding.View.GetType().FullName;
             switch (viewTypeName)
             {
-                case "Android.Widget.EditText":
-                    ((TextView)binding.View).AfterTextChanged -= TextView_AfterTextChanged;
-                    break;
-                case "Android.Widget.Spinner":
-                case "Android.Widget.ListView":
-                    var adapterView = (AdapterView)binding.View;
-                    adapterView.ItemSelected -= AdapterView_ItemSelected;
-                    break;
-                default:
-                    throw new NotImplementedException("View type not implemented: " + viewTypeName);
+                case "Android.Widget.EditText": ((TextView)binding.View).AfterTextChanged -= TextView_AfterTextChanged; break;
+                case "Android.Widget.Spinner": ((AdapterView)binding.View).ItemSelected -= AdapterView_ItemSelected; break;
+                case "Android.Widget.ListView": ((AdapterView)binding.View).ItemClick -= AdapterView_ItemClick; break;
+                default: throw new NotImplementedException("View type not implemented: " + viewTypeName);
             }
         }
 
@@ -157,28 +135,37 @@ namespace MvvmQuickCross
             }
         }
 
-        private void AdapterView_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)
+        private void HandleAdapterViewItemChosen(AdapterView adapterView, int itemPosition)
         {
-            if (e.Position >= 0)
+            if (itemPosition >= 0)
             {
-                var adapterView = (AdapterView)sender;
                 var adapter = adapterView.GetAdapter() as IDataBindableListAdapter;
                 var binding = FindBindingForView(adapterView);
                 if (adapter != null && binding != null)
                 {
-                    var value = adapter.GetItemAsObject(e.Position);
+                    var value = adapter.GetItemAsObject(itemPosition);
                     switch (binding.Mode)
                     {
-                        case BindingMode.Command:  
+                        case BindingMode.Command:
                             var command = (RelayCommand)binding.ViewModelPropertyInfo.GetValue(viewModel);
                             command.Execute(value);
                             break;
-                        case BindingMode.TwoWay: 
-                            binding.ViewModelPropertyInfo.SetValue(viewModel, value); 
+                        case BindingMode.TwoWay:
+                            binding.ViewModelPropertyInfo.SetValue(viewModel, value);
                             break;
                     }
                 }
             }
+        }
+
+        private void AdapterView_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)
+        {
+            HandleAdapterViewItemChosen((AdapterView)sender, e.Position);
+        }
+
+        private void AdapterView_ItemClick(object sender, AdapterView.ItemClickEventArgs e)
+        {
+            HandleAdapterViewItemChosen((AdapterView)sender, e.Position);
         }
 
         #endregion View types that support two-way data binding
