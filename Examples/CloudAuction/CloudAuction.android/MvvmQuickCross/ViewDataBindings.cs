@@ -163,11 +163,15 @@ namespace MvvmQuickCross
             if (view.Tag != null)
             {
                 // Get optional parameters from tag:
-                // {Binding propertyName, Mode=OneWay|TwoWay|Command} {List ItemsSource=listPropertyName, ItemIsValue=true, ItemTemplate=listItemTemplateName, ItemValueId=listItemValueId}
-                // Defaults: 
-                //   mode = BindingMode.OneWay
-                //   listPropertyName = propertyName + "List"
-                //   listItemTemplateName = listPropertyName + "Item"
+                // {Binding propertyName, Mode=OneWay|TwoWay|Command} {List ItemsSource=listPropertyName, ItemIsValue=false|true, ItemTemplate=listItemTemplateName, ItemValueId=listItemValueId}
+                // Defaults:
+                //   propertyName is known by convention from view Id = <rootview prefix><propertyName>; the default for the rootview prefix is the rootview class name + "_".
+                //   Mode = OneWay
+                // Additional defaults for views derived from AdapterView (i.e. lists):
+                //   ItemsSource = propertyName + "List"
+                //   ItemIsValue = false
+                //   ItemTemplate = ItemsSource + "Item"
+                //   ItemValueId : if ItemIsValue = true then the default for ItemValueId = ItemTemplate
                 string tag = view.Tag.ToString();
                 if (tag != null && tag.Contains("{Binding"))
                 {

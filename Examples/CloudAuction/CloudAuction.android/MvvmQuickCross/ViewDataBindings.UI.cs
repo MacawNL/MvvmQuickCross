@@ -104,7 +104,7 @@ namespace MvvmQuickCross
                         if (value is Uri) value = ((Uri)value).AbsoluteUri;
                         var multiImageView = (Macaw.UIComponents.MultiImageView)view;
                         multiImageView.LoadImageList(new[] { (string)value });
-                        multiImageView.LoadImage(); // TODO: Fix hang on no connection; Fix this LoadImage call should not be needed.
+                        multiImageView.LoadImage(); // TODO: Update to MultiImageView 1.2 when it is published, to fix hang on no connection and to get rid of this LoadImage call.
                         break;
 
                     default:

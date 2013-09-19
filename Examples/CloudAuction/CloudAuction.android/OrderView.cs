@@ -1,14 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
 using Android.App;
-using Android.Content;
 using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
 using MvvmQuickCross;
 using CloudAuction.Shared.ViewModels;
 using CloudAuction.Shared;
@@ -23,14 +14,14 @@ namespace CloudAuction
             base.OnCreate(bundle);
             SetContentView(Resource.Layout.OrderView);
 
-            /* Specify adapter in code:
-            var spinner = FindViewById<Spinner>(Resource.Id.OrderView_DeliveryLocation);
+            /* Example of how to specify a data bindable list adapter in code:
+            var spinner = FindViewById<Android.Widget.Spinner>(Resource.Id.OrderView_DeliveryLocation);
             spinner.Adapter = new DataBindableListAdapter<string>(LayoutInflater, Resource.Layout.TextListItem, Resource.Id.TextListItem);
             */
 
-            /* Specify binding in code:
+            /* Example of how to specify data bindings in code instead of from Layout markup:
             var bindingsParameters = new BindingParameters[] {
-               new BindingParameters { BindingMode.TwoWay, spinner, OrderViewModel.PROPERTYNAME_DeliveryLocation, OrderViewModel.PROPERTYNAME_DeliveryLocations }
+               new BindingParameters { mode = BindingMode.TwoWay, view = spinner, propertyName = OrderViewModel.PROPERTYNAME_DeliveryLocation, listPropertyName = OrderViewModel.PROPERTYNAME_DeliveryLocationList }
             };
             */
 

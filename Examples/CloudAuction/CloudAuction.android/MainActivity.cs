@@ -1,19 +1,15 @@
-﻿using System;
-using Android.App;
-using Android.Content;
-using Android.Runtime;
+﻿using Android.App;
 using Android.Views;
-using Android.Widget;
 using Android.OS;
-using CloudAuction.Shared;
 using MvvmQuickCross;
+using CloudAuction.Shared;
 
 namespace CloudAuction
 {
     [Activity(Label = "Cloud Auction", MainLauncher = true, Icon = "@drawable/icon")]
     public class MainActivity : Activity
     {
-        private bool areHandlersAdded;
+        private bool areHandlersAdded; // TODO: see if we can use the view base class without a view model, to eliminate lifetime management code?
         private ActionBar.Tab auctionTab, productsTab, helpTab;
         private Fragment auctionFragment, productsFragment, helpFragment;
 
@@ -47,7 +43,7 @@ namespace CloudAuction
             SetContentView(Resource.Layout.Main);
             ActionBar.NavigationMode = ActionBarNavigationMode.Tabs;
 
-            EnsureApplication();
+            EnsureApplication(); // TODO: check if we should use class derived from android application object as entry point?
             AndroidApplication.Initialize(typeof(Resource));
             CloudAuctionApplication.Instance.CurrentNavigationContext = this;
             CloudAuctionApplication.Instance.ContinueToAuction(skipNavigation: true);
@@ -66,11 +62,6 @@ namespace CloudAuction
             ActionBar.AddTab(auctionTab);
             ActionBar.AddTab(productsTab);
             ActionBar.AddTab(helpTab);
-
-            //// Get our button from the layout resource,
-            //// and attach an event to it
-            //Button button = FindViewById<Button>(Resource.Id.MyButton);
-            //button.Click += delegate { button.Text = string.Format("{0} clicks!", count++); };
         }
 
         protected override void OnResume()
@@ -106,20 +97,6 @@ namespace CloudAuction
             MenuInflater.Inflate(Resource.Menu.MainMenu, menu);
             return base.OnPrepareOptionsMenu(menu);
         }
-
-        // TODO: this should go into view fragment
-        /*
-        public override bool OnMenuItemSelected(int featureId, IMenuItem item)
-        {
-            switch (item.ItemId)
-            {
-                case Resource.Id.LogoutMenuItem:
-                    //do something
-                    return true;
-            }
-            return base.OnOptionsItemSelected(item);
-        }
-        */
     }
 }
 

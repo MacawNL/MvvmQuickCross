@@ -1,9 +1,5 @@
-using System;
-
-using Android.App;
 using Android.OS;
 using Android.Views;
-using Android.Widget;
 using MvvmQuickCross;
 using CloudAuction.Shared;
 using CloudAuction.Shared.ViewModels;
