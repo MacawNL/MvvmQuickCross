@@ -3,6 +3,7 @@ using System.Collections;
 
 using Android.Views;
 using Android.Widget;
+using System.Reflection;
 
 namespace MvvmQuickCross
 {
@@ -17,10 +18,11 @@ namespace MvvmQuickCross
             switch (viewTypeName)
             {
                 case "Android.Widget.Button":
-                    ((Button)binding.View).Click += Button_Click;
+                    binding.View.Click += View_Click;
                     break;
                 case "Android.Widget.Spinner":
-                    ((Spinner)binding.View).ItemClick += Spinner_ItemClick;
+                case "Android.Widget.ListView":
+                    ((AdapterView)binding.View).ItemSelected += AdapterView_ItemSelected;
                     break;
                 default:
                     throw new NotImplementedException("View type not implemented: " + viewTypeName);
@@ -34,17 +36,18 @@ namespace MvvmQuickCross
             switch (viewTypeName)
             {
                 case "Android.Widget.Button":
-                    ((Button)binding.View).Click -= Button_Click;
+                    binding.View.Click -= View_Click;
                     break;
                 case "Android.Widget.Spinner":
-                    ((Spinner)binding.View).ItemClick -= Spinner_ItemClick;
+                case "Android.Widget.ListView":
+                    ((AdapterView)binding.View).ItemSelected -= AdapterView_ItemSelected;
                     break;
                 default:
                     throw new NotImplementedException("View type not implemented: " + viewTypeName);
             }
         }
 
-        private void Button_Click(object sender, EventArgs e)
+        private void View_Click(object sender, EventArgs e)
         {
             var view = (Button)sender;
             var binding = FindBindingForView(view);
@@ -52,18 +55,6 @@ namespace MvvmQuickCross
             {
                 var command = (RelayCommand)binding.ViewModelPropertyInfo.GetValue(viewModel);
                 command.Execute(null);
-            }
-        }
-
-        private void Spinner_ItemClick(object sender, AdapterView.ItemClickEventArgs e)
-        {
-            var spinner = (Spinner)sender;
-            var binding = FindBindingForView(spinner);
-            if (binding != null && spinner.Adapter is IDataBindableListAdapter)
-            {
-                var adapter = (IDataBindableListAdapter)spinner.Adapter;
-                var command = (RelayCommand)binding.ViewModelPropertyInfo.GetValue(viewModel);
-                command.Execute(adapter.GetItemAsObject(e.Position));
             }
         }
 
@@ -91,12 +82,13 @@ namespace MvvmQuickCross
                         break;
 
                     case "Android.Widget.Spinner":
-                        var spinner = (Spinner)view;
-                        var adapter = spinner.Adapter as IDataBindableListAdapter;
+                    case "Android.Widget.ListView":
+                        var adapterView = (AdapterView)view;
+                        var adapter = adapterView.GetAdapter() as IDataBindableListAdapter;
                         if (adapter != null)
                         {
                             int position = adapter.GetItemPosition(value);
-                            if (spinner.SelectedItemPosition != position) spinner.SetSelection(position);
+                            if (adapterView.SelectedItemPosition != position) adapterView.SetSelection(position);
                         }
                         break;
 
@@ -124,11 +116,12 @@ namespace MvvmQuickCross
             switch (viewTypeName)
             {
                 case "Android.Widget.EditText":
-                    ((EditText)binding.View).AfterTextChanged += EditText_AfterTextChanged;
+                    ((TextView)binding.View).AfterTextChanged += TextView_AfterTextChanged;
                     break;
                 case "Android.Widget.Spinner":
-                    var spinner = (Spinner)binding.View;
-                    spinner.ItemSelected += Spinner_ItemSelected;
+                case "Android.Widget.ListView":
+                    var adapterView = (AdapterView)binding.View;
+                    adapterView.ItemSelected += AdapterView_ItemSelected;
                     break;
                 default:
                     throw new NotImplementedException("View type not implemented: " + viewTypeName);
@@ -142,20 +135,21 @@ namespace MvvmQuickCross
             switch (viewTypeName)
             {
                 case "Android.Widget.EditText":
-                    ((EditText)binding.View).AfterTextChanged -= EditText_AfterTextChanged;
+                    ((TextView)binding.View).AfterTextChanged -= TextView_AfterTextChanged;
                     break;
                 case "Android.Widget.Spinner":
-                    var spinner = (Spinner)binding.View;
-                    spinner.ItemSelected -= Spinner_ItemSelected;
+                case "Android.Widget.ListView":
+                    var adapterView = (AdapterView)binding.View;
+                    adapterView.ItemSelected -= AdapterView_ItemSelected;
                     break;
                 default:
                     throw new NotImplementedException("View type not implemented: " + viewTypeName);
             }
         }
 
-        void EditText_AfterTextChanged(object sender, Android.Text.AfterTextChangedEventArgs e)
+        private void TextView_AfterTextChanged(object sender, Android.Text.AfterTextChangedEventArgs e)
         {
-            var view = (EditText)sender;
+            var view = (TextView)sender;
             var binding = FindBindingForView(view);
             if (binding != null)
             {
@@ -163,16 +157,26 @@ namespace MvvmQuickCross
             }
         }
 
-        void Spinner_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)
+        private void AdapterView_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)
         {
             if (e.Position >= 0)
             {
-                var view = (Spinner)sender;
-                var binding = FindBindingForView(view);
-                if (binding != null)
+                var adapterView = (AdapterView)sender;
+                var adapter = adapterView.GetAdapter() as IDataBindableListAdapter;
+                var binding = FindBindingForView(adapterView);
+                if (adapter != null && binding != null)
                 {
-                    var adapter = (IDataBindableListAdapter)view.Adapter;
-                    binding.ViewModelPropertyInfo.SetValue(viewModel, adapter.GetItemAsObject(e.Position));
+                    var value = adapter.GetItemAsObject(e.Position);
+                    switch (binding.Mode)
+                    {
+                        case BindingMode.Command:  
+                            var command = (RelayCommand)binding.ViewModelPropertyInfo.GetValue(viewModel);
+                            command.Execute(value);
+                            break;
+                        case BindingMode.TwoWay: 
+                            binding.ViewModelPropertyInfo.SetValue(viewModel, value); 
+                            break;
+                    }
                 }
             }
         }

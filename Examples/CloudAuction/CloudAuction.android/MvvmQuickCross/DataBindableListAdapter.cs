@@ -5,6 +5,7 @@ using System.Reflection;
 using Android.Views;
 using Android.Widget;
 using System.Collections.Specialized;
+using System;
 
 namespace MvvmQuickCross
 {
@@ -46,31 +47,14 @@ namespace MvvmQuickCross
         private IList list;
         private readonly int? itemValueResourceId;
         private readonly string idPrefix;
-        private readonly List<ItemDataBinding> itemDataBindings;
+        private List<ItemDataBinding> itemDataBindings;
 
-        public DataBindableListAdapter(LayoutInflater layoutInflater, int itemTemplateResourceId, int? itemValueResourceId = null, string idPrefix = null)
+        public DataBindableListAdapter(LayoutInflater layoutInflater, int itemTemplateResourceId, string idPrefix, int? itemValueResourceId = null)
         {
             this.layoutInflater = layoutInflater;
             this.itemTemplateResourceId = itemTemplateResourceId;
+            this.idPrefix = idPrefix;
             this.itemValueResourceId = itemValueResourceId;
-            this.idPrefix = idPrefix ?? this.GetType().Name + "_";
-
-            if (!itemValueResourceId.HasValue)
-            {
-                itemDataBindings = new List<ItemDataBinding>();
-
-                foreach (var pi in typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance))
-                {
-                    var resourceId = AndroidApplication.FindResourceId(IdName(pi.Name));
-                    if (resourceId.HasValue) itemDataBindings.Add(new ItemDataBinding(pi, resourceId.Value));
-                }
-
-                foreach (var fi in typeof(T).GetFields(BindingFlags.Public | BindingFlags.Instance))
-                {
-                    var resourceId = AndroidApplication.FindResourceId(IdName(fi.Name));
-                    if (resourceId.HasValue) itemDataBindings.Add(new ItemDataBinding(fi, resourceId.Value));
-                }
-            }
         }
 
         private void AddListHandler()
@@ -133,7 +117,7 @@ namespace MvvmQuickCross
 
         private string IdName(string name) { return idPrefix + name; }
 
-        protected virtual void UpdateView(View view, T value)
+        protected virtual void UpdateView(View view, object value)
         {
             ViewDataBindings.UpdateView(view, value);
         }
@@ -145,14 +129,40 @@ namespace MvvmQuickCross
             {
                 if (itemValueResourceId.HasValue)
                 {
-                    UpdateView(rootView.FindViewById(itemValueResourceId.Value), (T)list[position]);
+                    UpdateView(rootView.FindViewById(itemValueResourceId.Value), list[position]);
                 }
                 else
                 {
-                    foreach (var idb in itemDataBindings) UpdateView(rootView.FindViewById(idb.ResourceId), (T)idb.GetValue(list[position]));
+                    object itemObject = list[position];
+                    if (itemObject != null)
+                    {
+                        EnsureBindings(itemObject);
+                        foreach (var idb in itemDataBindings) UpdateView(rootView.FindViewById(idb.ResourceId), idb.GetValue(itemObject));
+                    }
                 }
             }
             return rootView;
+        }
+
+        private void EnsureBindings(object itemObject)
+        {
+            if (itemDataBindings == null)
+            {
+                itemDataBindings = new List<ItemDataBinding>();
+                Type itemType = itemObject.GetType();
+
+                foreach (var pi in itemType.GetProperties(BindingFlags.Public | BindingFlags.Instance))
+                {
+                    var resourceId = AndroidApplication.FindResourceId(IdName(pi.Name));
+                    if (resourceId.HasValue) itemDataBindings.Add(new ItemDataBinding(pi, resourceId.Value));
+                }
+
+                foreach (var fi in itemType.GetFields(BindingFlags.Public | BindingFlags.Instance))
+                {
+                    var resourceId = AndroidApplication.FindResourceId(IdName(fi.Name));
+                    if (resourceId.HasValue) itemDataBindings.Add(new ItemDataBinding(fi, resourceId.Value));
+                }
+            }
         }
     }
 }

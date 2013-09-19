@@ -61,6 +61,7 @@
     <Compile Include="MvvmQuickCross\AndroidApplication.cs" />
     <Compile Include="MvvmQuickCross\ViewDataBindings.UI.cs" />
     <Compile Include="OrderView.cs" />
+    <Compile Include="ProductListItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="MvvmQuickCross\ViewDataBindings.cs" />
@@ -75,6 +76,9 @@
       <SubType>AndroidResource</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\Layout\TextListItem.axml">
+      <SubType>AndroidResource</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\Layout\ProductListItem.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
   </ItemGroup>

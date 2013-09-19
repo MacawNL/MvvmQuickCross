@@ -1,4 +1,6 @@
 using System;
+using System.Reflection;
+using Android.Widget;
 
 namespace MvvmQuickCross
 {
@@ -7,6 +9,7 @@ namespace MvvmQuickCross
         public enum Category { Drawable, Layout, Menu, Values, Id };
 
         private static Type resourceClassType;
+        private static PropertyInfo adapterViewRawAdapterPropertyInfo;
 
         public static void Initialize(Type resourceClassType) { AndroidApplication.resourceClassType = resourceClassType; }
 
@@ -18,6 +21,13 @@ namespace MvvmQuickCross
             var fieldInfo = categoryClassType.GetField(name);
             if (fieldInfo == null) return null;
             return (int)fieldInfo.GetValue(null);
+        }
+
+        public static object GetAdapter(this AdapterView adapterView)
+        {
+            if (adapterView == null) return null;
+            if (adapterViewRawAdapterPropertyInfo == null) adapterViewRawAdapterPropertyInfo = typeof(AdapterView).GetProperty("RawAdapter", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+            return adapterViewRawAdapterPropertyInfo.GetValue(adapterView);
         }
     }
 }

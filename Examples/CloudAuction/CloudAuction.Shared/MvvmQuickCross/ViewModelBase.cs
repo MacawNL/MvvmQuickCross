@@ -43,6 +43,11 @@ namespace MvvmQuickCross
                 return commandNames;
             }
         }
+
+        public T GetPropertyValue<T>(string propertyName)
+        {
+            return (T)GetType().GetProperty(propertyName).GetValue(this);
+        }
 #endif
         public event PropertyChangedEventHandler PropertyChanged;
 

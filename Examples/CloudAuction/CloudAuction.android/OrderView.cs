@@ -16,7 +16,7 @@ namespace CloudAuction
 
             /* Example of how to specify a data bindable list adapter in code:
             var spinner = FindViewById<Android.Widget.Spinner>(Resource.Id.OrderView_DeliveryLocation);
-            spinner.Adapter = new DataBindableListAdapter<string>(LayoutInflater, Resource.Layout.TextListItem, Resource.Id.TextListItem);
+            spinner.Adapter = new DataBindableListAdapter<string>(LayoutInflater, Resource.Layout.TextListItem, "TextListItem_", Resource.Id.TextListItem);
             */
 
             /* Example of how to specify data bindings in code instead of from Layout markup:
@@ -27,5 +27,21 @@ namespace CloudAuction
 
             Initialize(FindViewById(Resource.Id.OrderView), CloudAuctionApplication.Instance.OrderViewModel /*, bindingsParameters */);
         }
+
+        /* Example of how to handle specific viewmodel property changes in code instead of with (or in addition to) data binding:
+        protected override void OnPropertyChanged(string propertyName)
+        {
+            switch (propertyName)
+            {
+                case OrderViewModel.PROPERTYNAME_DeliveryLocationListHasItems:
+                    var hasItems = ViewModel.GetPropertyValue<bool>(OrderViewModel.PROPERTYNAME_DeliveryLocationListHasItems);
+                    var spinner = FindViewById<Android.Widget.Spinner>(Resource.Id.OrderView_DeliveryLocation);
+                    spinner.Visibility = hasItems ? Android.Views.ViewStates.Visible : Android.Views.ViewStates.Invisible;
+                    break;
+                default:
+                    base.OnPropertyChanged(propertyName); break;
+            }
+        }
+        */
     }
 }

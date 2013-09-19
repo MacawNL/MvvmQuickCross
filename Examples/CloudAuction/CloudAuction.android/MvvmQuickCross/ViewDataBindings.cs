@@ -70,6 +70,7 @@ namespace MvvmQuickCross
                     binding.View = rootView.FindViewById(binding.ResourceId.Value);
                 }
 
+                UpdateList(binding);
                 UpdateView(binding);
             }
         }
@@ -79,6 +80,7 @@ namespace MvvmQuickCross
             DataBinding binding;
             if (dataBindings.TryGetValue(IdName(propertyName), out binding))
             {
+                UpdateList(binding);
                 UpdateView(binding);
                 return;
             }
@@ -216,12 +218,19 @@ namespace MvvmQuickCross
             if (binding.View is AdapterView)
             {
                 if (listPropertyName == null) listPropertyName = propertyName + "List";
-                binding.ViewModelListPropertyInfo = viewModel.GetType().GetProperty(listPropertyName);
+                var pi = viewModel.GetType().GetProperty(listPropertyName);
+                if (pi == null && binding.ViewModelPropertyInfo.PropertyType.GetInterface("IList") != null)
+                {
+                    listPropertyName = propertyName;
+                    pi = binding.ViewModelPropertyInfo;
+                    binding.ViewModelPropertyInfo = null;
+                }
+                binding.ViewModelListPropertyInfo = pi;
 
-                var pi = binding.View.GetType().GetProperty("Adapter", BindingFlags.Public | BindingFlags.Instance);
+                pi = binding.View.GetType().GetProperty("Adapter", BindingFlags.Public | BindingFlags.Instance);
                 if (pi != null)
                 {
-                    var adapter = pi.GetValue(binding.View) as IDataBindableListAdapter;
+                    var adapter = pi.GetValue(binding.View);
                     if (adapter == null) {
                         if (itemTemplateName == null) itemTemplateName = listPropertyName + "Item";
                         if (itemIsValue && itemValueId == null) itemValueId = itemTemplateName;
@@ -229,11 +238,11 @@ namespace MvvmQuickCross
                         int? itemValueResourceId = AndroidApplication.FindResourceId(itemValueId);
                         if (itemTemplateResourceId.HasValue)
                         {
-                            adapter = new DataBindableListAdapter<object>(layoutInflater, itemTemplateResourceId.Value, itemValueResourceId);
+                            adapter = new DataBindableListAdapter<object>(layoutInflater, itemTemplateResourceId.Value, itemTemplateName + "_", itemValueResourceId);
                             pi.SetValue(binding.View, adapter);
                         }
                     }
-                    binding.ListAdapter = adapter;
+                    binding.ListAdapter = adapter as IDataBindableListAdapter;
                 }
             }
 
@@ -259,7 +268,10 @@ namespace MvvmQuickCross
 
         private void UpdateView(DataBinding binding)
         {
-            UpdateView(binding.View, binding.ViewModelPropertyInfo.GetValue(viewModel));
+            if (binding.View != null && binding.ViewModelPropertyInfo != null)
+            {
+                UpdateView(binding.View, binding.ViewModelPropertyInfo.GetValue(viewModel));
+            }
         }
 
         private void UpdateList(DataBinding binding)
