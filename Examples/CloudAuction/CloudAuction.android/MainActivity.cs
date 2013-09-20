@@ -3,10 +3,11 @@ using Android.Views;
 using Android.OS;
 using MvvmQuickCross;
 using CloudAuction.Shared;
+using Android.Content.PM;
 
 namespace CloudAuction
 {
-    [Activity(Label = "Cloud Auction", MainLauncher = true, Icon = "@drawable/icon")]
+    [Activity(Label = "Cloud Auction", MainLauncher = true, LaunchMode = LaunchMode.SingleTask, Icon = "@drawable/icon")]
     public class MainActivity : Activity
     {
         private bool areHandlersAdded; // TODO: see if we can use the view base class without a view model, to eliminate lifetime management code?
@@ -44,7 +45,7 @@ namespace CloudAuction
             ActionBar.NavigationMode = ActionBarNavigationMode.Tabs;
 
             EnsureApplication(); // TODO: check if we should use class derived from android application object as entry point?
-            AndroidApplication.Initialize(typeof(Resource));
+            AndroidHelpers.Initialize(typeof(Resource));
             CloudAuctionApplication.Instance.CurrentNavigationContext = this;
             CloudAuctionApplication.Instance.ContinueToAuction(skipNavigation: true);
 
@@ -62,6 +63,14 @@ namespace CloudAuction
             ActionBar.AddTab(auctionTab);
             ActionBar.AddTab(productsTab);
             ActionBar.AddTab(helpTab);
+        }
+
+        public enum TabIndex { Auction, Products, Help }
+
+        public void SelectTab(TabIndex tabIndex)
+        {
+            int index = (int)tabIndex;
+            if (ActionBar.SelectedNavigationIndex != index) ActionBar.SetSelectedNavigationItem(index);
         }
 
         protected override void OnResume()

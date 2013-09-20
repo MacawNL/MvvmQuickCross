@@ -44,17 +44,20 @@ namespace MvvmQuickCross
 
         private readonly LayoutInflater layoutInflater;
         private readonly int itemTemplateResourceId;
-        private IList list;
-        private readonly int? itemValueResourceId;
         private readonly string idPrefix;
+        private readonly int? itemValueResourceId;
+        private readonly ViewDataBindings.ViewExtensionPoints viewExtensionPoints;
+
+        private IList list;
         private List<ItemDataBinding> itemDataBindings;
 
-        public DataBindableListAdapter(LayoutInflater layoutInflater, int itemTemplateResourceId, string idPrefix, int? itemValueResourceId = null)
+        public DataBindableListAdapter(LayoutInflater layoutInflater, int itemTemplateResourceId, string idPrefix, int? itemValueResourceId = null, ViewDataBindings.ViewExtensionPoints viewExtensionPoints = null)
         {
             this.layoutInflater = layoutInflater;
             this.itemTemplateResourceId = itemTemplateResourceId;
             this.idPrefix = idPrefix;
             this.itemValueResourceId = itemValueResourceId;
+            this.viewExtensionPoints = viewExtensionPoints;
         }
 
         private void AddListHandler()
@@ -73,13 +76,30 @@ namespace MvvmQuickCross
             }
         }
 
+        /// <summary>
+        /// Override this method in a derived adapter class to register additional event handlers for your adapter. Always call base.AddHandlers() in your override.
+        /// </summary>
         public virtual void AddHandlers() { AddListHandler(); }
 
+        /// <summary>
+        /// Override this method in a derived adapter class to unregister additional event handlers for your adapter. Always call base.AddHandlers() in your override.
+        /// </summary>
         public virtual void RemoveHandlers() { RemoveListHandler(); }
 
-        void DataBindableListAdapter_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        /// <summary>
+        /// Override this method in a derived adapter class to react to changes in a list if it implements INotifyCollectionChanged (e.g. an ObservableCollection)
+        /// </summary>
+        /// <param name="sender">The ObservableCollection that was changed</param>
+        /// <param name="e">See http://blog.stephencleary.com/2009/07/interpreting-notifycollectionchangedeve.html for details</param>
+        protected virtual void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             NotifyDataSetChanged(); // TODO: Check if this should & can be optimized, see for details documentation at http://blog.stephencleary.com/2009/07/interpreting-notifycollectionchangedeve.html
+            if (viewExtensionPoints != null) viewExtensionPoints.OnCollectionChanged(sender, e);
+        }
+
+        private void DataBindableListAdapter_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            OnCollectionChanged(sender, e);
         }
 
         public int GetItemPosition(object item)
@@ -94,6 +114,7 @@ namespace MvvmQuickCross
 
         public void SetList(IList list)
         {
+            if (Object.ReferenceEquals(this.list, list)) return;
             RemoveListHandler();
             this.list = list;
             AddListHandler();
@@ -117,9 +138,14 @@ namespace MvvmQuickCross
 
         private string IdName(string name) { return idPrefix + name; }
 
+        /// <summary>
+        /// Override this method in a derived adapter class to change how a data-bound value is set for specific views
+        /// </summary>
+        /// <param name="view"></param>
+        /// <param name="value"></param>
         protected virtual void UpdateView(View view, object value)
         {
-            ViewDataBindings.UpdateView(view, value);
+            if (viewExtensionPoints != null) viewExtensionPoints.UpdateView(view, value); else ViewDataBindings.UpdateView(view, value);
         }
 
         public override View GetView(int position, View convertView, ViewGroup parent)
@@ -153,13 +179,13 @@ namespace MvvmQuickCross
 
                 foreach (var pi in itemType.GetProperties(BindingFlags.Public | BindingFlags.Instance))
                 {
-                    var resourceId = AndroidApplication.FindResourceId(IdName(pi.Name));
+                    var resourceId = AndroidHelpers.FindResourceId(IdName(pi.Name));
                     if (resourceId.HasValue) itemDataBindings.Add(new ItemDataBinding(pi, resourceId.Value));
                 }
 
                 foreach (var fi in itemType.GetFields(BindingFlags.Public | BindingFlags.Instance))
                 {
-                    var resourceId = AndroidApplication.FindResourceId(IdName(fi.Name));
+                    var resourceId = AndroidHelpers.FindResourceId(IdName(fi.Name));
                     if (resourceId.HasValue) itemDataBindings.Add(new ItemDataBinding(fi, resourceId.Value));
                 }
             }

@@ -1,12 +1,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 
 using Android.Views;
 using Android.Widget;
-using System.Text.RegularExpressions;
 
 namespace MvvmQuickCross
 {
@@ -41,9 +42,10 @@ namespace MvvmQuickCross
 
         private Dictionary<string, DataBinding> dataBindings = new Dictionary<string, DataBinding>();
 
-        public interface ViewExtensionPoints
+        public interface ViewExtensionPoints  // Implement these methods as virtual in a view base class
         {
-            void UpdateView(View view, object value); // Implement as virtual in view base class
+            void UpdateView(View view, object value);
+            void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e);
         }
 
         public ViewDataBindings(View rootView, ViewModelBase viewModel, LayoutInflater layoutInflater, string idPrefix)
@@ -163,7 +165,7 @@ namespace MvvmQuickCross
         private DataBinding AddBinding(string propertyName, BindingMode mode = BindingMode.OneWay, string listPropertyName = null, View view = null)
         {
             string idName = (view != null) ? view.Id.ToString() : IdName(propertyName);
-            int? resourceId = AndroidApplication.FindResourceId(idName);
+            int? resourceId = AndroidHelpers.FindResourceId(idName);
             if (view == null && resourceId.HasValue) view = rootView.FindViewById(resourceId.Value);
             if (view == null) return null;
 
@@ -241,11 +243,11 @@ namespace MvvmQuickCross
                     if (adapter == null) {
                         if (itemTemplateName == null) itemTemplateName = listPropertyName + "Item";
                         if (itemIsValue && itemValueId == null) itemValueId = itemTemplateName;
-                        int? itemTemplateResourceId = AndroidApplication.FindResourceId(itemTemplateName, AndroidApplication.Category.Layout);
-                        int? itemValueResourceId = AndroidApplication.FindResourceId(itemValueId);
+                        int? itemTemplateResourceId = AndroidHelpers.FindResourceId(itemTemplateName, AndroidHelpers.ResourceCategory.Layout);
+                        int? itemValueResourceId = AndroidHelpers.FindResourceId(itemValueId);
                         if (itemTemplateResourceId.HasValue)
                         {
-                            adapter = new DataBindableListAdapter<object>(layoutInflater, itemTemplateResourceId.Value, itemTemplateName + "_", itemValueResourceId);
+                            adapter = new DataBindableListAdapter<object>(layoutInflater, itemTemplateResourceId.Value, itemTemplateName + "_", itemValueResourceId, rootViewExtensionPoints);
                             pi.SetValue(binding.View, adapter);
                         }
                     }

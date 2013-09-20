@@ -15,7 +15,8 @@ namespace CloudAuction
 
         public void NavigateToAuctionView(object navigationContext)
         {
-            Navigate(navigationContext, typeof(MainActivity));
+            if (navigationContext == null || navigationContext.GetType().Name != "MainActivity") Navigate(navigationContext, typeof(MainActivity));
+            ((MainActivity)CloudAuctionApplication.Instance.CurrentNavigationContext).SelectTab(MainActivity.TabIndex.Auction);
         }
 
         public void NavigateToOrderView(object navigationContext)
