@@ -17,18 +17,6 @@ namespace CloudAuction.Shared.ViewModels
         public void Initialize(Bid bid) { _bid = bid; }
 
         #region Data-bindable properties and commands
-        public ObservableCollection<ProductViewModel> ProductList /* One-way data-bindable property generated with propdbcol snippet. Keep on one line - see http://goo.gl/Yg6QMd for why. */ { get { return _ProductList; } protected set { if (_ProductList != value) { _ProductList = value; RaisePropertyChanged(PROPERTYNAME_ProductList); UpdateProductListHasItems(); } } } private ObservableCollection<ProductViewModel> _ProductList; public const string PROPERTYNAME_ProductList = "ProductList";
-        public bool ProductListHasItems /* One-way data-bindable property generated with propdbcol snippet. Keep on one line - see http://goo.gl/Yg6QMd for why. */ { get { return _ProductListHasItems; } protected set { if (_ProductListHasItems != value) { _ProductListHasItems = value; RaisePropertyChanged(PROPERTYNAME_ProductListHasItems); } } } private bool _ProductListHasItems; public const string PROPERTYNAME_ProductListHasItems = "ProductListHasItems";
-        protected void UpdateProductListHasItems() /* Helper method generated with propdbcol snippet. Keep on one line - see http://goo.gl/Yg6QMd for why. */ { ProductListHasItems = _ProductList != null && _ProductList.Count > 0; }
-        public RelayCommand SelectProductCommand /* Data-bindable command with parameter that calls SelectProduct(), generated with cmdp snippet. Keep on one line - see http://goo.gl/Yg6QMd for why. */ { get { if (_SelectProductCommand == null) _SelectProductCommand = new RelayCommand(SelectProduct); return _SelectProductCommand; } } private RelayCommand _SelectProductCommand;
-
-        private void SelectProduct(object parameter)
-        {
-            var product = (ProductViewModel)parameter;
-            // TODO: Implement SelectProduct()
-        }
-
-
         public ObservableCollection<string> DeliveryLocationList /* One-way data-bindable property generated with propdbcol snippet. Keep on one line - see http://goo.gl/Yg6QMd for why. */ { get { return _DeliveryLocationList; } protected set { if (_DeliveryLocationList != value) { _DeliveryLocationList = value; RaisePropertyChanged(PROPERTYNAME_DeliveryLocationList); UpdateDeliveryLocationListHasItems(); } } } private ObservableCollection<string> _DeliveryLocationList; public const string PROPERTYNAME_DeliveryLocationList = "DeliveryLocationList";
         public bool DeliveryLocationListHasItems /* One-way data-bindable property generated with propdbcol snippet. Keep on one line - see http://goo.gl/Yg6QMd for why. */ { get { return _DeliveryLocationListHasItems; } protected set { if (_DeliveryLocationListHasItems != value) { _DeliveryLocationListHasItems = value; RaisePropertyChanged(PROPERTYNAME_DeliveryLocationListHasItems); } } } private bool _DeliveryLocationListHasItems; public const string PROPERTYNAME_DeliveryLocationListHasItems = "DeliveryLocationListHasItems";
         protected void UpdateDeliveryLocationListHasItems() /* Helper method generated with propdbcol snippet. Keep on one line - see http://goo.gl/Yg6QMd for why. */ { DeliveryLocationListHasItems = _DeliveryLocationList != null && _DeliveryLocationList.Count > 0; }
@@ -74,9 +62,6 @@ namespace CloudAuction.Shared.ViewModels.Design
     {
         public OrderViewModelDesign()
         {
-            ProductList = new ObservableCollection<ProductViewModel>(); 
-            for (int i = 0; i < 3; i++) ProductList.Add(new ProductViewModelDesign());
-
             DeliveryLocationList = new ObservableCollection<string>(new string[] { "At home", "Pickup" });
             DeliveryLocation = DeliveryLocationList[0];
             TitleList = new ObservableCollection<string>(new string[] { "Mr.", "Ms." });

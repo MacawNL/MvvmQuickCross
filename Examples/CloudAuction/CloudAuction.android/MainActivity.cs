@@ -1,18 +1,18 @@
 ﻿using Android.App;
 using Android.Views;
 using Android.OS;
+using Android.Content.PM;
 using MvvmQuickCross;
 using CloudAuction.Shared;
-using Android.Content.PM;
 
 namespace CloudAuction
 {
     [Activity(Label = "Cloud Auction", MainLauncher = true, LaunchMode = LaunchMode.SingleTask, Icon = "@drawable/icon")]
     public class MainActivity : Activity
     {
-        private bool areHandlersAdded; // TODO: see if we can use the view base class without a view model, to eliminate lifetime management code?
-        private ActionBar.Tab auctionTab, productsTab, helpTab;
-        private Fragment auctionFragment, productsFragment, helpFragment;
+        private bool areHandlersAdded; // TODO: see if we can use the view base class with either the auction view model including extra , to eliminate lifetime management code?
+        private ActionBar.Tab[] tabs;
+        private Fragment[] tabFragments;
 
         private CloudAuctionApplication EnsureApplication()
         {
@@ -22,18 +22,14 @@ namespace CloudAuction
         private void EnsureHandlersAdded()
         {
             if (areHandlersAdded) return;
-            auctionTab.TabSelected += AuctionTab_TabSelected;
-            productsTab.TabSelected += ProductsTab_TabSelected;
-            helpTab.TabSelected += HelpTab_TabSelected;
+            foreach (var tab in tabs) tab.TabSelected += Tab_TabSelected;
             areHandlersAdded = true;
         }
 
         private void EnsureHandlersRemoved()
         {
             if (!areHandlersAdded) return;
-            auctionTab.TabSelected -= AuctionTab_TabSelected;
-            productsTab.TabSelected -= ProductsTab_TabSelected;
-            helpTab.TabSelected -= HelpTab_TabSelected;
+            foreach (var tab in tabs) tab.TabSelected -= Tab_TabSelected;
             areHandlersAdded = false;
         }
 
@@ -49,56 +45,54 @@ namespace CloudAuction
             CloudAuctionApplication.Instance.CurrentNavigationContext = this;
             CloudAuctionApplication.Instance.ContinueToAuction(skipNavigation: true);
 
-            auctionTab = ActionBar.NewTab().SetText("Auction");
-            auctionFragment = new AuctionView();
-
-            productsTab = ActionBar.NewTab().SetText("Products");
-            productsFragment = new Fragment();
-
-            helpTab = ActionBar.NewTab().SetText("Help");
-            helpFragment = new Fragment();
-
+            tabFragments = new Fragment[] { new AuctionView(), new ProductsView(), new Fragment() };
+            tabs = new ActionBar.Tab[] { ActionBar.NewTab().SetText("Auction"), ActionBar.NewTab().SetText("Products"), ActionBar.NewTab().SetText("Help") };
             EnsureHandlersAdded();
-
-            ActionBar.AddTab(auctionTab);
-            ActionBar.AddTab(productsTab);
-            ActionBar.AddTab(helpTab);
+            foreach (var tab in tabs) ActionBar.AddTab(tab);
         }
 
         public enum TabIndex { Auction, Products, Help }
+        public static TabIndex CurrentTabIndex;
 
-        public void SelectTab(TabIndex tabIndex)
+        private void EnsureCurrentTabIsSelected()
         {
-            int index = (int)tabIndex;
+            int index = (int)CurrentTabIndex;
             if (ActionBar.SelectedNavigationIndex != index) ActionBar.SetSelectedNavigationItem(index);
         }
 
-        protected override void OnResume()
+        protected override void OnDestroy()
         {
-            base.OnResume();
-            EnsureHandlersAdded();
+            EnsureHandlersRemoved();
+            AndroidHelpers.ClearActivityReference(this);
+            base.OnDestroy();
         }
 
         protected override void OnPause()
         {
             EnsureHandlersRemoved();
+            AndroidHelpers.ClearActivityReference(this);
             base.OnPause();
         }
 
-        private void AuctionTab_TabSelected(object sender, ActionBar.TabEventArgs e)
+        protected override void OnResume()
         {
-            e.FragmentTransaction.Replace(Resource.Id.mainFragmentContainer, auctionFragment);
+            base.OnResume();
+            AndroidHelpers.SetCurrentActivity(this);
+            EnsureHandlersAdded();
+            EnsureCurrentTabIsSelected();
+        }
+
+        private void Tab_TabSelected(object sender, ActionBar.TabEventArgs e)
+        {
+            var tab = (ActionBar.Tab)sender;
+            TabIndex tabIndex = (TabIndex)tab.Position;
+            switch (tabIndex)
+            {
+                case TabIndex.Auction: CloudAuctionApplication.Instance.ContinueToAuction(skipNavigation: true); break;
+                case TabIndex.Products: CloudAuctionApplication.Instance.ContinueToProducts(skipNavigation: true); break;
+            }
+            e.FragmentTransaction.Replace(Resource.Id.mainFragmentContainer, tabFragments[tab.Position]);
             // TODO: Check if we should also use .Remove in TabUnselected event? E.g. see http://arvid-g.de/12/android-4-actionbar-with-tabs-example
-        }
-
-        void ProductsTab_TabSelected(object sender, ActionBar.TabEventArgs e)
-        {
-            e.FragmentTransaction.Replace(Resource.Id.mainFragmentContainer, productsFragment);
-        }
-
-        void HelpTab_TabSelected(object sender, ActionBar.TabEventArgs e)
-        {
-            e.FragmentTransaction.Replace(Resource.Id.mainFragmentContainer, helpFragment);
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)

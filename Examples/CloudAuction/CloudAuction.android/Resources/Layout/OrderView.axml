@@ -11,11 +11,6 @@
         android:layout_height="wrap_content"
         android:id="@+id/OrderView_DeliveryLocation"
         android:tag="{Binding Mode=TwoWay} {List ItemIsValue=true, ItemTemplate=TextListItem}" />
-    <ListView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/OrderView_ProductList"
-        android:tag="{Binding SelectProductCommand, Mode=Command} {List ItemsSource=ProductList}" />
     <EditText
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

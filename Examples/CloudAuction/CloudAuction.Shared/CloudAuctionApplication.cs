@@ -8,7 +8,7 @@ namespace CloudAuction.Shared
 {
     public sealed class CloudAuctionApplication : ApplicationBase
     {
-        private ICloudAuctionNavigator _navigator;
+        private readonly ICloudAuctionNavigator navigator;
 
         public CloudAuctionApplication(ICloudAuctionNavigator navigator, object currentNavigationContext = null, TaskScheduler uiTaskScheduler = null)
             : base(currentNavigationContext, uiTaskScheduler)
@@ -16,7 +16,7 @@ namespace CloudAuction.Shared
             // Services that have a platform-specific implementation, such as the navigator,
             // are instantiated in a platform-specific project and passed to this application 
             // as a cross-platform interface.
-            _navigator = navigator;
+            this.navigator = navigator;
 
             // TODO: Create instances for all services that have a cross-platform implementation
         }
@@ -27,6 +27,7 @@ namespace CloudAuction.Shared
            public _VIEWNAME_ViewModel _VIEWNAME_ViewModel { get; private set; }
          */
         public AuctionViewModel AuctionViewModel { get; private set; }
+        public ProductsViewModel ProductsViewModel { get; private set; }
         public OrderViewModel OrderViewModel { get; private set; }
         public OrderResultViewModel OrderResultViewModel { get; private set; }
 
@@ -44,21 +45,27 @@ namespace CloudAuction.Shared
         public void ContinueToAuction(bool skipNavigation = false)
         {
             if (AuctionViewModel == null) AuctionViewModel = new AuctionViewModelDesign();
-            if (!skipNavigation) RunOnUIThread(() => _navigator.NavigateToAuctionView(CurrentNavigationContext));
+            if (!skipNavigation) RunOnUIThread(() => navigator.NavigateToAuctionView(CurrentNavigationContext));
+        }
+
+        public void ContinueToProducts(bool skipNavigation = false)
+        {
+            if (ProductsViewModel == null) ProductsViewModel = new ProductsViewModelDesign();
+            if (!skipNavigation) RunOnUIThread(() => navigator.NavigateToProductsView(CurrentNavigationContext));
         }
 
         public void ContinueToOrder(Bid bid, bool skipNavigation = false)
         {
             if (OrderViewModel == null) OrderViewModel = new OrderViewModelDesign();
             OrderViewModel.Initialize(bid);
-            if (!skipNavigation) RunOnUIThread(() => _navigator.NavigateToOrderView(CurrentNavigationContext));
+            if (!skipNavigation) RunOnUIThread(() => navigator.NavigateToOrderView(CurrentNavigationContext));
         }
 
         public void ContinueToOrderResult(Bid bid, bool skipNavigation = false)
         {
             if (OrderResultViewModel == null) OrderResultViewModel = new OrderResultViewModel();
             OrderResultViewModel.Initialize(bid);
-            if (!skipNavigation) RunOnUIThread(() => _navigator.NavigateToOrderResultView(CurrentNavigationContext));
+            if (!skipNavigation) RunOnUIThread(() => navigator.NavigateToOrderResultView(CurrentNavigationContext));
         }
     }
 }

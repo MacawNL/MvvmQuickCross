@@ -107,41 +107,44 @@ namespace CloudAuction
 			// aapt resource value: 0x7f070009
 			public const int AuctionView_TimeRemaining = 2131165193;
 			
-			// aapt resource value: 0x7f070017
-			public const int LogoutMenuItem = 2131165207;
+			// aapt resource value: 0x7f070018
+			public const int LogoutMenuItem = 2131165208;
 			
 			// aapt resource value: 0x7f07000c
 			public const int OrderView = 2131165196;
 			
-			// aapt resource value: 0x7f070012
-			public const int OrderView_CancelCommand = 2131165202;
+			// aapt resource value: 0x7f070011
+			public const int OrderView_CancelCommand = 2131165201;
 			
 			// aapt resource value: 0x7f07000d
 			public const int OrderView_DeliveryLocation = 2131165197;
 			
-			// aapt resource value: 0x7f07000f
-			public const int OrderView_FirstName = 2131165199;
-			
-			// aapt resource value: 0x7f070011
-			public const int OrderView_LastName = 2131165201;
+			// aapt resource value: 0x7f07000e
+			public const int OrderView_FirstName = 2131165198;
 			
 			// aapt resource value: 0x7f070010
-			public const int OrderView_MiddleName = 2131165200;
+			public const int OrderView_LastName = 2131165200;
 			
-			// aapt resource value: 0x7f07000e
-			public const int OrderView_ProductList = 2131165198;
-			
-			// aapt resource value: 0x7f070014
-			public const int ProductListItem_Description = 2131165204;
-			
-			// aapt resource value: 0x7f070015
-			public const int ProductListItem_ListPrice = 2131165205;
+			// aapt resource value: 0x7f07000f
+			public const int OrderView_MiddleName = 2131165199;
 			
 			// aapt resource value: 0x7f070013
-			public const int ProductListItem_Name = 2131165203;
+			public const int ProductListItem_Description = 2131165203;
+			
+			// aapt resource value: 0x7f070014
+			public const int ProductListItem_ListPrice = 2131165204;
+			
+			// aapt resource value: 0x7f070012
+			public const int ProductListItem_Name = 2131165202;
+			
+			// aapt resource value: 0x7f070015
+			public const int ProductsView = 2131165205;
 			
 			// aapt resource value: 0x7f070016
-			public const int TextListItem = 2131165206;
+			public const int ProductsView_ProductList = 2131165206;
+			
+			// aapt resource value: 0x7f070017
+			public const int TextListItem = 2131165207;
 			
 			// aapt resource value: 0x7f07000b
 			public const int mainFragmentContainer = 2131165195;
@@ -172,7 +175,10 @@ namespace CloudAuction
 			public const int ProductListItem = 2130903043;
 			
 			// aapt resource value: 0x7f030004
-			public const int TextListItem = 2130903044;
+			public const int ProductsView = 2130903044;
+			
+			// aapt resource value: 0x7f030005
+			public const int TextListItem = 2130903045;
 			
 			static Layout()
 			{
