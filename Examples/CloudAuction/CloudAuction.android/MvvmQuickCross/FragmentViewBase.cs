@@ -3,7 +3,7 @@ using Android.Views;
 
 namespace MvvmQuickCross
 {
-    public class FragmentViewBase<ViewModelType> : Fragment where ViewModelType : ViewModelBase
+    public class FragmentViewBase<ViewModelType> : Fragment, ViewDataBindings.ViewExtensionPoints where ViewModelType : ViewModelBase
     {
         private bool areHandlersAdded;
         protected ViewModelType ViewModel { get; private set; }
@@ -65,6 +65,11 @@ namespace MvvmQuickCross
         private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             OnPropertyChanged(e.PropertyName);
+        }
+
+        public virtual void UpdateView(View view, object value)
+        {
+            ViewDataBindings.UpdateView(view, value);
         }
     }
 }

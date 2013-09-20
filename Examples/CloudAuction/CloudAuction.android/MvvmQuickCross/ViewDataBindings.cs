@@ -34,15 +34,22 @@ namespace MvvmQuickCross
         }
 
         private readonly View rootView;
+        private readonly ViewExtensionPoints rootViewExtensionPoints;
         private readonly ViewModelBase viewModel;
         private readonly LayoutInflater layoutInflater;
         private readonly string idPrefix;
 
         private Dictionary<string, DataBinding> dataBindings = new Dictionary<string, DataBinding>();
 
+        public interface ViewExtensionPoints
+        {
+            void UpdateView(View view, object value); // Implement as virtual in view base class
+        }
+
         public ViewDataBindings(View rootView, ViewModelBase viewModel, LayoutInflater layoutInflater, string idPrefix)
         {
             this.rootView = rootView;
+            this.rootViewExtensionPoints = rootView as ViewExtensionPoints;
             this.viewModel = viewModel;
             this.layoutInflater = layoutInflater;
             this.idPrefix = idPrefix;
@@ -270,7 +277,9 @@ namespace MvvmQuickCross
         {
             if (binding.View != null && binding.ViewModelPropertyInfo != null)
             {
-                UpdateView(binding.View, binding.ViewModelPropertyInfo.GetValue(viewModel));
+                var view = binding.View;
+                var value = binding.ViewModelPropertyInfo.GetValue(viewModel);
+                if (rootViewExtensionPoints != null) rootViewExtensionPoints.UpdateView(view, value); else UpdateView(view, value);
             }
         }
 
@@ -278,7 +287,8 @@ namespace MvvmQuickCross
         {
             if (binding.ViewModelListPropertyInfo != null && binding.ListAdapter != null)
             {
-                binding.ListAdapter.SetList((IList)binding.ViewModelListPropertyInfo.GetValue(viewModel));
+                var list = (IList)binding.ViewModelListPropertyInfo.GetValue(viewModel);
+                binding.ListAdapter.SetList(list);
             }
         }
     }
