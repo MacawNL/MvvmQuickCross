@@ -8,9 +8,8 @@ using CloudAuction.Shared;
 namespace CloudAuction
 {
     [Activity(Label = "Cloud Auction", MainLauncher = true, LaunchMode = LaunchMode.SingleTask, Icon = "@drawable/icon")]
-    public class MainActivity : Activity
+    public class MainActivity : ActivityViewBase
     {
-        private bool areHandlersAdded; // TODO: see if we can use the view base class with either the auction view model including extra , to eliminate lifetime management code?
         private ActionBar.Tab[] tabs;
         private Fragment[] tabFragments;
 
@@ -19,18 +18,16 @@ namespace CloudAuction
             return CloudAuctionApplication.Instance ?? new CloudAuctionApplication(new CloudAuctionNavigator());
         }
 
-        private void EnsureHandlersAdded()
+        protected override void AddHandlers()
         {
-            if (areHandlersAdded) return;
+            base.AddHandlers();
             foreach (var tab in tabs) tab.TabSelected += Tab_TabSelected;
-            areHandlersAdded = true;
         }
 
-        private void EnsureHandlersRemoved()
+        protected override void RemoveHandlers()
         {
-            if (!areHandlersAdded) return;
             foreach (var tab in tabs) tab.TabSelected -= Tab_TabSelected;
-            areHandlersAdded = false;
+            base.RemoveHandlers();
         }
 
         protected override void OnCreate(Bundle bundle)
@@ -47,7 +44,7 @@ namespace CloudAuction
 
             tabFragments = new Fragment[] { new AuctionView(), new ProductsView(), new Fragment() };
             tabs = new ActionBar.Tab[] { ActionBar.NewTab().SetText("Auction"), ActionBar.NewTab().SetText("Products"), ActionBar.NewTab().SetText("Help") };
-            EnsureHandlersAdded();
+            Initialize();
             foreach (var tab in tabs) ActionBar.AddTab(tab);
         }
 
@@ -60,25 +57,9 @@ namespace CloudAuction
             if (ActionBar.SelectedNavigationIndex != index) ActionBar.SetSelectedNavigationItem(index);
         }
 
-        protected override void OnDestroy()
-        {
-            EnsureHandlersRemoved();
-            AndroidHelpers.ClearActivityReference(this);
-            base.OnDestroy();
-        }
-
-        protected override void OnPause()
-        {
-            EnsureHandlersRemoved();
-            AndroidHelpers.ClearActivityReference(this);
-            base.OnPause();
-        }
-
         protected override void OnResume()
         {
             base.OnResume();
-            AndroidHelpers.SetCurrentActivity(this);
-            EnsureHandlersAdded();
             EnsureCurrentTabIsSelected();
         }
 
