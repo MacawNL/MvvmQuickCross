@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using MvvmQuickCross;
+using System.Threading.Tasks;
 
 namespace CloudAuction.Shared.ViewModels
 {
@@ -37,6 +38,16 @@ namespace CloudAuction.Shared.ViewModels.Design
         {
             ProductList = new ObservableCollection<ProductViewModel>();
             for (int i = 0; i < 1000; i++) ProductList.Add(new ProductViewModelDesign());
+            var t = LowerPrices();
+        }
+
+        async Task LowerPrices()
+        {
+            for (; ; )
+            {
+                await Task.Delay(1000);
+                foreach (var product in ProductList) product.ListPrice--;
+            }
         }
     }
 }

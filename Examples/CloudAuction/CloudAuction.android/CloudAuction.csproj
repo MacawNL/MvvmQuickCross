@@ -61,7 +61,6 @@
     <Compile Include="MvvmQuickCross\AndroidHelpers.cs" />
     <Compile Include="MvvmQuickCross\ViewDataBindings.UI.cs" />
     <Compile Include="OrderView.cs" />
-    <Compile Include="ProductListItem.cs" />
     <Compile Include="ProductsView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />

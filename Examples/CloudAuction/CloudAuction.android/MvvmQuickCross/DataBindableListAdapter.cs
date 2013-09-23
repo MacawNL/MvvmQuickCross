@@ -50,6 +50,7 @@ namespace MvvmQuickCross
 
         private IList list;
         private List<ItemDataBinding> itemDataBindings;
+        private bool? itemIsViewModel;
 
         public DataBindableListAdapter(LayoutInflater layoutInflater, int itemTemplateResourceId, string idPrefix, int? itemValueResourceId = null, ViewDataBindings.ViewExtensionPoints viewExtensionPoints = null)
         {
@@ -79,12 +80,20 @@ namespace MvvmQuickCross
         /// <summary>
         /// Override this method in a derived adapter class to register additional event handlers for your adapter. Always call base.AddHandlers() in your override.
         /// </summary>
-        public virtual void AddHandlers() { AddListHandler(); }
+        public virtual void AddHandlers() 
+        { 
+            AddListHandler();
+            foreach (var viewDataBindingsHolder in viewDataBindingsHolders) { viewDataBindingsHolder.AddHandlers(); }
+        }
 
         /// <summary>
         /// Override this method in a derived adapter class to unregister additional event handlers for your adapter. Always call base.AddHandlers() in your override.
         /// </summary>
-        public virtual void RemoveHandlers() { RemoveListHandler(); }
+        public virtual void RemoveHandlers() 
+        { 
+            RemoveListHandler();
+            foreach (var viewDataBindingsHolder in viewDataBindingsHolders) { viewDataBindingsHolder.RemoveHandlers(); }
+        }
 
         /// <summary>
         /// Override this method in a derived adapter class to react to changes in a list if it implements INotifyCollectionChanged (e.g. an ObservableCollection)
@@ -165,8 +174,15 @@ namespace MvvmQuickCross
                     if (itemObject != null)
                     {
                         EnsureBindings(itemObject);
-                        ListDictionary viewHolder = EnsureMultipleViewHolder(rootView);
-                        foreach (var idb in itemDataBindings) UpdateView((View)viewHolder[idb.ResourceId], idb.GetValue(itemObject));
+                        if (itemIsViewModel.Value)
+                        {
+                            EnsureViewDataBindingsHolder(rootView, (ViewModelBase)itemObject);
+                        }
+                        else
+                        {
+                            ListDictionary viewHolder = EnsureMultipleViewHolder(rootView);
+                            foreach (var idb in itemDataBindings) UpdateView((View)viewHolder[idb.ResourceId], idb.GetValue(itemObject));
+                        }
                     }
                 }
             }
@@ -185,6 +201,56 @@ namespace MvvmQuickCross
             return valueView;
         }
 
+        // If the list item is a viewmodel, we can bind it using a ViewBindings instance, which then becomes the viewholder
+        private void EnsureViewDataBindingsHolder(View rootView, ViewModelBase viewModel)
+        {
+            ViewDataBindingsHolder holder = (Wrapper<ViewDataBindingsHolder>)rootView.Tag;
+            if (holder == null)
+            {
+                holder = new ViewDataBindingsHolder(rootView, viewModel, layoutInflater, idPrefix);
+                viewDataBindingsHolders.Add(holder);
+                rootView.Tag = (Wrapper<ViewDataBindingsHolder>)holder;
+            }
+            else
+            {
+                holder.SetViewModel(viewModel);
+            }
+        }
+
+        private class ViewDataBindingsHolder
+        {
+            private ViewModelBase viewModel;
+            private readonly ViewDataBindings bindings;
+
+            public ViewDataBindingsHolder(View rootView, ViewModelBase viewModel, LayoutInflater layoutInflater, string idPrefix)
+            {
+                this.viewModel = viewModel;
+                bindings = new ViewDataBindings(rootView, viewModel, layoutInflater, idPrefix);
+                bindings.EnsureCommandBindings();  // Then add any command bindings that were not specified in code (based on the Id naming convention)
+                AddHandlers();
+                viewModel.RaisePropertiesChanged();
+            }
+            
+            public void AddHandlers() { viewModel.PropertyChanged += viewModel_PropertyChanged; }
+            public void RemoveHandlers() { viewModel.PropertyChanged -= viewModel_PropertyChanged; }
+
+            public void SetViewModel(ViewModelBase newViewModel)
+            {
+                RemoveHandlers();
+                viewModel = newViewModel;
+                AddHandlers();
+                bindings.SetViewModel(newViewModel);
+            }
+            
+            private void viewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+            {
+                bindings.UpdateView(e.PropertyName);
+            }
+        }
+
+        private HashSet<ViewDataBindingsHolder> viewDataBindingsHolders = new HashSet<ViewDataBindingsHolder>();
+        
+        
         // Implement the ViewHolder pattern; e.g. see http://www.jmanzano.es/blog/?p=166
         private ListDictionary EnsureMultipleViewHolder(View rootView)
         {
@@ -200,21 +266,32 @@ namespace MvvmQuickCross
 
         private void EnsureBindings(object itemObject)
         {
-            if (itemDataBindings == null)
+            if (itemDataBindings == null && !itemIsViewModel.HasValue)
             {
-                itemDataBindings = new List<ItemDataBinding>();
-                Type itemType = itemObject.GetType();
-
-                foreach (var pi in itemType.GetProperties(BindingFlags.Public | BindingFlags.Instance))
+                itemIsViewModel = itemObject is ViewModelBase;
+                if (itemIsViewModel.Value)
                 {
-                    var resourceId = AndroidHelpers.FindResourceId(IdName(pi.Name));
-                    if (resourceId.HasValue) itemDataBindings.Add(new ItemDataBinding(pi, resourceId.Value));
+                    // If the item is a viewmodel, we can bind it using a Activity / Fragment / ?  view base class - then we use that instead of databindings?
+                    // The viewholder then becomes the viewbindings object
+                    // TODO: extend IDataBindableListAdapter so it has addhandlers and removehandlers, to be called from viewdatabindings
                 }
-
-                foreach (var fi in itemType.GetFields(BindingFlags.Public | BindingFlags.Instance))
+                else
                 {
-                    var resourceId = AndroidHelpers.FindResourceId(IdName(fi.Name));
-                    if (resourceId.HasValue) itemDataBindings.Add(new ItemDataBinding(fi, resourceId.Value));
+                    itemDataBindings = new List<ItemDataBinding>();
+
+                    Type itemType = itemObject.GetType();
+
+                    foreach (var pi in itemType.GetProperties(BindingFlags.Public | BindingFlags.Instance))
+                    {
+                        var resourceId = AndroidHelpers.FindResourceId(IdName(pi.Name));
+                        if (resourceId.HasValue) itemDataBindings.Add(new ItemDataBinding(pi, resourceId.Value));
+                    }
+
+                    foreach (var fi in itemType.GetFields(BindingFlags.Public | BindingFlags.Instance))
+                    {
+                        var resourceId = AndroidHelpers.FindResourceId(IdName(fi.Name));
+                        if (resourceId.HasValue) itemDataBindings.Add(new ItemDataBinding(fi, resourceId.Value));
+                    }
                 }
             }
         }

@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 
 using Android.Views;
 using Android.Widget;
+using System.ComponentModel;
 
 namespace MvvmQuickCross
 {
@@ -36,7 +37,7 @@ namespace MvvmQuickCross
 
         private readonly View rootView;
         private readonly ViewExtensionPoints rootViewExtensionPoints;
-        private readonly ViewModelBase viewModel;
+        private ViewModelBase viewModel;
         private readonly LayoutInflater layoutInflater;
         private readonly string idPrefix;
 
@@ -57,6 +58,15 @@ namespace MvvmQuickCross
             this.idPrefix = idPrefix;
         }
 
+        public void SetViewModel(ViewModelBase newViewModel)
+        {
+            if (Object.ReferenceEquals(viewModel, newViewModel)) return;
+            RemoveHandlers();
+            viewModel = newViewModel;
+            AddHandlers();
+            UpdateView(findViews: false);
+        }
+
         public void EnsureCommandBindings()
         {
             foreach (string commandName in viewModel.CommandNames)
@@ -69,12 +79,12 @@ namespace MvvmQuickCross
             }
         }
 
-        public void UpdateView()
+        public void UpdateView(bool findViews = true)
         {
             foreach (var item in dataBindings)
             {
                 var binding = item.Value;
-                if (binding.ResourceId.HasValue)
+                if (binding.ResourceId.HasValue && findViews)
                 {
                     binding.View = rootView.FindViewById(binding.ResourceId.Value);
                 }
