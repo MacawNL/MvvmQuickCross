@@ -5,9 +5,64 @@ using Android.Views;
 
 namespace MvvmQuickCross
 {
-    public class FragmentViewBase<ViewModelType> : Fragment, ViewDataBindings.ViewExtensionPoints where ViewModelType : ViewModelBase
+    public class FragmentViewBase : Fragment
     {
         private bool areHandlersAdded;
+
+        /// <summary>
+        /// Call Initialize() in the OnCreateView method of a derived view class to ensure handlers are added.
+        /// </summary>
+        protected void Initialize() 
+        {
+            EnsureHandlersAreAdded();
+        }
+
+        /// <summary>
+        /// Override this method in a derived view class to register additional event handlers for your view. Always call base.AddHandlers() in your override.
+        /// </summary>
+        protected virtual void AddHandlers() { }
+
+        /// <summary>
+        /// Override this method in a derived view class to unregister additional event handlers for your view. Always call base.AddHandlers() in your override.
+        /// </summary>
+        protected virtual void RemoveHandlers() { }
+
+        public override void OnDestroyView()
+        {
+            EnsureHandlersAreRemoved();
+            base.OnDestroyView();
+        }
+
+        public override void OnPause() 
+        { 
+            EnsureHandlersAreRemoved(); 
+            base.OnPause();
+        }
+
+        public override void OnResume() 
+        { 
+            base.OnResume(); 
+            EnsureHandlersAreAdded(); 
+        }
+
+        private void EnsureHandlersAreAdded()
+        {
+            if (areHandlersAdded) return;
+            AddHandlers();
+            areHandlersAdded = true;
+        }
+
+        private void EnsureHandlersAreRemoved()
+        {
+            if (!areHandlersAdded) return;
+            RemoveHandlers();
+            areHandlersAdded = false;
+        }
+    }
+
+
+    public class FragmentViewBase<ViewModelType> : FragmentViewBase, ViewDataBindings.ViewExtensionPoints where ViewModelType : ViewModelBase
+    {
         protected ViewModelType ViewModel { get; private set; }
         protected ViewDataBindings Bindings { get; private set; }
 
@@ -23,7 +78,7 @@ namespace MvvmQuickCross
         {
             Bindings = new ViewDataBindings(rootView, viewModel, layoutInflater, idPrefix ?? this.GetType().Name + "_");
             ViewModel = viewModel;
-            EnsureHandlersAreAdded();
+            base.Initialize();
             Bindings.AddBindings(bindingsParameters); // First add any bindings that were specified in code 
             Bindings.EnsureCommandBindings();  // Then add any command bindings that were not specified in code (based on the Id naming convention)
             ViewModel.RaisePropertiesChanged(); // Finally add any property bindings that were not specified in code (based on the Id naming convention), and update the root view with the current property values
@@ -32,7 +87,7 @@ namespace MvvmQuickCross
         /// <summary>
         /// Override this method in a derived view class to register additional event handlers for your view. Always call base.AddHandlers() in your override.
         /// </summary>
-        protected virtual void AddHandlers()
+        protected override void AddHandlers()
         {
             ViewModel.PropertyChanged += ViewModel_PropertyChanged;
             Bindings.AddHandlers();
@@ -41,7 +96,7 @@ namespace MvvmQuickCross
         /// <summary>
         /// Override this method in a derived view class to unregister additional event handlers for your view. Always call base.AddHandlers() in your override.
         /// </summary>
-        protected virtual void RemoveHandlers()
+        protected override void RemoveHandlers()
         {
             Bindings.RemoveHandlers();
             ViewModel.PropertyChanged -= ViewModel_PropertyChanged;
@@ -54,32 +109,6 @@ namespace MvvmQuickCross
         protected virtual void OnPropertyChanged(string propertyName)
         {
             Bindings.UpdateView(propertyName);
-        }
-
-        public override void OnPause()
-        {
-            EnsureHandlersAreRemoved();
-            base.OnPause();
-        }
-
-        public override void OnResume()
-        {
-            base.OnResume();
-            EnsureHandlersAreAdded();
-        }
-
-        private void EnsureHandlersAreAdded()
-        {
-            if (areHandlersAdded) return;
-            AddHandlers();
-            areHandlersAdded = true;
-        }
-
-        private void EnsureHandlersAreRemoved()
-        {
-            if (!areHandlersAdded) return;
-            RemoveHandlers();
-            areHandlersAdded = false;
         }
 
         private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)

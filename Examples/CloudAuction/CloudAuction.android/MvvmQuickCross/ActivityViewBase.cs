@@ -9,6 +9,9 @@ namespace MvvmQuickCross
     {
         private bool areHandlersAdded;
 
+        /// <summary>
+        /// Call Initialize() in the OnCreateView method of a derived view class to ensure handlers are added.
+        /// </summary>
         protected void Initialize()
         {
             ApplicationBase.Instance.CurrentNavigationContext = this;
@@ -86,7 +89,7 @@ namespace MvvmQuickCross
         /// <summary>
         /// Override this method in a derived view class to register additional event handlers for your view. Always call base.AddHandlers() in your override.
         /// </summary>
-        override protected void AddHandlers()
+        protected override void AddHandlers()
         {
             base.AddHandlers();
             ViewModel.PropertyChanged += ViewModel_PropertyChanged;
@@ -96,7 +99,7 @@ namespace MvvmQuickCross
         /// <summary>
         /// Override this method in a derived view class to unregister additional event handlers for your view. Always call base.AddHandlers() in your override.
         /// </summary>
-        override protected void RemoveHandlers()
+        protected override void RemoveHandlers()
         {
             Bindings.RemoveHandlers();
             ViewModel.PropertyChanged -= ViewModel_PropertyChanged;
