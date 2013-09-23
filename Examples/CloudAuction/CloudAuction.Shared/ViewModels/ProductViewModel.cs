@@ -10,7 +10,7 @@ namespace CloudAuction.Shared.ViewModels
             // TODO: pass any services that this model needs as contructor parameters. 
         }
 
-        /*
+        /* Fields:
         public string Name, Description;
         public int ListPrice;
         */
@@ -19,9 +19,14 @@ namespace CloudAuction.Shared.ViewModels
         // TODO: Generate data-bindable properties and commands here with prop* and cmd* code snippets
         public string Name /* One-way data-bindable property generated with propdb1 snippet. Keep on one line - see http://goo.gl/Yg6QMd for why. */ { get { return _Name; } protected set { if (_Name != value) { _Name = value; RaisePropertyChanged(PROPERTYNAME_Name); } } } private string _Name; public const string PROPERTYNAME_Name = "Name";
         public string Description /* One-way data-bindable property generated with propdb1 snippet. Keep on one line - see http://goo.gl/Yg6QMd for why. */ { get { return _Description; } protected set { if (_Description != value) { _Description = value; RaisePropertyChanged(PROPERTYNAME_Description); } } } private string _Description; public const string PROPERTYNAME_Description = "Description";
-        public int ListPrice /* One-way data-bindable property generated with propdb1 snippet. Keep on one line - see http://goo.gl/Yg6QMd for why. */ { get { return _ListPrice; } set { if (_ListPrice != value) { _ListPrice = value; RaisePropertyChanged(PROPERTYNAME_ListPrice); } } } private int _ListPrice; public const string PROPERTYNAME_ListPrice = "ListPrice";
-
+        public int ListPriceNumeric /* Two-way data-bindable property that calls custom code in OnListPriceNumericChanged() from setter, generated with propdb2c snippet. Keep on one line - see http://goo.gl/Yg6QMd for why. */ { get { return _ListPriceNumeric; } set { if (_ListPriceNumeric != value) { _ListPriceNumeric = value; RaisePropertyChanged(PROPERTYNAME_ListPriceNumeric); OnListPriceNumericChanged(); } } } private int _ListPriceNumeric; public const string PROPERTYNAME_ListPriceNumeric = "ListPriceNumeric";
+        public string ListPrice /* One-way data-bindable property generated with propdb1 snippet. Keep on one line - see http://goo.gl/Yg6QMd for why. */ { get { return _ListPrice; } protected set { if (_ListPrice != value) { _ListPrice = value; RaisePropertyChanged(PROPERTYNAME_ListPrice); } } } private string _ListPrice; public const string PROPERTYNAME_ListPrice = "ListPrice";
         #endregion
+
+        private void OnListPriceNumericChanged()
+        {
+            ListPrice = string.Format("$ {0},00", ListPriceNumeric);
+        }
 
         public override string ToString()
         {
@@ -42,7 +47,7 @@ namespace CloudAuction.Shared.ViewModels.Design
         {
             Name = "Product Name " + nr.ToString();
             Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec id placerat nisi. Phasellus scelerisque vestibulum lorem eget aliquam. Nunc quis.";
-            ListPrice = 240 + nr++;
+            ListPriceNumeric = 240 + nr++;
         }
     }
 }

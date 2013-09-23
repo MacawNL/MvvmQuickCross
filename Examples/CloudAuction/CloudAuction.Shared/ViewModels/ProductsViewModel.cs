@@ -46,7 +46,7 @@ namespace CloudAuction.Shared.ViewModels.Design
             for (; ; )
             {
                 await Task.Delay(1000);
-                foreach (var product in ProductList) product.ListPrice--;
+                foreach (var product in ProductList) product.ListPriceNumeric--;
             }
         }
     }
