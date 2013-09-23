@@ -43,5 +43,15 @@ namespace MvvmQuickCross
             if (adapterViewRawAdapterPropertyInfo == null) adapterViewRawAdapterPropertyInfo = typeof(AdapterView).GetProperty("RawAdapter", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly);
             return adapterViewRawAdapterPropertyInfo.GetValue(adapterView);
         }
+
+
+    }
+
+    public class Wrapper<T> : Java.Lang.Object
+    {
+        public T DotNetObject;
+
+        public static implicit operator T(Wrapper<T> wrapper) { return wrapper == null ? default(T) : wrapper.DotNetObject; }
+        public static implicit operator Wrapper<T>(T dotNetObject) { return new Wrapper<T> { DotNetObject = dotNetObject }; }
     }
 }

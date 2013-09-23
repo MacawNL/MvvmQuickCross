@@ -36,7 +36,7 @@ namespace CloudAuction.Shared.ViewModels.Design
         public ProductsViewModelDesign()
         {
             ProductList = new ObservableCollection<ProductViewModel>();
-            for (int i = 0; i < 20; i++) ProductList.Add(new ProductViewModelDesign());
+            for (int i = 0; i < 1000; i++) ProductList.Add(new ProductViewModelDesign());
         }
     }
 }

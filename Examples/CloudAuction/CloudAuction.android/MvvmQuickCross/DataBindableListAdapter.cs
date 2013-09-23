@@ -151,11 +151,13 @@ namespace MvvmQuickCross
         public override View GetView(int position, View convertView, ViewGroup parent)
         {
             var rootView = convertView ?? layoutInflater.Inflate(itemTemplateResourceId, parent, false);
+
             if (list != null)
             {
                 if (itemValueResourceId.HasValue)
                 {
-                    UpdateView(rootView.FindViewById(itemValueResourceId.Value), list[position]);
+                    var valueView = EnsureSingleViewHolder(rootView);
+                    UpdateView(valueView, list[position]);
                 }
                 else
                 {
@@ -163,11 +165,37 @@ namespace MvvmQuickCross
                     if (itemObject != null)
                     {
                         EnsureBindings(itemObject);
-                        foreach (var idb in itemDataBindings) UpdateView(rootView.FindViewById(idb.ResourceId), idb.GetValue(itemObject));
+                        ListDictionary viewHolder = EnsureMultipleViewHolder(rootView);
+                        foreach (var idb in itemDataBindings) UpdateView((View)viewHolder[idb.ResourceId], idb.GetValue(itemObject));
                     }
                 }
             }
             return rootView;
+        }
+
+        // Implement the ViewHolder pattern; e.g. see http://www.jmanzano.es/blog/?p=166
+        private View EnsureSingleViewHolder(View rootView)
+        {
+            var valueView = (View)rootView.Tag;
+            if (valueView == null)
+            {
+                valueView = rootView.FindViewById(itemValueResourceId.Value);
+                rootView.Tag = valueView;
+            }
+            return valueView;
+        }
+
+        // Implement the ViewHolder pattern; e.g. see http://www.jmanzano.es/blog/?p=166
+        private ListDictionary EnsureMultipleViewHolder(View rootView)
+        {
+            ListDictionary viewHolder = (Wrapper<ListDictionary>)rootView.Tag;
+            if (viewHolder == null)
+            {
+                viewHolder = new ListDictionary();
+                foreach (var idb in itemDataBindings) viewHolder.Add(idb.ResourceId, rootView.FindViewById(idb.ResourceId));
+                rootView.Tag = (Wrapper<ListDictionary>)viewHolder;
+            }
+            return viewHolder;
         }
 
         private void EnsureBindings(object itemObject)

@@ -13,6 +13,11 @@ namespace CloudAuction.Shared.ViewModels
         public string Name, Description;
         public string ListPrice;
 
+        public override string ToString()
+        {
+            return Name + "\r\n" + ListPrice + "\r\n" + Description;
+        }
+
         #region Data-bindable properties and commands
         // TODO: Generate data-bindable properties and commands here with prop* and cmd* code snippets
 
