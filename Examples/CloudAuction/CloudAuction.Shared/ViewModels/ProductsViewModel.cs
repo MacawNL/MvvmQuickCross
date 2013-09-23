@@ -20,7 +20,7 @@ namespace CloudAuction.Shared.ViewModels
         private void SelectProduct(object parameter)
         {
             var product = (ProductViewModel)parameter;
-            CloudAuctionApplication.Instance.ContinueToAuction();
+            CloudAuctionApplication.Instance.ContinueToMain();
             // TODO: Implement SelectProduct()
         }
         #endregion

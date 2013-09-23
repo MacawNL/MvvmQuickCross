@@ -53,7 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CloudAuctionNavigator.cs" />
-    <Compile Include="MainActivity.cs" />
+    <Compile Include="MainView.cs" />
     <Compile Include="AuctionView.cs" />
     <Compile Include="MvvmQuickCross\ActivityViewBase.cs" />
     <Compile Include="MvvmQuickCross\FragmentViewBase.cs" />
@@ -70,7 +70,7 @@
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
-    <AndroidResource Include="Resources\Layout\Main.axml">
+    <AndroidResource Include="Resources\Layout\MainView.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\Layout\OrderView.axml">

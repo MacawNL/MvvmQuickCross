@@ -26,7 +26,7 @@ namespace CloudAuction.Shared.ViewModels
 
         private void Done()
         {
-            CloudAuctionApplication.Instance.ContinueToAuction();
+            CloudAuctionApplication.Instance.ContinueToMain();
         }
     }
 }

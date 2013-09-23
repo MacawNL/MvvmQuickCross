@@ -10,6 +10,7 @@ namespace CloudAuction
     {
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
+            CloudAuctionApplication.Instance.ContinueToMain(subView: MainViewModel.SubView.Auction, skipNavigation: true);
             var view = inflater.Inflate(Resource.Layout.AuctionView, container, false);
             Initialize(view, CloudAuctionApplication.Instance.AuctionViewModel, inflater);
             return view;

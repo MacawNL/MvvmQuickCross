@@ -1,8 +1,9 @@
 using System;
 
 using Android.Content;
-using CloudAuction.Shared;
 using MvvmQuickCross;
+using CloudAuction.Shared;
+using CloudAuction.Shared.ViewModels;
 
 namespace CloudAuction
 {
@@ -14,16 +15,10 @@ namespace CloudAuction
             context.StartActivity(type);
         }
 
-        public void NavigateToAuctionView(object navigationContext)
+        public void NavigateToMainView(object navigationContext, MainViewModel.SubView? subView)
         {
-            MainActivity.CurrentTabIndex = MainActivity.TabIndex.Auction;
-            Navigate(navigationContext, typeof(MainActivity));
-        }
-
-        public void NavigateToProductsView(object navigationContext)
-        {
-            MainActivity.CurrentTabIndex = MainActivity.TabIndex.Products;
-            Navigate(navigationContext, typeof(MainActivity));
+            if (subView.HasValue) MainView.CurrentSubView = subView.Value;
+            Navigate(navigationContext, typeof(MainView));
         }
 
         public void NavigateToOrderView(object navigationContext)

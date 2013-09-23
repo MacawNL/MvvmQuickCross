@@ -26,6 +26,7 @@ namespace CloudAuction.Shared
         /* TODO: For each view model, add a public property with a private setter like this:
            public _VIEWNAME_ViewModel _VIEWNAME_ViewModel { get; private set; }
          */
+        public MainViewModel MainViewModel { get; private set; }
         public AuctionViewModel AuctionViewModel { get; private set; }
         public ProductsViewModel ProductsViewModel { get; private set; }
         public OrderViewModel OrderViewModel { get; private set; }
@@ -42,16 +43,18 @@ namespace CloudAuction.Shared
          * The skipNavigation parameter is needed in cases where the OS has already navigated to the view for you;
          * in that case you only need to initialize the view model. */
 
-        public void ContinueToAuction(bool skipNavigation = false)
+        public void ContinueToMain(MainViewModel.SubView? subView = null, bool skipNavigation = false)
         {
-            if (AuctionViewModel == null) AuctionViewModel = new AuctionViewModelDesign();
-            if (!skipNavigation) RunOnUIThread(() => navigator.NavigateToAuctionView(CurrentNavigationContext));
-        }
-
-        public void ContinueToProducts(bool skipNavigation = false)
-        {
-            if (ProductsViewModel == null) ProductsViewModel = new ProductsViewModelDesign();
-            if (!skipNavigation) RunOnUIThread(() => navigator.NavigateToProductsView(CurrentNavigationContext));
+            if (MainViewModel == null) MainViewModel = new MainViewModel();
+            if (subView.HasValue)
+            {
+                switch (subView.Value)
+                {
+                    case MainViewModel.SubView.Auction: if (ProductsViewModel == null) if (AuctionViewModel == null) AuctionViewModel = new AuctionViewModelDesign(); break;
+                    case MainViewModel.SubView.Products: if (ProductsViewModel == null) ProductsViewModel = new ProductsViewModelDesign(); break;
+                }
+            }
+            if (!skipNavigation) RunOnUIThread(() => navigator.NavigateToMainView(CurrentNavigationContext, subView));
         }
 
         public void ContinueToOrder(Bid bid, bool skipNavigation = false)
