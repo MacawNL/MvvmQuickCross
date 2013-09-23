@@ -11,7 +11,7 @@ namespace CloudAuction.Shared.ViewModels
         }
 
         public string Name, Description;
-        public int ListPrice;
+        public string ListPrice;
 
         #region Data-bindable properties and commands
         // TODO: Generate data-bindable properties and commands here with prop* and cmd* code snippets
@@ -26,13 +26,13 @@ namespace CloudAuction.Shared.ViewModels.Design
 {
     public class ProductViewModelDesign : ProductViewModel
     {
-        private static int nr = 0;
+        private static int nr = 1;
 
         public ProductViewModelDesign()
         {
-            Name = "Name " + nr.ToString();
-            Description = "Description " + nr.ToString();
-            ListPrice = nr++;
+            Name = "Product Name " + nr.ToString();
+            Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec id placerat nisi. Phasellus scelerisque vestibulum lorem eget aliquam. Nunc quis.";
+            ListPrice = string.Format("$ {0},00", 240 + nr++);
         }
     }
 }
