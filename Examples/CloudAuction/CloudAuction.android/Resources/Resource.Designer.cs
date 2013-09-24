@@ -104,8 +104,8 @@ namespace CloudAuction
 			// aapt resource value: 0x7f060009
 			public const int AuctionView_TimeRemaining = 2131099657;
 			
-			// aapt resource value: 0x7f06001b
-			public const int LogoutMenuItem = 2131099675;
+			// aapt resource value: 0x7f060023
+			public const int LogoutMenuItem = 2131099683;
 			
 			// aapt resource value: 0x7f06000b
 			public const int MainView = 2131099659;
@@ -116,44 +116,68 @@ namespace CloudAuction
 			// aapt resource value: 0x7f06000d
 			public const int OrderView = 2131099661;
 			
-			// aapt resource value: 0x7f060012
-			public const int OrderView_CancelCommand = 2131099666;
+			// aapt resource value: 0x7f060016
+			public const int OrderView_City = 2131099670;
 			
 			// aapt resource value: 0x7f06000e
-			public const int OrderView_DeliveryLocation = 2131099662;
-			
-			// aapt resource value: 0x7f06000f
-			public const int OrderView_FirstName = 2131099663;
-			
-			// aapt resource value: 0x7f060011
-			public const int OrderView_LastName = 2131099665;
-			
-			// aapt resource value: 0x7f060010
-			public const int OrderView_MiddleName = 2131099664;
-			
-			// aapt resource value: 0x7f060014
-			public const int ProductListItem_Description = 2131099668;
-			
-			// aapt resource value: 0x7f060015
-			public const int ProductListItem_ListPrice = 2131099669;
-			
-			// aapt resource value: 0x7f060013
-			public const int ProductListItem_Name = 2131099667;
-			
-			// aapt resource value: 0x7f060016
-			public const int ProductsView = 2131099670;
-			
-			// aapt resource value: 0x7f060019
-			public const int ProductsView_ProductImage = 2131099673;
+			public const int OrderView_ConfirmCommand = 2131099662;
 			
 			// aapt resource value: 0x7f060017
-			public const int ProductsView_ProductInfo = 2131099671;
+			public const int OrderView_Country = 2131099671;
+			
+			// aapt resource value: 0x7f06000f
+			public const int OrderView_DeliveryLocation = 2131099663;
 			
 			// aapt resource value: 0x7f060018
-			public const int ProductsView_ProductList = 2131099672;
+			public const int OrderView_Email = 2131099672;
+			
+			// aapt resource value: 0x7f060011
+			public const int OrderView_FirstName = 2131099665;
+			
+			// aapt resource value: 0x7f060013
+			public const int OrderView_LastName = 2131099667;
+			
+			// aapt resource value: 0x7f060012
+			public const int OrderView_MiddleName = 2131099666;
+			
+			// aapt resource value: 0x7f060019
+			public const int OrderView_Mobile = 2131099673;
 			
 			// aapt resource value: 0x7f06001a
-			public const int TextListItem = 2131099674;
+			public const int OrderView_Phone = 2131099674;
+			
+			// aapt resource value: 0x7f060014
+			public const int OrderView_Street = 2131099668;
+			
+			// aapt resource value: 0x7f060010
+			public const int OrderView_Title = 2131099664;
+			
+			// aapt resource value: 0x7f060015
+			public const int OrderView_Zip = 2131099669;
+			
+			// aapt resource value: 0x7f06001c
+			public const int ProductListItem_Description = 2131099676;
+			
+			// aapt resource value: 0x7f06001d
+			public const int ProductListItem_ListPrice = 2131099677;
+			
+			// aapt resource value: 0x7f06001b
+			public const int ProductListItem_Name = 2131099675;
+			
+			// aapt resource value: 0x7f06001e
+			public const int ProductsView = 2131099678;
+			
+			// aapt resource value: 0x7f060021
+			public const int ProductsView_ProductImage = 2131099681;
+			
+			// aapt resource value: 0x7f06001f
+			public const int ProductsView_ProductInfo = 2131099679;
+			
+			// aapt resource value: 0x7f060020
+			public const int ProductsView_ProductList = 2131099680;
+			
+			// aapt resource value: 0x7f060022
+			public const int TextListItem = 2131099682;
 			
 			static Id()
 			{
