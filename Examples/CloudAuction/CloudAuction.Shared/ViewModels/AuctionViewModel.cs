@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using MvvmQuickCross;
 
 namespace CloudAuction.Shared.ViewModels
@@ -60,6 +61,25 @@ namespace CloudAuction.Shared.ViewModels.Design
             AvailableCount = 48;
             Condition = "Damaged";
             TimeRemaining = "0:01:17";
+
+            var v = RunAuction();
+        }
+
+        private async Task RunAuction()
+        {
+            int maxPrice = 299, minPrice = 149;
+            do
+            {
+                TimePercentageRemaining = 100;
+                for (int secondsRemaining = 90; secondsRemaining > 0; secondsRemaining--)
+                {
+                    await Task.Delay(1000);
+                    int price = minPrice + ((maxPrice - minPrice) * secondsRemaining / 90);
+                    CurrentPrice = string.Format("$ {0},00", price);
+                    TimePercentageRemaining = (100 * secondsRemaining) / 90;
+                    TimeRemaining = TimeSpan.FromSeconds(secondsRemaining).ToString();
+                }
+            } while (--AvailableCount > 0);
         }
     }
 }

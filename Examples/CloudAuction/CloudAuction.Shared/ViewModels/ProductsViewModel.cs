@@ -45,7 +45,7 @@ namespace CloudAuction.Shared.ViewModels.Design
             var t = LowerPrices();
         }
 
-        async Task LowerPrices()
+        private async Task LowerPrices()
         {
             for (; ; )
             {
