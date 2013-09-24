@@ -12,7 +12,8 @@ namespace CloudAuction.Shared.ViewModels
 
         /* Fields:
         public string Name, Description;
-        public int ListPrice;
+        public string ListPrice;
+        public int ListPriceNumeric;
         */
 
         #region Data-bindable properties and commands
@@ -30,7 +31,7 @@ namespace CloudAuction.Shared.ViewModels
 
         public override string ToString()
         {
-            return Name + "\r\n$ " + ListPrice.ToString() + ",00\r\n" + Description;
+            return Name + "\r\n$ " + ListPriceNumeric.ToString() + ",00\r\n" + Description;
         }
     }
 }

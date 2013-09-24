@@ -65,18 +65,18 @@ namespace MvvmQuickCross
                 {
                     // TODO: Add cases here for specialized view types, as needed
                     case "Android.Widget.ProgressBar":
-                        ((ProgressBar)view).Progress = (int)value;
+                        ((ProgressBar)view).Progress = (int)(value ?? 0);
                         break;
 
                     case "Android.Webkit.WebView":
                         var webView = (Android.Webkit.WebView)view;
-                        if (value is Uri) webView.LoadUrl(value.ToString()); else webView.LoadData(value.ToString(), "text/html", null);
+                        if (value is Uri) webView.LoadUrl(value.ToString()); else webView.LoadData(value == null ? "" : value.ToString(), "text/html", null);
                         break;
 
                     case "Macaw.UIComponents.MultiImageView":
                         if (value is Uri) value = ((Uri)value).AbsoluteUri;
                         var multiImageView = (Macaw.UIComponents.MultiImageView)view;
-                        multiImageView.LoadImageList(new[] { (string)value });
+                        multiImageView.LoadImageList(value == null ? null : new[] { (string)value });
                         multiImageView.LoadImage(); // TODO: Update to MultiImageView 1.2 when it is published, to fix hang on no connection and to get rid of this LoadImage call.
                         break;
 
@@ -84,7 +84,7 @@ namespace MvvmQuickCross
                         if (view is TextView)
                         {
                             var textView = (TextView)view;
-                            string text = value.ToString();
+                            string text = value == null ? "" : value.ToString();
                             if (textView.Text != text) textView.Text = text;
                         }
                         else if (view is AdapterView)
