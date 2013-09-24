@@ -1,9 +1,7 @@
 using System;
-using System.Collections;
 
 using Android.Views;
 using Android.Widget;
-using System.Reflection;
 
 namespace MvvmQuickCross
 {
@@ -13,33 +11,39 @@ namespace MvvmQuickCross
 
         private void AddCommandHandler(DataBinding binding)
         {
-            if (binding.View == null) return;
-            string viewTypeName = binding.View.GetType().FullName;
+            var view = binding.View;
+            if (view == null) return;
+            string viewTypeName = view.GetType().FullName;
             switch (viewTypeName)
             {
-                case "Android.Widget.Button": binding.View.Click += View_Click; break;
-                case "Android.Widget.Spinner": ((AdapterView)binding.View).ItemSelected += AdapterView_ItemSelected; break;
-                case "Android.Widget.ListView": ((AdapterView)binding.View).ItemClick += AdapterView_ItemClick; break;
-                default: throw new NotImplementedException("View type not implemented: " + viewTypeName);
+                // TODO: Add cases here for specialized view types, as needed
+                default:
+                    if (view is AbsSpinner) ((AdapterView)view).ItemSelected += AdapterView_ItemSelected;
+                    else if (view is AdapterView) ((AdapterView)view).ItemClick += AdapterView_ItemClick;
+                    else view.Click += View_Click;
+                    break;
             }
         }
 
         private void RemoveCommandHandler(DataBinding binding)
         {
-            if (binding.View == null) return;
-            string viewTypeName = binding.View.GetType().FullName;
+            var view = binding.View;
+            if (view == null) return;
+            string viewTypeName = view.GetType().FullName;
             switch (viewTypeName)
             {
-                case "Android.Widget.Button": binding.View.Click -= View_Click; break;
-                case "Android.Widget.Spinner": ((AdapterView)binding.View).ItemSelected -= AdapterView_ItemSelected; break;
-                case "Android.Widget.ListView": ((AdapterView)binding.View).ItemClick -= AdapterView_ItemClick; break;
-                default: throw new NotImplementedException("View type not implemented: " + viewTypeName);
+                // TODO: Add cases here for specialized view types, as needed
+                default:
+                    if (view is AbsSpinner) ((AdapterView)view).ItemSelected -= AdapterView_ItemSelected;
+                    else if (view is AdapterView) ((AdapterView)view).ItemClick -= AdapterView_ItemClick;
+                    else view.Click -= View_Click;
+                    break;
             }
         }
 
         private void View_Click(object sender, EventArgs e)
         {
-            var view = (Button)sender;
+            var view = (View)sender;
             var binding = FindBindingForView(view);
             if (binding != null)
             {
@@ -57,29 +61,11 @@ namespace MvvmQuickCross
             if (view != null)
             {
                 string viewTypeName = view.GetType().FullName;
-
                 switch (viewTypeName)
                 {
-                    case "Android.Widget.TextView":
-                    case "Android.Widget.EditText":
-                        var textView = (TextView)view;
-                        string text = value.ToString();
-                        if (textView.Text != text) textView.Text = text;
-                        break;
-
+                    // TODO: Add cases here for specialized view types, as needed
                     case "Android.Widget.ProgressBar":
                         ((ProgressBar)view).Progress = (int)value;
-                        break;
-
-                    case "Android.Widget.Spinner":
-                    case "Android.Widget.ListView":
-                        var adapterView = (AdapterView)view;
-                        var adapter = adapterView.GetAdapter() as IDataBindableListAdapter;
-                        if (adapter != null)
-                        {
-                            int position = adapter.GetItemPosition(value);
-                            if (adapterView.SelectedItemPosition != position) adapterView.SetSelection(position);
-                        }
                         break;
 
                     case "Macaw.UIComponents.MultiImageView":
@@ -90,7 +76,24 @@ namespace MvvmQuickCross
                         break;
 
                     default:
-                        throw new NotImplementedException("View type not implemented: " + viewTypeName);
+                        if (view is TextView)
+                        {
+                            var textView = (TextView)view;
+                            string text = value.ToString();
+                            if (textView.Text != text) textView.Text = text;
+                        }
+                        else if (view is AdapterView)
+                        {
+                            var adapterView = (AdapterView)view;
+                            var adapter = adapterView.GetAdapter() as IDataBindableListAdapter;
+                            if (adapter != null)
+                            {
+                                int position = adapter.GetItemPosition(value);
+                                if (adapterView.SelectedItemPosition != position) adapterView.SetSelection(position);
+                            }
+                        }
+                        else throw new NotImplementedException("View type not implemented: " + viewTypeName);
+                        break;
                 }
             }
         }
@@ -101,27 +104,35 @@ namespace MvvmQuickCross
 
         private void AddTwoWayHandler(DataBinding binding)
         {
-            if (binding.View == null) return;
-            string viewTypeName = binding.View.GetType().FullName;
+            var view = binding.View;
+            if (view == null) return;
+            string viewTypeName = view.GetType().FullName;
             switch (viewTypeName)
             {
-                case "Android.Widget.EditText": ((TextView)binding.View).AfterTextChanged += TextView_AfterTextChanged; break;
-                case "Android.Widget.Spinner":  ((AdapterView)binding.View).ItemSelected += AdapterView_ItemSelected; break;
-                case "Android.Widget.ListView": ((AdapterView)binding.View).ItemClick += AdapterView_ItemClick; break;
-                default: throw new NotImplementedException("View type not implemented: " + viewTypeName);
+                // TODO: Add cases here for specialized view types, as needed
+                default:
+                    if (view is AbsSpinner) ((AdapterView)view).ItemSelected += AdapterView_ItemSelected;
+                    else if (view is AbsListView) ((AdapterView)view).ItemClick += AdapterView_ItemClick;
+                    else if (view is EditText) ((TextView)view).AfterTextChanged += TextView_AfterTextChanged;
+                    else throw new NotImplementedException("View type not implemented: " + viewTypeName);
+                    break;
             }
         }
 
         private void RemoveTwoWayHandler(DataBinding binding)
         {
-            if (binding.View == null) return;
-            string viewTypeName = binding.View.GetType().FullName;
+            var view = binding.View;
+            if (view == null) return;
+            string viewTypeName = view.GetType().FullName;
             switch (viewTypeName)
             {
-                case "Android.Widget.EditText": ((TextView)binding.View).AfterTextChanged -= TextView_AfterTextChanged; break;
-                case "Android.Widget.Spinner": ((AdapterView)binding.View).ItemSelected -= AdapterView_ItemSelected; break;
-                case "Android.Widget.ListView": ((AdapterView)binding.View).ItemClick -= AdapterView_ItemClick; break;
-                default: throw new NotImplementedException("View type not implemented: " + viewTypeName);
+                // TODO: Add cases here for specialized view types, as needed
+                default:
+                    if (view is AbsSpinner) ((AdapterView)view).ItemSelected -= AdapterView_ItemSelected;
+                    else if (view is AbsListView) ((AdapterView)view).ItemClick -= AdapterView_ItemClick;
+                    else if (view is EditText) ((TextView)view).AfterTextChanged -= TextView_AfterTextChanged;
+                    else throw new NotImplementedException("View type not implemented: " + viewTypeName);
+                    break;
             }
         }
 

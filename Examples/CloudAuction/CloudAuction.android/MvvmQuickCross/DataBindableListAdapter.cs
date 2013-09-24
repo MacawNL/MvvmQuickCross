@@ -269,13 +269,7 @@ namespace MvvmQuickCross
             if (itemDataBindings == null && !itemIsViewModel.HasValue)
             {
                 itemIsViewModel = itemObject is ViewModelBase;
-                if (itemIsViewModel.Value)
-                {
-                    // If the item is a viewmodel, we can bind it using a Activity / Fragment / ?  view base class - then we use that instead of databindings?
-                    // The viewholder then becomes the viewbindings object
-                    // TODO: extend IDataBindableListAdapter so it has addhandlers and removehandlers, to be called from viewdatabindings
-                }
-                else
+                if (!itemIsViewModel.Value)
                 {
                     itemDataBindings = new List<ItemDataBinding>();
 
