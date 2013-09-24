@@ -68,6 +68,11 @@ namespace MvvmQuickCross
                         ((ProgressBar)view).Progress = (int)value;
                         break;
 
+                    case "Android.Webkit.WebView":
+                        var webView = (Android.Webkit.WebView)view;
+                        if (value is Uri) webView.LoadUrl(value.ToString()); else webView.LoadData(value.ToString(), "text/html", null);
+                        break;
+
                     case "Macaw.UIComponents.MultiImageView":
                         if (value is Uri) value = ((Uri)value).AbsoluteUri;
                         var multiImageView = (Macaw.UIComponents.MultiImageView)view;

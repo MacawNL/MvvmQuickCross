@@ -4,9 +4,18 @@
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
+    <WebView
+        android:layout_width="fill_parent"
+        android:layout_height="200dp"
+        android:id="@+id/ProductsView_ProductInfo" />
     <ListView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/ProductsView_ProductList"
         android:tag="{Binding SelectProductCommand, Mode=Command} {List ItemsSource=ProductList}" />
+    <ImageView
+        android:src="@android:drawable/ic_menu_gallery"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/ProductsView_ProductImage" />
 </LinearLayout>

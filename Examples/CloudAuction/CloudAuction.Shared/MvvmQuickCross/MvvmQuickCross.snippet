@@ -28,7 +28,7 @@
         </Literal>
       </Declarations>
       <Code Language="csharp">
-        <![CDATA[public $type$ $property$ /* One-way data-bindable property generated with propdb1 snippet. Keep on one line - see http://goo.gl/Yg6QMd for why. */ { get { return _$property$; } protected set { if (_$property$ != value) { _$property$ = value; RaisePropertyChanged(PROPERTYNAME_$property$); } } } private $type$ _$property$; public const string PROPERTYNAME_$property$ = "$property$";
+        <![CDATA[public $type$ $property$ /* One-way data-bindable property generated with propdb1 snippet. Keep on one line - see http://goo.gl/Yg6QMd for why. */ { get { return _$property$; } set { if (_$property$ != value) { _$property$ = value; RaisePropertyChanged(PROPERTYNAME_$property$); } } } private $type$ _$property$; public const string PROPERTYNAME_$property$ = "$property$";
 	$end$]]>
       </Code>
     </Snippet>
@@ -62,7 +62,7 @@
         </Literal>
       </Declarations>
       <Code Language="csharp">
-        <![CDATA[public $collectiontype$<$elementtype$> $property$ /* One-way data-bindable property generated with propdbcol snippet. Keep on one line - see http://goo.gl/Yg6QMd for why. */ { get { return _$property$; } protected set { if (_$property$ != value) { _$property$ = value; RaisePropertyChanged(PROPERTYNAME_$property$); Update$property$HasItems(); } } } private $collectiontype$<$elementtype$> _$property$; public const string PROPERTYNAME_$property$ = "$property$";
+        <![CDATA[public $collectiontype$<$elementtype$> $property$ /* One-way data-bindable property generated with propdbcol snippet. Keep on one line - see http://goo.gl/Yg6QMd for why. */ { get { return _$property$; } set { if (_$property$ != value) { _$property$ = value; RaisePropertyChanged(PROPERTYNAME_$property$); Update$property$HasItems(); } } } private $collectiontype$<$elementtype$> _$property$; public const string PROPERTYNAME_$property$ = "$property$";
   public bool $property$HasItems /* One-way data-bindable property generated with propdbcol snippet. Keep on one line - see http://goo.gl/Yg6QMd for why. */ { get { return _$property$HasItems; } protected set { if (_$property$HasItems != value) { _$property$HasItems = value; RaisePropertyChanged(PROPERTYNAME_$property$HasItems); } } } private bool _$property$HasItems; public const string PROPERTYNAME_$property$HasItems = "$property$HasItems";
   protected void Update$property$HasItems() /* Helper method generated with propdbcol snippet. Keep on one line - see http://goo.gl/Yg6QMd for why. */ { $property$HasItems = _$property$ != null && _$property$.Count > 0; }
 	$end$]]>

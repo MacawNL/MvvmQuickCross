@@ -104,8 +104,8 @@ namespace CloudAuction
 			// aapt resource value: 0x7f060009
 			public const int AuctionView_TimeRemaining = 2131099657;
 			
-			// aapt resource value: 0x7f060019
-			public const int LogoutMenuItem = 2131099673;
+			// aapt resource value: 0x7f06001b
+			public const int LogoutMenuItem = 2131099675;
 			
 			// aapt resource value: 0x7f06000b
 			public const int MainView = 2131099659;
@@ -143,11 +143,17 @@ namespace CloudAuction
 			// aapt resource value: 0x7f060016
 			public const int ProductsView = 2131099670;
 			
+			// aapt resource value: 0x7f060019
+			public const int ProductsView_ProductImage = 2131099673;
+			
 			// aapt resource value: 0x7f060017
-			public const int ProductsView_ProductList = 2131099671;
+			public const int ProductsView_ProductInfo = 2131099671;
 			
 			// aapt resource value: 0x7f060018
-			public const int TextListItem = 2131099672;
+			public const int ProductsView_ProductList = 2131099672;
+			
+			// aapt resource value: 0x7f06001a
+			public const int TextListItem = 2131099674;
 			
 			static Id()
 			{

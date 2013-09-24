@@ -17,14 +17,18 @@ namespace CloudAuction.Shared.ViewModels
         public bool ProductListHasItems /* One-way data-bindable property generated with propdbcol snippet. Keep on one line - see http://goo.gl/Yg6QMd for why. */ { get { return _ProductListHasItems; } protected set { if (_ProductListHasItems != value) { _ProductListHasItems = value; RaisePropertyChanged(PROPERTYNAME_ProductListHasItems); } } } private bool _ProductListHasItems; public const string PROPERTYNAME_ProductListHasItems = "ProductListHasItems";
         protected void UpdateProductListHasItems() /* Helper method generated with propdbcol snippet. Keep on one line - see http://goo.gl/Yg6QMd for why. */ { ProductListHasItems = _ProductList != null && _ProductList.Count > 0; }
         public RelayCommand SelectProductCommand /* Data-bindable command with parameter that calls SelectProduct(), generated with cmdp snippet. Keep on one line - see http://goo.gl/Yg6QMd for why. */ { get { if (_SelectProductCommand == null) _SelectProductCommand = new RelayCommand(SelectProduct); return _SelectProductCommand; } } private RelayCommand _SelectProductCommand;
+        public Uri ProductInfo /* One-way data-bindable property generated with propdb1 snippet. Keep on one line - see http://goo.gl/Yg6QMd for why. */ { get { return _ProductInfo; } set { if (_ProductInfo != value) { _ProductInfo = value; RaisePropertyChanged(PROPERTYNAME_ProductInfo); } } } private Uri _ProductInfo; public const string PROPERTYNAME_ProductInfo = "ProductInfo";
+        #endregion
+
+        private static Uri[] productInfos = new Uri[] { new Uri("http://cloudauction.macaw.nl/Auction/Lot/1"), new Uri("http://cloudauction.macaw.nl/Auction/Lot/2"), new Uri("http://cloudauction.macaw.nl/Auction/Lot/3"), new Uri("http://cloudauction.macaw.nl/Auction/Lot/4"), new Uri("http://cloudauction.macaw.nl/Auction/Lot/5") };
 
         private void SelectProduct(object parameter)
         {
             var product = (ProductViewModel)parameter;
             CloudAuctionApplication.Instance.ContinueToMain();
+            ProductInfo = productInfos[product.ListPriceNumeric % productInfos.Length];
             // TODO: Implement SelectProduct()
         }
-        #endregion
     }
 }
 
