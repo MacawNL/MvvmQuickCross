@@ -54,6 +54,7 @@ namespace MvvmQuickCross
 
         public DataBindableListAdapter(LayoutInflater layoutInflater, int itemTemplateResourceId, string idPrefix, int? itemValueResourceId = null, ViewDataBindings.ViewExtensionPoints viewExtensionPoints = null)
         {
+            if (layoutInflater == null) throw new ArgumentNullException("layoutInflater");
             this.layoutInflater = layoutInflater;
             this.itemTemplateResourceId = itemTemplateResourceId;
             this.idPrefix = idPrefix;

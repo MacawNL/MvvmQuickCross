@@ -51,6 +51,8 @@ namespace MvvmQuickCross
 
         public ViewDataBindings(View rootView, ViewModelBase viewModel, LayoutInflater layoutInflater, string idPrefix)
         {
+            if (rootView == null) throw new ArgumentNullException("rootView");
+            if (viewModel == null) throw new ArgumentNullException("viewModel");
             this.rootView = rootView;
             this.rootViewExtensionPoints = rootView as ViewExtensionPoints;
             this.viewModel = viewModel;

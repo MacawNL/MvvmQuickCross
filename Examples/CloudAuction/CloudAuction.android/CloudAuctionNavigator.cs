@@ -28,7 +28,7 @@ namespace CloudAuction
 
         public void NavigateToOrderResultView(object navigationContext)
         {
-            throw new NotImplementedException();
+            Navigate(navigationContext, typeof(OrderResultView));
         }
     }
 }

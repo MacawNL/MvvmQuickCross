@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CloudAuctionNavigator.cs" />
+    <Compile Include="OrderResultView.cs" />
     <Compile Include="MainView.cs" />
     <Compile Include="AuctionView.cs" />
     <Compile Include="MvvmQuickCross\ActivityViewBase.cs" />
@@ -82,6 +83,9 @@
       <SubType>AndroidResource</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\Layout\ProductsView.axml">
+      <SubType>AndroidResource</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\Layout\OrderResultView.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
   </ItemGroup>
