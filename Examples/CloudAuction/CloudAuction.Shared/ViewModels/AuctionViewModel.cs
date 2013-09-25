@@ -62,7 +62,7 @@ namespace CloudAuction.Shared.ViewModels.Design
             Condition = "Damaged";
             TimeRemaining = "0:01:17";
 
-            var v = RunAuction();
+            var _ = RunAuction();
         }
 
         private async Task RunAuction()
