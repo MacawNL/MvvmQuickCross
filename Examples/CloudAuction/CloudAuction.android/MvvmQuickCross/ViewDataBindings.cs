@@ -53,6 +53,7 @@ namespace MvvmQuickCross
         {
             if (rootView == null) throw new ArgumentNullException("rootView");
             if (viewModel == null) throw new ArgumentNullException("viewModel");
+            if (layoutInflater == null) throw new ArgumentNullException("layoutInflater");
             this.rootView = rootView;
             this.rootViewExtensionPoints = rootView as ViewExtensionPoints;
             this.viewModel = viewModel;

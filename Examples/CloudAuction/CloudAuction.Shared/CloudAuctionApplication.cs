@@ -29,6 +29,7 @@ namespace CloudAuction.Shared
         public MainViewModel MainViewModel { get; private set; }
         public AuctionViewModel AuctionViewModel { get; private set; }
         public ProductsViewModel ProductsViewModel { get; private set; }
+        public ProductViewModel ProductViewModel { get; private set; }
         public OrderViewModel OrderViewModel { get; private set; }
         public OrderResultViewModel OrderResultViewModel { get; private set; }
 
@@ -50,11 +51,18 @@ namespace CloudAuction.Shared
             {
                 switch (subView.Value)
                 {
-                    case MainViewModel.SubView.Auction: if (ProductsViewModel == null) if (AuctionViewModel == null) AuctionViewModel = new AuctionViewModelDesign(); break;
+                    case MainViewModel.SubView.Auction: if (AuctionViewModel == null) AuctionViewModel = new AuctionViewModelDesign(); break;
                     case MainViewModel.SubView.Products: if (ProductsViewModel == null) ProductsViewModel = new ProductsViewModelDesign(); break;
                 }
             }
             if (!skipNavigation) RunOnUIThread(() => navigator.NavigateToMainView(CurrentNavigationContext, subView));
+        }
+
+        public void ContinueToProduct(ProductViewModel product, bool skipNavigation = false)
+        {
+            if (ProductViewModel == null) ProductViewModel = new ProductViewModel();
+            ProductViewModel.Initialize(product); // Note that we update the existing ProductViewModel instance instead of replacing it with a new instance, because views may exist that are bound to the existing instance.
+            if (!skipNavigation) RunOnUIThread(() => navigator.NavigateToProductView(CurrentNavigationContext));
         }
 
         public void ContinueToOrder(Bid bid, bool skipNavigation = false)

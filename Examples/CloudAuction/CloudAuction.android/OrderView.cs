@@ -6,7 +6,7 @@ using CloudAuction.Shared;
 
 namespace CloudAuction
 {
-    [Activity(Label = "Order View")]
+    [Activity(Label = "Order")]
     public class OrderView : ActivityViewBase<OrderViewModel>
     {
         protected override void OnCreate(Bundle bundle)

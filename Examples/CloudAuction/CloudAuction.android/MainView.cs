@@ -37,9 +37,9 @@ namespace CloudAuction
                 ActionBar.NewTab().SetText("Products").SetTag(new ProductsView()), 
                 ActionBar.NewTab().SetText("Help").SetTag(new Fragment()) };
 
-            Initialize(FindViewById(Resource.Layout.MainView), CloudAuctionApplication.Instance.MainViewModel);
+            Initialize(FindViewById(Resource.Id.MainView), CloudAuctionApplication.Instance.MainViewModel);
             
-            foreach (var tab in tabs) ActionBar.AddTab(tab);
+            for (int position = 0; position < tabs.Length; position++) ActionBar.AddTab(tabs[position], setSelected: (MainViewModel.SubView)position == CurrentSubView);
         }
 
         protected override void AddHandlers()

@@ -21,6 +21,11 @@ namespace CloudAuction
             Navigate(navigationContext, typeof(MainView));
         }
 
+        public void NavigateToProductView(object navigationContext)
+        {
+            Navigate(navigationContext, typeof(ProductView));
+        }
+
         public void NavigateToOrderView(object navigationContext)
         {
             Navigate(navigationContext, typeof(OrderView));

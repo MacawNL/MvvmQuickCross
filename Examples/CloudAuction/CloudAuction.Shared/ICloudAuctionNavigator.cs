@@ -8,6 +8,7 @@ namespace CloudAuction.Shared
                 void NavigateTo_VIEWNAME_View(object navigationContext);
          */
         void NavigateToMainView(object navigationContext, MainViewModel.SubView? subView);
+        void NavigateToProductView(object navigationContext);
         void NavigateToOrderView(object navigationContext);
         void NavigateToOrderResultView(object navigationContext);
     }
