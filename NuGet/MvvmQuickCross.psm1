@@ -1,6 +1,3 @@
-param($installPath, $toolsPath, $package, $project)
-Write-Host "Install: installPath = $installPath, toolsPath = $toolsPath, project = $($project.Name)"
-
 function ReplaceStringsInString([string]$text, [Hashtable]$replacements)
 {
     foreach ($replacement in $replacements.GetEnumerator())
@@ -17,8 +14,16 @@ function ReplaceStringsInFile([string]$filePath, [Hashtable]$replacements)
     [System.IO.File]::WriteAllText($filePath, $content, [System.Text.Encoding]::UTF8)
 }
 
-function Install($project)
+function Install-Mvvm
 {
+    Param(
+       [string]$projectName
+    )
+
+    if ("$projectName" -eq '') { $project = Get-Project } else { $project = Get-Project $projectName }
+    if ($project -eq $null)  { Write-Host "Project '$projectName' not found."; return }
+    $projectName = $project.Name
+
     # Get the application name from the solution file name
     $solutionName = Split-Path ($project.DTE.Solution.FullName) -Leaf
     $appName = $solutionName.Split('.')[0]
@@ -44,9 +49,10 @@ function Install($project)
         default        { throw "Unsupported target framework: " + $targetFrameworkName }
     }
 
-    Write-Output "Output: Detected platform: $platform, project type: " + ('library', 'app')[$isApplication]
-    Write-Host "Host: Detected platform: $platform, project type: " + ('library', 'app')[$isApplication]
-    
+    Write-Host ("Project {0}: platform = {1}, project type = {2}" -f $project.Name, $platform, ('library', 'app')[$isApplication])
+
+    $toolsPath = $PSScriptRoot
+
     $nameReplacements = @{
         "_APPNAME_" = $appName
     }
@@ -61,6 +67,14 @@ function Install($project)
     #       OR: if shared code not installed, fail and give message to install and reference first? nonblocking Dialog needed?
     if ($installSharedCode) # Do the shared library file actions
     {
+        Write-Host "Installing MvvmQuickCross library support in project $projectName ..."
+        $librarySourcePath = Join-Path -Path $toolsPath -ChildPath library
+        $libraryDestinationPath = Split-Path -Path $project.FullName -Parent
+        Get-ChildItem $librarySourcePath -Recurse | ForEach-Object {
+            $relativePath = $_.FullName.Substring($librarySourcePath.Length)
+            $destinationPath = Join-Path -Path $libraryDestinationPath -ChildPath $relativePath
+            Copy-Item -Path $_.FullName -Destination $destinationPath -Force
+            $dte.ItemOperations.AddExistingItem($destinationPath) # TODO: ***HERE*** use http://msdn.microsoft.com/en-us/library/envdte.projectitems.addfromfile.ASPX instead, maybe reuse some factory util code?
         $projectItems = (
             $project.ProjectItems.Item("_APPNAME_Application.cs"),
             $project.ProjectItems.Item("I_APPNAME_Navigator.cs"),
@@ -76,12 +90,9 @@ function Install($project)
     }
 
     # TODO: 
-    # If the folder for the target framework is not added automatically, copy and add it
-    # If the folders for the other frameworks are added automatically, remove them
-
     # Add the #define for the target framework, if needed.
-    # In the readme, 
+    Write-Host "Installing MvvmQuickCross done."
 
 }
 
-Install -project $project
+Export-ModuleMember -Function Install-Mvvm
