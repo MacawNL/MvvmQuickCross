@@ -1,20 +1,67 @@
-function ReplaceStringsInString([string]$text, [Hashtable]$replacements)
+$ErrorActionPreference = 'Stop'
+Set-StrictMode -Version Latest
+
+function ReplaceStringsInString
 {
-    foreach ($replacement in $replacements.GetEnumerator())
+    Param(
+        [Parameter(Mandatory=$true)] [string]$text,
+        [Hashtable]$replacements
+    )
+
+    if ($replacements -ne $null) 
     {
-        $text = $text.Replace($replacement.Name, $replacement.Value)
+        foreach ($replacement in $replacements.GetEnumerator())
+        {
+            $text = $text.Replace($replacement.Name, $replacement.Value)
+        }
     }
     $text
 }
 
-function ReplaceStringsInFile([string]$filePath, [Hashtable]$replacements)
+function ReplaceStringsInFile
 {
-    $content = [System.IO.File]::ReadAllText($filePath)
-    $content = ReplaceStringsInString -text $content -replacements $replacements
-    [System.IO.File]::WriteAllText($filePath, $content, [System.Text.Encoding]::UTF8)
+    Param(
+        [Parameter(Mandatory=$true)] [string]$filePath,
+        [Hashtable]$replacements
+    )
+
+    if ($replacements -ne $null) 
+    {
+        $content = [System.IO.File]::ReadAllText($filePath)
+        $content = ReplaceStringsInString -text $content -replacements $replacements
+        [System.IO.File]::WriteAllText($filePath, $content, [System.Text.Encoding]::UTF8)
+    }
 }
 
-function Install-Mvvm
+function AddProjectItemsFromDirectory
+{
+    Param(
+        [Parameter(Mandatory=$true)] $project,
+        [Parameter(Mandatory=$true)] [string]$sourceDirectory,
+        [string]$destinationDirectory,
+        [Hashtable]$nameReplacements,
+        [Hashtable]$contentReplacements
+    )
+
+    if ("$destinationDirectory" -eq '') { $destinationDirectory = Split-Path -Path $project.FullName -Parent }
+
+    Get-ChildItem $sourceDirectory | ForEach-Object {
+        $itemName = ReplaceStringsInString -text $_.Name -replacements $nameReplacements
+        $destinationPath = Join-Path -Path $destinationDirectory -ChildPath $itemName
+        if ($_.PSIsContainer)
+        {
+            if (-not (Test-Path -Path $destinationPath)) { $null = New-Item -Path $destinationPath -ItemType directory }
+            AddProjectItemsFromDirectory -sourceDirectory $_.FullName -destinationDirectory $destinationPath -project $project
+        } else {
+            Write-Host "Adding project item: $destinationPath"
+            Copy-Item -Path $_.FullName -Destination $destinationPath -Force
+            ReplaceStringsInFile -filePath $destinationPath -replacements $contentReplacements
+            $null = $project.ProjectItems.AddFromFile($destinationPath)
+        }
+    }
+}
+
+function Install-Project
 {
     Param(
        [string]$projectName
@@ -67,32 +114,14 @@ function Install-Mvvm
     #       OR: if shared code not installed, fail and give message to install and reference first? nonblocking Dialog needed?
     if ($installSharedCode) # Do the shared library file actions
     {
-        Write-Host "Installing MvvmQuickCross library support in project $projectName ..."
-        $librarySourcePath = Join-Path -Path $toolsPath -ChildPath library
-        $libraryDestinationPath = Split-Path -Path $project.FullName -Parent
-        Get-ChildItem $librarySourcePath -Recurse | ForEach-Object {
-            $relativePath = $_.FullName.Substring($librarySourcePath.Length)
-            $destinationPath = Join-Path -Path $libraryDestinationPath -ChildPath $relativePath
-            Copy-Item -Path $_.FullName -Destination $destinationPath -Force
-            $dte.ItemOperations.AddExistingItem($destinationPath) # TODO: ***HERE*** use http://msdn.microsoft.com/en-us/library/envdte.projectitems.addfromfile.ASPX instead, maybe reuse some factory util code?
-        $projectItems = (
-            $project.ProjectItems.Item("_APPNAME_Application.cs"),
-            $project.ProjectItems.Item("I_APPNAME_Navigator.cs"),
-            $project.ProjectItems.Item("ViewModels").ProjectItems.Item("_VIEWNAME_ViewModel.cs")
-        )
-
-        # Replace variables in project item names and content
-        foreach ($projectItem in $projectItems)
-        {
-            $projectItem.Name = ReplaceStringsInString -text $projectItem.Name -replacements $nameReplacements
-            ReplaceStringsInFile -filePath $projectItem.Properties.Item("FullPath").Value -replacements $contentReplacements
-        }
+        Write-Host "Installing MvvmQuickCross library files in project $projectName"
+        $librarySourceDirectory = Join-Path -Path $toolsPath -ChildPath library
+        AddProjectItemsFromDirectory -project $project -sourceDirectory $librarySourceDirectory -nameReplacements $nameReplacements -contentReplacements $contentReplacements
     }
 
     # TODO: 
     # Add the #define for the target framework, if needed.
-    Write-Host "Installing MvvmQuickCross done."
-
+    Write-Host "MvvmQuickCross is installed in project $projectName" 
 }
 
-Export-ModuleMember -Function Install-Mvvm
+Export-ModuleMember -Function Install-Project
