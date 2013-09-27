@@ -1,43 +1,55 @@
 ﻿using System.ComponentModel;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace MvvmQuickCross
 {
     public abstract class ViewModelBase : INotifyPropertyChanged
     {
-#if __ANDROID__ || __IOS__
-        private HashSet<string> changedProperties = new HashSet<string>();
+        #if __ANDROID__ || __IOS__
+        private List<string> propertyNames;
+        private List<string> commandNames;
 
-        private PropertyChangedEventHandler _propertyChanged;
-
-        public event PropertyChangedEventHandler PropertyChanged
+        public void RaisePropertiesChanged()
         {
-            add
+            if (propertyNames == null)
             {
-                _propertyChanged += value;
-                if (changedProperties.Count > 0)
+                propertyNames = new List<string>();
+                foreach (var fieldInfo in this.GetType().GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy))
                 {
-                    foreach (string propertyName in changedProperties) RaisePropertyChanged(propertyName);
-                    changedProperties.Clear();
+                    if (fieldInfo.IsLiteral && !fieldInfo.IsInitOnly && fieldInfo.Name.StartsWith("PROPERTYNAME_"))
+                    {
+                        propertyNames.Add((string)fieldInfo.GetValue(null));
+                    }
                 }
             }
-
-            remove { _propertyChanged -= value; }
+            foreach (string propertyName in propertyNames) RaisePropertyChanged(propertyName);
         }
 
-        protected virtual void RaisePropertyChanged(string propertyName)
+        public List<string> CommandNames
         {
-            var handler = _propertyChanged;
-            if (handler != null)
+            get
             {
-                ApplicationBase.RunOnUIThread(() => handler(this, new PropertyChangedEventArgs(propertyName)));
-            }
-            else
-            {
-                changedProperties.Add(propertyName);
+                if (commandNames == null) {
+                    commandNames = new List<string>();
+                    foreach (var propertyInfo in this.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
+                    {
+                        if (propertyInfo.PropertyType == typeof(RelayCommand))
+                        {
+                            commandNames.Add(propertyInfo.Name);
+                        }
+                    }
+                }
+                return commandNames;
             }
         }
-#else
+
+        public T GetPropertyValue<T>(string propertyName)
+        {
+            return (T)GetType().GetProperty(propertyName).GetValue(this);
+        }
+        #endif
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void RaisePropertyChanged(string propertyName)
@@ -45,6 +57,5 @@ namespace MvvmQuickCross
             var handler = PropertyChanged;
             if (handler != null) ApplicationBase.RunOnUIThread(() => handler(this, new PropertyChangedEventArgs(propertyName)));
         }
-#endif
     }
 }

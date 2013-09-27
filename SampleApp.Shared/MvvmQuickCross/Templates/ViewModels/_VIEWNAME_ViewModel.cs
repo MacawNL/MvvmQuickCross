@@ -17,7 +17,7 @@ namespace MvvmQuickCross.Templates.ViewModels
     }
 }
 
-// Design data support
+// Design-time data support
 #if DEBUG
 namespace MvvmQuickCross.Templates.ViewModels.Design
 {

@@ -6,7 +6,7 @@ namespace MvvmQuickCross
 {
     public abstract class ViewModelBase : INotifyPropertyChanged
     {
-        #region This code is only called from iOS and Android, but it works on all platforms. We compile it unconditionally to support Portable Class Libraries.
+#if __ANDROID__ || __IOS__
         private List<string> propertyNames;
         private List<string> commandNames;
 
@@ -30,7 +30,8 @@ namespace MvvmQuickCross
         {
             get
             {
-                if (commandNames == null) {
+                if (commandNames == null)
+                {
                     commandNames = new List<string>();
                     foreach (var propertyInfo in this.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
                     {
@@ -48,7 +49,7 @@ namespace MvvmQuickCross
         {
             return (T)GetType().GetProperty(propertyName).GetValue(this);
         }
-        #endregion
+#endif
 
         public event PropertyChangedEventHandler PropertyChanged;
 
