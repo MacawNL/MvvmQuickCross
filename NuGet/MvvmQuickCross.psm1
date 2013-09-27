@@ -61,7 +61,7 @@ function AddProjectItemsFromDirectory
     }
 }
 
-function Install-Project
+function Install-Mvvm
 {
     Param(
        [string]$projectName
@@ -119,9 +119,28 @@ function Install-Project
         AddProjectItemsFromDirectory -project $project -sourceDirectory $librarySourceDirectory -nameReplacements $nameReplacements -contentReplacements $contentReplacements
     }
 
-    # TODO: 
-    # Add the #define for the target framework, if needed.
+    if ($define -ne $null)
+    {
+        # Add the #define for the target framework, if needed.
+        Write-Host "Ensuring $define conditional compilation symbol for all project configurations and platforms"
+        $project.ConfigurationManager.ConfigurationRowNames | foreach-object {
+            $project.ConfigurationManager.ConfigurationRow($_) | foreach-object { 
+                $property = $_.Properties.Item('DefineConstants')
+                if ($property -ne $null)
+                {
+                    $value = "$($property.value)".Trim()
+                    if ($value -notmatch "\W*$define\W*") {
+                        if ($value -ne '') { $value += ';' }
+                        $value += $define
+                        $property.value = $value
+                    }
+                }
+            } 
+        }
+    }
+
+
     Write-Host "MvvmQuickCross is installed in project $projectName" 
 }
 
-Export-ModuleMember -Function Install-Project
+Export-ModuleMember -Function Install-Mvvm

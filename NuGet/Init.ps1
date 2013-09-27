@@ -15,4 +15,4 @@ if ((Get-Module MvvmQuickCross) -ne $null)
 }
 $modulePath = Join-Path -Path $toolsPath -ChildPath MvvmQuickCross.psm1
 Write-Host "Importing MvvmQuickCross module from $modulePath"
-Import-Module -Name $modulePath -Prefix Mvvm
+Import-Module -Name $modulePath
