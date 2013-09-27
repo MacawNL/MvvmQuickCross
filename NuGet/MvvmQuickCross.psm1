@@ -12,7 +12,7 @@ function ReplaceStringsInString
     {
         foreach ($replacement in $replacements.GetEnumerator())
         {
-            $text = $text.Replace($replacement.Name, $replacement.Value)
+            $text = $text -replace $replacement.Name, $replacement.Value
         }
     }
     $text
@@ -61,15 +61,58 @@ function AddProjectItemsFromDirectory
     }
 }
 
+function GetProjectPlatform
+{
+    Param([Parameter(Mandatory=$true)] $project)
+
+    $targetFrameworkMoniker = $project.Properties.Item("TargetFrameworkMoniker").Value
+    # E.g. valid target framework monikers are:
+    # Windows Store:   .NETCore,Version=v4.5
+    # Windows Phone:   WindowsPhone,Version=v8.0
+    # Xamarin.Android: MonoAndroid,Version=v4.2
+    # Xamarin.iOS:     TODO CHECK: MonoTouch?,?
+
+    $targetFrameworkName = $targetFrameworkMoniker.Split(',')[0]
+    switch ($targetFrameworkName)
+    {
+        'MonoAndroid'  { $platform = "android" }
+        'MonoTouch'    { $platform = "ios"     }
+        '.NETCore'     { $platform = "ws"      }
+        'WindowsPhone' { $platform = "wp"      }
+        default        { throw "Unsupported target framework: " + $targetFrameworkName }
+    }
+
+    $platform
+}
+
+Function IsApplicationProject
+{
+    Param([Parameter(Mandatory=$true)] $project)
+
+    $projectFileContent = [System.IO.File]::ReadAllText($project.FullName)
+    $platform = GetProjectPlatform -project $project
+
+    switch ($platform)
+    {
+        'android' { $isApplication = $projectFileContent -match '<\s*AndroidApplication\s*>\s*true\s*</\s*AndroidApplication\s*>' }
+        'ios'     { $isApplication = $projectFileContent -match '<\s*OutputType\s*>\s*Exe\s*</\s*OutputType\s*>' }
+        'ws'      { $isApplication = $projectFileContent -match '<\s*OutputType\s*>\s*AppContainerExe\s*</\s*OutputType\s*>' }
+        'wp'      { $isApplication = $projectFileContent -match '<\s*SilverlightApplication\s*>\s*true\s*</\s*SilverlightApplication\s*>' }
+        default   { throw "Unknown platform: " + $platform }
+    }
+
+    $isApplication
+}
+
 function Install-Mvvm
 {
     Param(
-       [string]$projectName
+       [string]$ProjectName
     )
 
-    if ("$projectName" -eq '') { $project = Get-Project } else { $project = Get-Project $projectName }
-    if ($project -eq $null)  { Write-Host "Project '$projectName' not found."; return }
-    $projectName = $project.Name
+    if ("$ProjectName" -eq '') { $project = Get-Project } else { $project = Get-Project $ProjectName }
+    if ($project -eq $null)  { Write-Host "Project '$ProjectName' not found."; return }
+    $ProjectName = $project.Name
 
     # Get the application name from the solution file name
     $solutionName = Split-Path ($project.DTE.Solution.FullName) -Leaf
@@ -85,15 +128,14 @@ function Install-Mvvm
 
     $targetFrameworkName = $targetFrameworkMoniker.Split(',')[0]
     $projectFileContent = [System.IO.File]::ReadAllText($project.FullName)
+    $platform = GetProjectPlatform -project $project
+    $isApplication = IsApplicationProject -project $project
 
-    switch ($targetFrameworkName)
-    {
-        'MonoAndroid'  { $platform = "android"; $define = '__ANDROID__'  ; $isApplication = $projectFileContent -match '<\s*AndroidApplication\s*>\s*true\s*</\s*AndroidApplication\s*>' }
-        'MonoTouch'    { $platform = "ios"    ; $define = '__IOS__'      ; $isApplication = $projectFileContent -match '<\s*OutputType\s*>\s*Exe\s*</\s*OutputType\s*>' }
-        '.NETCore'     { $platform = "ws"     ; $define = 'NETFX_CORE'   ; $isApplication = $projectFileContent -match '<\s*OutputType\s*>\s*AppContainerExe\s*</\s*OutputType\s*>' }
-        'WindowsPhone' { $platform = "wp"     ; $define = 'WINDOWS_PHONE'; $isApplication = $projectFileContent -match '<\s*SilverlightApplication\s*>\s*true\s*</\s*SilverlightApplication\s*>' }
-        '.NETPortable' { $platform = $null    ; $define = $null          ; $isApplication = $false }
-        default        { throw "Unsupported target framework: " + $targetFrameworkName }
+    $platformDefines = @{
+        'android' = '__ANDROID__';
+        'ios'     = '__IOS__';
+        'ws'      = 'NETFX_CORE';
+        'wp'      = 'WINDOWS_PHONE'
     }
 
     Write-Host ("Project {0}: platform = {1}, project type = {2}" -f $project.Name, $platform, ('library', 'app')[$isApplication])
@@ -106,7 +148,7 @@ function Install-Mvvm
 
     $contentReplacements = @{
         "_APPNAME_" = $appName;
-        "MvvmQuickCross.Templates" = $defaultNamespace
+        "MvvmQuickCross\.Templates" = $defaultNamespace
     }
 
     $installSharedCode = -not $isApplication
@@ -114,11 +156,12 @@ function Install-Mvvm
     #       OR: if shared code not installed, fail and give message to install and reference first? nonblocking Dialog needed?
     if ($installSharedCode) # Do the shared library file actions
     {
-        Write-Host "Installing MvvmQuickCross library files in project $projectName"
+        Write-Host "Installing MvvmQuickCross library files in project $ProjectName"
         $librarySourceDirectory = Join-Path -Path $toolsPath -ChildPath library
         AddProjectItemsFromDirectory -project $project -sourceDirectory $librarySourceDirectory -nameReplacements $nameReplacements -contentReplacements $contentReplacements
     }
 
+    $define = $platformDefines[$platform]
     if ($define -ne $null)
     {
         # Add the #define for the target framework, if needed.
@@ -140,7 +183,53 @@ function Install-Mvvm
     }
 
 
-    Write-Host "MvvmQuickCross is installed in project $projectName" 
+    Write-Host "MvvmQuickCross is installed in project $ProjectName" 
+}
+
+function New-ViewModel
+{
+    Param(
+        [Parameter(Mandatory=$true)] [string]$ViewModelName,
+        [string]$ProjectName
+    )
+
+    if ("$ProjectName" -eq '') { $project = Get-Project } else { $project = Get-Project $ProjectName }
+    if ($project -eq $null)  { Write-Host "Project '$ProjectName' not found."; return }
+    $ProjectName = $project.Name
+    
+    if (IsApplicationProject -project $project)
+    {
+        Write-Host "Project $ProjectName is an application project; view models should be coded in a library project. Specify a library project with the ProjectName parameter or select a library project as the default project in the Package Manager Console."
+        return
+    }
+
+    $projectFolder = Split-Path -Path $project.FullName -Parent
+    $templatePath = Join-Path -Path $projectFolder -ChildPath 'ViewModels\_VIEWNAME_ViewModel.cs'
+    if (-not(Test-Path $templatePath))
+    {
+        $toolsPath = $PSScriptRoot
+        $templatePath = Join-Path -Path $toolsPath -ChildPath 'library\ViewModels\_VIEWNAME_ViewModel.cs'
+        if (-not(Test-Path $templatePath)) { throw "Viewmodel template file not found: $templatePath" }
+    }
+
+    $destinationFolder = Join-Path -Path $projectFolder -ChildPath ViewModels
+    if (-not(Test-Path -Path $destinationFolder)) { $null = New-Item $destinationFolder -ItemType Directory -Force }
+    $destinationPath = Join-Path -Path $destinationFolder -ChildPath ('{0}ViewModel.cs' -f $ViewModelName)
+    Copy-Item -Path $templatePath -Destination $destinationPath -Force
+
+    $defaultNamespace = $project.Properties.Item("DefaultNamespace").Value
+    $contentReplacements = @{
+        "MvvmQuickCross.Templates" = $defaultNamespace;
+        "_VIEWMODEL_" = $ViewModelName;
+        "\s*#if\s+TEMPLATE\s+[^\r\n]*[\r\n]+" = '';
+        "\s*#endif\s+//\s*TEMPLATE\s+[^\r\n]*[\r\n]*" = '';
+    }
+
+    ReplaceStringsInFile -filePath $destinationPath -replacements $contentReplacements
+
+    $null = $project.ProjectItems.AddFromFile($destinationPath)
+    $dte.ItemOperations.OpenFile($destinationPath)
 }
 
 Export-ModuleMember -Function Install-Mvvm
+Export-ModuleMember -Function New-ViewModel
