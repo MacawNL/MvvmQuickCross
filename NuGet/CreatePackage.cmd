@@ -1,2 +1,2 @@
-%~dp0NuGet.exe Pack MvvmQuickCross.nuspec -Verbose -BasePath %~dp0 -OutputDirectory %~dp0..\NuGetPackages 
+%~dp0NuGet.exe Pack MvvmQuickCross.nuspec -Verbosity detailed  -BasePath %~dp0 -OutputDirectory %~dp0..\NuGetPackages 
 pause
