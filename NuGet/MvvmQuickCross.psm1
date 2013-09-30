@@ -165,13 +165,13 @@ function Install-Mvvm
     #       OR: if shared code not installed, fail and give message to install and reference first? nonblocking Dialog needed?
     if ($installSharedCode) # Do the shared library file actions
     {
-        Write-Host "Installing MvvmQuickCross library files in project $ProjectName"
+        Write-Host "Installing MvvmQuickCross library files"
         $librarySourceDirectory = Join-Path -Path $toolsPath -ChildPath library
         AddProjectItemsFromDirectory -project $project -sourceDirectory $librarySourceDirectory -nameReplacements $nameReplacements -contentReplacements $contentReplacements
     }
 
     if ($isApplication) {
-        Write-Host "Installing MvvmQuickCross android app files in project $ProjectName"
+        Write-Host "Installing MvvmQuickCross app files"
         $appSourceDirectory = Join-Path -Path $toolsPath -ChildPath app.android
         AddProjectItemsFromDirectory -project $project -sourceDirectory $appSourceDirectory -nameReplacements $nameReplacements -contentReplacements $contentReplacements
     }

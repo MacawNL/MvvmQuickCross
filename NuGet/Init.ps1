@@ -7,10 +7,8 @@ param(
 
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
-Write-Host "installPath : $installPath"
-Write-Host "toolsPath   : $toolsPath"
-Write-Host "package     : $($package -ne $null)"
 
+Write-Host "" # We need to write an empty line to prevent an error when the solution is (re)loaded and the user starts typing in the package manager console.
 if ((Get-Module MvvmQuickCross) -ne $null) 
 {
     Write-Host "Removing existing MvvmQuickCross module"
@@ -19,5 +17,6 @@ if ((Get-Module MvvmQuickCross) -ne $null)
 $modulePath = Join-Path -Path $toolsPath -ChildPath MvvmQuickCross.psm1
 Write-Host "Importing MvvmQuickCross module from $modulePath"
 Import-Module -Name $modulePath
-Write-Host "Available MvvmQuickCross Commands:"
-Get-Command -Module MvvmQuickCross -Syntax | Out-Host
+$commands = Get-Command -Module MvvmQuickCross -Syntax | Out-String
+$commands = $commands -replace '[\r\n]+', "`r`n"
+Write-Host "Available MvvmQuickCross Commands:`r`n$commands"
