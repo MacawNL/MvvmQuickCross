@@ -24,7 +24,7 @@ namespace SampleApp
 
         public void NavigateToSampleItemView(object navigationContext)
         {
-            throw new NotImplementedException();
+            Navigate(navigationContext, typeof(SampleItemView));
         }
     }
 }

@@ -8,5 +8,5 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/SampleItemListView_Items"
-        android:tag="{Binding ViewItemCommand, Mode=Command} {List ItemTemplate=ListItem}" />
+        android:tag="{Binding ViewItemCommand, Mode=Command} {List ItemsSource=Items, ItemTemplate=ListItem}" />
 </LinearLayout>

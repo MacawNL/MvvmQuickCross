@@ -66,6 +66,7 @@ namespace MvvmQuickCross
     
     public class ActivityViewBase<ViewModelType> : ActivityViewBase, ViewDataBindings.ViewExtensionPoints where ViewModelType : ViewModelBase
     {
+        private bool isJustInitialized;
         protected ViewModelType ViewModel { get; private set; }
         protected ViewDataBindings Bindings { get; private set; }
 
@@ -84,6 +85,13 @@ namespace MvvmQuickCross
             Bindings.AddBindings(bindingsParameters); // First add any bindings that were specified in code 
             Bindings.EnsureCommandBindings();  // Then add any command bindings that were not specified in code (based on the Id naming convention)
             ViewModel.RaisePropertiesChanged(); // Finally add any property bindings that were not specified in code (based on the Id naming convention), and update the root view with the current property values
+            isJustInitialized = true;
+        }
+
+        protected override void OnResume()
+        {
+            base.OnResume();
+            if (isJustInitialized) isJustInitialized = false; else Bindings.UpdateView(findViews: false);
         }
 
         /// <summary>
