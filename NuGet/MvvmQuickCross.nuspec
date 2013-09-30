@@ -25,13 +25,14 @@ MvvmQuickCross is lightweight and easy to modify: it adds no binaries, just one 
   <files>
     <file src="Init.ps1"            target="tools\Init.ps1" />
     <file src="MvvmQuickCross.psm1" target="tools\MvvmQuickCross.psm1" />
-    <file src="..\SampleApp.Shared\MvvmQuickCross.library\ApplicationBase.cs"                          target="tools\library\MvvmQuickCross\ApplicationBase.cs" />
-    <file src="..\SampleApp.Shared\MvvmQuickCross.library\RelayCommand.cs"                             target="tools\library\MvvmQuickCross\RelayCommand.cs" />
-    <file src="..\SampleApp.Shared\MvvmQuickCross.library\ViewModelBase.cs"                            target="tools\library\MvvmQuickCross\ViewModelBase.cs" />
-    <file src="..\SampleApp.Shared\MvvmQuickCross.library\MvvmQuickCross.snippet"                      target="tools\library\MvvmQuickCross\MvvmQuickCross.snippet" />
-    <file src="..\SampleApp.Shared\MvvmQuickCross.library\Templates\_APPNAME_Application.cs"           target="tools\library\_APPNAME_Application.cs" />
-    <file src="..\SampleApp.Shared\MvvmQuickCross.library\Templates\I_APPNAME_Navigator.cs"            target="tools\library\I_APPNAME_Navigator.cs" />
-    <file src="..\SampleApp.Shared\MvvmQuickCross.library\Templates\ViewModels\_VIEWNAME_ViewModel.cs" target="tools\library\ViewModels\_VIEWNAME_ViewModel.cs" />
+    <file src="..\SampleApp.Shared\MvvmQuickCross\ApplicationBase.cs"                          target="tools\library\MvvmQuickCross\ApplicationBase.cs" />
+    <file src="..\SampleApp.Shared\MvvmQuickCross\RelayCommand.cs"                             target="tools\library\MvvmQuickCross\RelayCommand.cs" />
+    <file src="..\SampleApp.Shared\MvvmQuickCross\ViewModelBase.cs"                            target="tools\library\MvvmQuickCross\ViewModelBase.cs" />
+    <file src="..\SampleApp.Shared\MvvmQuickCross\MvvmQuickCross.snippet"                      target="tools\library\MvvmQuickCross\MvvmQuickCross.snippet" />
+    <file src="..\SampleApp.Shared\MvvmQuickCross\Templates\_APPNAME_Application.cs"           target="tools\library\_APPNAME_Application.cs" />
+    <file src="..\SampleApp.Shared\MvvmQuickCross\Templates\I_APPNAME_Navigator.cs"            target="tools\library\I_APPNAME_Navigator.cs" />
+    <file src="..\SampleApp.Shared\MvvmQuickCross\Templates\ViewModels\_VIEWNAME_ViewModel.cs" target="tools\library\ViewModels\_VIEWNAME_ViewModel.cs" />
     <!--<file src="readme.txt" target="" />-->
+    <file src="..\SampleApp.android\MvvmQuickCross\*.*"                                       target="tools\app.android\MvvmQuickCross\" />
   </files>
 </package>

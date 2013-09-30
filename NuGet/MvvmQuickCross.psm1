@@ -170,6 +170,12 @@ function Install-Mvvm
         AddProjectItemsFromDirectory -project $project -sourceDirectory $librarySourceDirectory -nameReplacements $nameReplacements -contentReplacements $contentReplacements
     }
 
+    if ($isApplication) {
+        Write-Host "Installing MvvmQuickCross android app files in project $ProjectName"
+        $appSourceDirectory = Join-Path -Path $toolsPath -ChildPath app.android
+        AddProjectItemsFromDirectory -project $project -sourceDirectory $appSourceDirectory -nameReplacements $nameReplacements -contentReplacements $contentReplacements
+    }
+
     $platformDefines = @{
         'android' = '__ANDROID__';
         'ios'     = '__IOS__';
