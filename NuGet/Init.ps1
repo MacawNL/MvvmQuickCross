@@ -7,6 +7,9 @@ param(
 
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
+Write-Host "installPath : $installPath"
+Write-Host "toolsPath   : $toolsPath"
+Write-Host "package     : $($package -ne $null)"
 
 if ((Get-Module MvvmQuickCross) -ne $null) 
 {
@@ -16,3 +19,5 @@ if ((Get-Module MvvmQuickCross) -ne $null)
 $modulePath = Join-Path -Path $toolsPath -ChildPath MvvmQuickCross.psm1
 Write-Host "Importing MvvmQuickCross module from $modulePath"
 Import-Module -Name $modulePath
+Write-Host "Available MvvmQuickCross Commands:"
+Get-Command -Module MvvmQuickCross -Syntax | Out-Host

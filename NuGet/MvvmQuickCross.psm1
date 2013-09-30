@@ -104,64 +104,13 @@ Function IsApplicationProject
     $isApplication
 }
 
-function Install-Mvvm
+function EnsureConditionalCompilationSymbol
 {
     Param(
-       [string]$ProjectName
+        [Parameter(Mandatory=$true)] $project,
+        [Parameter(Mandatory=$true)] [string]$define
     )
 
-    if ("$ProjectName" -eq '') { $project = Get-Project } else { $project = Get-Project $ProjectName }
-    if ($project -eq $null)  { Write-Host "Project '$ProjectName' not found."; return }
-    $ProjectName = $project.Name
-
-    # Get the application name from the solution file name
-    $solutionName = Split-Path ($project.DTE.Solution.FullName) -Leaf
-    $appName = $solutionName.Split('.')[0]
-    $defaultNamespace = $project.Properties.Item("DefaultNamespace").Value
-    $targetFrameworkMoniker = $project.Properties.Item("TargetFrameworkMoniker").Value
-    # E.g. valid target framework monikers are:
-    # Windows Store:   .NETCore,Version=v4.5
-    # Windows Phone:   WindowsPhone,Version=v8.0
-    # Xamarin.Android: MonoAndroid,Version=v4.2
-    # Xamarin.iOS:     TODO MonoTouch,?
-    # Portable:        .NETPortable,Version=v4.5,Profile=Profile78
-
-    $targetFrameworkName = $targetFrameworkMoniker.Split(',')[0]
-    $projectFileContent = [System.IO.File]::ReadAllText($project.FullName)
-    $platform = GetProjectPlatform -project $project
-    $isApplication = IsApplicationProject -project $project
-
-    $platformDefines = @{
-        'android' = '__ANDROID__';
-        'ios'     = '__IOS__';
-        'ws'      = 'NETFX_CORE';
-        'wp'      = 'WINDOWS_PHONE'
-    }
-
-    Write-Host ("Project {0}: platform = {1}, project type = {2}" -f $project.Name, $platform, ('library', 'app')[$isApplication])
-
-    $toolsPath = $PSScriptRoot
-
-    $nameReplacements = @{
-        "_APPNAME_" = $appName
-    }
-
-    $contentReplacements = @{
-        "_APPNAME_" = $appName;
-        "MvvmQuickCross\.Templates" = $defaultNamespace
-    }
-
-    $installSharedCode = -not $isApplication
-    # TODO: ?check if the shared code is already present in another (referenced?) project in the solution, if not, install the shared code into the same project - to also support one-project solutions?
-    #       OR: if shared code not installed, fail and give message to install and reference first? nonblocking Dialog needed?
-    if ($installSharedCode) # Do the shared library file actions
-    {
-        Write-Host "Installing MvvmQuickCross library files in project $ProjectName"
-        $librarySourceDirectory = Join-Path -Path $toolsPath -ChildPath library
-        AddProjectItemsFromDirectory -project $project -sourceDirectory $librarySourceDirectory -nameReplacements $nameReplacements -contentReplacements $contentReplacements
-    }
-
-    $define = $platformDefines[$platform]
     if ($define -ne $null)
     {
         # Add the #define for the target framework, if needed.
@@ -181,7 +130,53 @@ function Install-Mvvm
             } 
         }
     }
+}
 
+function Install-Mvvm
+{
+    Param(
+       [string]$ProjectName
+    )
+
+    if ("$ProjectName" -eq '') { $project = Get-Project } else { $project = Get-Project $ProjectName }
+    if ($project -eq $null)  { Write-Host "Project '$ProjectName' not found."; return }
+    $ProjectName = $project.Name
+
+    # Get the application name from the solution file name
+    $solutionName = Split-Path ($project.DTE.Solution.FullName) -Leaf
+    $appName = $solutionName.Split('.')[0]
+    $defaultNamespace = $project.Properties.Item("DefaultNamespace").Value
+    $platform = GetProjectPlatform -project $project
+    $isApplication = IsApplicationProject -project $project
+
+    Write-Host ("Project {0}: platform = {1}, project type = {2}" -f $project.Name, $platform, ('library', 'app')[$isApplication])
+
+    $toolsPath = $PSScriptRoot
+    $nameReplacements = @{
+        "_APPNAME_" = $appName
+    }
+    $contentReplacements = @{
+        "_APPNAME_" = $appName;
+        "MvvmQuickCross\.Templates" = $defaultNamespace
+    }
+
+    $installSharedCode = -not $isApplication
+    # TODO: ?check if the shared code is already present in another (referenced?) project in the solution, if not, install the shared code into the same project - to also support one-project solutions?
+    #       OR: if shared code not installed, fail and give message to install and reference first? nonblocking Dialog needed?
+    if ($installSharedCode) # Do the shared library file actions
+    {
+        Write-Host "Installing MvvmQuickCross library files in project $ProjectName"
+        $librarySourceDirectory = Join-Path -Path $toolsPath -ChildPath library
+        AddProjectItemsFromDirectory -project $project -sourceDirectory $librarySourceDirectory -nameReplacements $nameReplacements -contentReplacements $contentReplacements
+    }
+
+    $platformDefines = @{
+        'android' = '__ANDROID__';
+        'ios'     = '__IOS__';
+        'ws'      = 'NETFX_CORE';
+        'wp'      = 'WINDOWS_PHONE'
+    }
+    EnsureConditionalCompilationSymbol -project $project -define $platformDefines[$platform]
 
     Write-Host "MvvmQuickCross is installed in project $ProjectName" 
 }
@@ -219,16 +214,16 @@ function New-ViewModel
 
     $defaultNamespace = $project.Properties.Item("DefaultNamespace").Value
     $contentReplacements = @{
-        "MvvmQuickCross.Templates" = $defaultNamespace;
-        "_VIEWMODEL_" = $ViewModelName;
-        "\s*#if\s+TEMPLATE\s+[^\r\n]*[\r\n]+" = '';
-        "\s*#endif\s+//\s*TEMPLATE\s+[^\r\n]*[\r\n]*" = '';
+        'MvvmQuickCross.Templates' = $defaultNamespace;
+        '_VIEWMODEL_' = $ViewModelName;
+        '(?m)^\s*#if\s+TEMPLATE\s+[^\r\n]*[\r\n]+' = '';
+        '(?m)^\s*#endif\s+//\s*TEMPLATE[^\r\n]*[\r\n]*' = '';
     }
 
     ReplaceStringsInFile -filePath $destinationPath -replacements $contentReplacements
 
     $null = $project.ProjectItems.AddFromFile($destinationPath)
-    $dte.ItemOperations.OpenFile($destinationPath)
+    $null = $dte.ItemOperations.OpenFile($destinationPath)
 }
 
 Export-ModuleMember -Function Install-Mvvm
