@@ -19,7 +19,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuGet", "NuGet", "{D0AD395C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleApp.Shared.ws", "SampleApp.Shared\SampleApp.Shared.ws.csproj", "{3C1B89C8-2834-49D6-A0EF-6013593F4652}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleApp.ws", "SampleApp.w8\SampleApp.ws.csproj", "{C82EFBC8-37F5-4555-8788-17ACCFF16129}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleApp.ws", "SampleApp.ws\SampleApp.ws.csproj", "{C82EFBC8-37F5-4555-8788-17ACCFF16129}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
