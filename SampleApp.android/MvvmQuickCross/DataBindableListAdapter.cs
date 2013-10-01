@@ -119,7 +119,7 @@ namespace MvvmQuickCross
 
         public object GetItemAsObject(int position)
         {
-            return (list == null) ? null : list[position];
+            return (list == null || position < 0 || position >= list.Count) ? null : list[position];
         }
 
         public void SetList(IList list)

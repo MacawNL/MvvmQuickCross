@@ -48,7 +48,15 @@ namespace MvvmQuickCross
             if (binding != null)
             {
                 var command = (RelayCommand)binding.ViewModelPropertyInfo.GetValue(viewModel);
-                command.Execute(null);
+                object parameter = null;
+                if (binding.CommandParameterSelectedItemAdapterView != null)
+                {
+                    var adapter = binding.CommandParameterSelectedItemAdapterView.GetAdapter() as IDataBindableListAdapter;
+                    var adapterView = binding.CommandParameterSelectedItemAdapterView;
+                    int selectedItemPosition = (adapterView is AbsListView) ? ((AbsListView)adapterView).CheckedItemPosition : adapterView.SelectedItemPosition;
+                    if (adapter != null && selectedItemPosition >= 0) parameter = adapter.GetItemAsObject(selectedItemPosition);
+                }
+                command.Execute(parameter);
             }
         }
 
@@ -65,12 +73,26 @@ namespace MvvmQuickCross
                 {
                     // TODO: Add cases here for specialized view types, as needed
                     case "Android.Widget.ProgressBar":
-                        ((ProgressBar)view).Progress = (int)(value ?? 0);
+                        {
+                            var progressBar = (ProgressBar)view;
+                            int progressValue = (int)(value ?? 0);
+                            if (progressBar.Progress != progressValue) progressBar.Progress = progressValue;
+                        }
                         break;
 
                     case "Android.Webkit.WebView":
-                        var webView = (Android.Webkit.WebView)view;
-                        if (value is Uri) webView.LoadUrl(value.ToString()); else webView.LoadData(value == null ? "" : value.ToString(), "text/html", null);
+                        {
+                            var webView = (Android.Webkit.WebView)view;
+                            if (value is Uri)
+                            {
+                                string newUrl = value.ToString();
+                                if (webView.Url != newUrl) webView.LoadUrl(newUrl);
+                            }
+                            else
+                            {
+                                webView.LoadData(value == null ? "" : value.ToString(), "text/html", null);
+                            }
+                        }
                         break;
 
                     default:

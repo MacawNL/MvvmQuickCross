@@ -16,10 +16,11 @@ namespace MvvmQuickCross
 
     public class BindingParameters
     {
-        public string propertyName;
-        public string listPropertyName;
-        public BindingMode mode = BindingMode.OneWay;
-        public View view;
+        public string PropertyName;
+        public string ListPropertyName;
+        public BindingMode Mode = BindingMode.OneWay;
+        public View View;
+        public AdapterView CommandParameterSelectedItemAdapterView;
     }
 
     public partial class ViewDataBindings
@@ -33,6 +34,9 @@ namespace MvvmQuickCross
 
             public PropertyInfo ViewModelListPropertyInfo;
             public IDataBindableListAdapter ListAdapter;
+
+            public int? CommandParameterSelectedItemAdapterViewId;
+            public AdapterView CommandParameterSelectedItemAdapterView;
         }
 
         private readonly View rootView;
@@ -87,11 +91,11 @@ namespace MvvmQuickCross
             foreach (var item in dataBindings)
             {
                 var binding = item.Value;
-                if (binding.ResourceId.HasValue && findViews)
+                if (findViews)
                 {
-                    binding.View = rootView.FindViewById(binding.ResourceId.Value);
+                    if (binding.ResourceId.HasValue) binding.View = rootView.FindViewById(binding.ResourceId.Value);
+                    if (binding.CommandParameterSelectedItemAdapterViewId.HasValue) binding.CommandParameterSelectedItemAdapterView = rootView.FindViewById<AdapterView>(binding.CommandParameterSelectedItemAdapterViewId.Value);
                 }
-
                 UpdateList(binding);
                 UpdateView(binding);
             }
@@ -166,16 +170,16 @@ namespace MvvmQuickCross
             {
                 foreach (var bp in bindingsParameters)
                 {
-                    if (bp.view != null && FindBindingForView(bp.view) != null) throw new ArgumentException("Cannot add binding because a binding already exists for the view with Id " + bp.view.Id.ToString());
-                    if (dataBindings.ContainsKey(IdName(bp.propertyName))) throw new ArgumentException("Cannot add binding because a binding already exists for the view with Id " + IdName(bp.propertyName));
-                    AddBinding(bp.propertyName, bp.mode, bp.listPropertyName, bp.view);
+                    if (bp.View != null && FindBindingForView(bp.View) != null) throw new ArgumentException("Cannot add binding because a binding already exists for the view with Id " + bp.View.Id.ToString());
+                    if (dataBindings.ContainsKey(IdName(bp.PropertyName))) throw new ArgumentException("Cannot add binding because a binding already exists for the view with Id " + IdName(bp.PropertyName));
+                    AddBinding(bp.PropertyName, bp.Mode, bp.ListPropertyName, bp.View, bp.CommandParameterSelectedItemAdapterView);
                 }
             }
         }
 
         private string IdName(string name) { return idPrefix + name; }
 
-        private DataBinding AddBinding(string propertyName, BindingMode mode = BindingMode.OneWay, string listPropertyName = null, View view = null)
+        private DataBinding AddBinding(string propertyName, BindingMode mode = BindingMode.OneWay, string listPropertyName = null, View view = null, AdapterView commandParameterSelectedItemAdapterView = null)
         {
             string idName = (view != null) ? view.Id.ToString() : IdName(propertyName);
             int? resourceId = AndroidHelpers.FindResourceId(idName);
@@ -184,10 +188,12 @@ namespace MvvmQuickCross
 
             bool itemIsValue = false;
             string itemTemplateName = null, itemValueId = null;
+            int? commandParameterSelectedItemAdapterViewId = null;
             if (view.Tag != null)
             {
                 // Get optional parameters from tag:
                 // {Binding propertyName, Mode=OneWay|TwoWay|Command} {List ItemsSource=listPropertyName, ItemIsValue=false|true, ItemTemplate=listItemTemplateName, ItemValueId=listItemValueId}
+                // {CommandParameter SelectedItemAdapterViewId=<view Id>}
                 // Defaults:
                 //   propertyName is known by convention from view Id = <rootview prefix><propertyName>; the default for the rootview prefix is the rootview class name + "_".
                 //   Mode = OneWay
@@ -197,9 +203,9 @@ namespace MvvmQuickCross
                 //   ItemTemplate = ItemsSource + "Item"
                 //   ItemValueId : if ItemIsValue = true then the default for ItemValueId = ItemTemplate
                 string tag = view.Tag.ToString();
-                if (tag != null && tag.Contains("{Binding"))
+                if (tag != null && tag.Contains("{"))
                 {
-                    var match = Regex.Match(tag, @"{Binding\s+((?<assignment>[^,{}]+),?)+\s*}(\s*{List\s+((?<assignment>[^,{}]+),?)+\s*})?");
+                    var match = Regex.Match(tag, @"({Binding\s+((?<assignment>[^,{}]+),?)+\s*})?(\s*{List\s+((?<assignment>[^,{}]+),?)+\s*})?(\s*{CommandParameter\s+((?<assignment>[^,{}]+),?)+\s*})?");
                     if (match.Success)
                     {
                         var gc = match.Groups["assignment"];
@@ -213,7 +219,8 @@ namespace MvvmQuickCross
                                     string[] assignmentElements = cc[i].Value.Split('=');
                                     if (assignmentElements.Length == 1)
                                     {
-                                        propertyName = assignmentElements[0].Trim();
+                                        string value = assignmentElements[0].Trim();
+                                        if (value != "") propertyName = value;
                                     }
                                     else if (assignmentElements.Length == 2)
                                     {
@@ -226,6 +233,11 @@ namespace MvvmQuickCross
                                             case "ItemIsValue": Boolean.TryParse(value, out itemIsValue); break;
                                             case "ItemTemplate": itemTemplateName = value; break;
                                             case "ItemValueId": itemValueId = value; break;
+                                            case "SelectedItemAdapterViewId":
+                                                commandParameterSelectedItemAdapterViewId = AndroidHelpers.FindResourceId(value);
+                                                if (commandParameterSelectedItemAdapterView == null && commandParameterSelectedItemAdapterViewId.HasValue) commandParameterSelectedItemAdapterView = rootView.FindViewById<AdapterView>(commandParameterSelectedItemAdapterViewId.Value);
+                                                break;
+                                            default: throw new ArgumentException("Unknown tag binding parameter: " + name);
                                         }
                                     }
                                 }
@@ -235,7 +247,12 @@ namespace MvvmQuickCross
                 }
             }
 
-            var binding = new DataBinding { View = view, ResourceId = resourceId, Mode = mode, ViewModelPropertyInfo = viewModel.GetType().GetProperty(propertyName) };
+            var binding = new DataBinding { 
+                View = view, ResourceId = resourceId, Mode = mode, 
+                ViewModelPropertyInfo = viewModel.GetType().GetProperty(propertyName),
+                CommandParameterSelectedItemAdapterViewId = commandParameterSelectedItemAdapterViewId,
+                CommandParameterSelectedItemAdapterView = commandParameterSelectedItemAdapterView
+            };
 
             if (binding.View is AdapterView)
             {
@@ -290,7 +307,7 @@ namespace MvvmQuickCross
 
         private void UpdateView(DataBinding binding)
         {
-            if (binding.View != null && binding.ViewModelPropertyInfo != null)
+            if ((binding.Mode == BindingMode.OneWay) || (binding.Mode == BindingMode.TwoWay) && binding.View != null && binding.ViewModelPropertyInfo != null)
             {
                 var view = binding.View;
                 var value = binding.ViewModelPropertyInfo.GetValue(viewModel);
