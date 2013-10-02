@@ -2,6 +2,7 @@ using System;
 
 using Android.Views;
 using Android.Widget;
+using System.Collections;
 
 namespace MvvmQuickCross
 {
@@ -49,12 +50,42 @@ namespace MvvmQuickCross
             {
                 var command = (RelayCommand)binding.ViewModelPropertyInfo.GetValue(viewModel);
                 object parameter = null;
-                if (binding.CommandParameterSelectedItemAdapterView != null)
+                if (binding.CommandParameterListView != null)
                 {
-                    var adapter = binding.CommandParameterSelectedItemAdapterView.GetAdapter() as IDataBindableListAdapter;
-                    var adapterView = binding.CommandParameterSelectedItemAdapterView;
-                    int selectedItemPosition = (adapterView is AbsListView) ? ((AbsListView)adapterView).CheckedItemPosition : adapterView.SelectedItemPosition;
-                    if (adapter != null && selectedItemPosition >= 0) parameter = adapter.GetItemAsObject(selectedItemPosition);
+                    var adapter = binding.CommandParameterListView.GetAdapter() as IDataBindableListAdapter;
+                    if (adapter != null) 
+                    {
+                        var adapterView = binding.CommandParameterListView;
+                        if (adapterView is AbsListView)
+                        {
+                            var absListView = (AbsListView)adapterView;
+                            switch (absListView.ChoiceMode)
+                            {
+                                case ChoiceMode.Single:
+                                    parameter = adapter.GetItemAsObject(absListView.CheckedItemPosition);
+                                    break;
+                                case ChoiceMode.Multiple:
+                                    {
+                                        var checkedItems = new ArrayList();
+                                        var positions = absListView.CheckedItemPositions;
+                                        for (int i = 0; i < positions.Size(); i++)
+                                        {
+                                            if (positions.ValueAt(i))
+                                            {
+                                                int position = positions.KeyAt(i);
+                                                checkedItems.Add(adapter.GetItemAsObject(position));
+                                            }
+                                        }
+                                        if (checkedItems.Count > 0) parameter = checkedItems;
+                                    }
+                                    break;
+                            }
+                        } 
+                        else 
+                        {
+                            parameter = adapter.GetItemAsObject(adapterView.SelectedItemPosition);
+                        }
+                    }
                 }
                 command.Execute(parameter);
             }

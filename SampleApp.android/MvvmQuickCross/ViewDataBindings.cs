@@ -35,8 +35,8 @@ namespace MvvmQuickCross
             public PropertyInfo ViewModelListPropertyInfo;
             public IDataBindableListAdapter ListAdapter;
 
-            public int? CommandParameterSelectedItemAdapterViewId;
-            public AdapterView CommandParameterSelectedItemAdapterView;
+            public int? CommandParameterListId;
+            public AdapterView CommandParameterListView;
         }
 
         private readonly View rootView;
@@ -94,7 +94,7 @@ namespace MvvmQuickCross
                 if (findViews)
                 {
                     if (binding.ResourceId.HasValue) binding.View = rootView.FindViewById(binding.ResourceId.Value);
-                    if (binding.CommandParameterSelectedItemAdapterViewId.HasValue) binding.CommandParameterSelectedItemAdapterView = rootView.FindViewById<AdapterView>(binding.CommandParameterSelectedItemAdapterViewId.Value);
+                    if (binding.CommandParameterListId.HasValue) binding.CommandParameterListView = rootView.FindViewById<AdapterView>(binding.CommandParameterListId.Value);
                 }
                 UpdateList(binding);
                 UpdateView(binding);
@@ -188,12 +188,13 @@ namespace MvvmQuickCross
 
             bool itemIsValue = false;
             string itemTemplateName = null, itemValueId = null;
-            int? commandParameterSelectedItemAdapterViewId = null;
+            int? commandParameterListId = null;
             if (view.Tag != null)
             {
                 // Get optional parameters from tag:
-                // {Binding propertyName, Mode=OneWay|TwoWay|Command} {List ItemsSource=listPropertyName, ItemIsValue=false|true, ItemTemplate=listItemTemplateName, ItemValueId=listItemValueId}
-                // {CommandParameter SelectedItemAdapterViewId=<view Id>}
+                // {Binding propertyName, Mode=OneWay|TwoWay|Command}
+                // {List ItemsSource=listPropertyName, ItemIsValue=false|true, ItemTemplate=listItemTemplateName, ItemValueId=listItemValueId}
+                // {CommandParameter ListId=<view Id>}
                 // Defaults:
                 //   propertyName is known by convention from view Id = <rootview prefix><propertyName>; the default for the rootview prefix is the rootview class name + "_".
                 //   Mode = OneWay
@@ -233,9 +234,9 @@ namespace MvvmQuickCross
                                             case "ItemIsValue": Boolean.TryParse(value, out itemIsValue); break;
                                             case "ItemTemplate": itemTemplateName = value; break;
                                             case "ItemValueId": itemValueId = value; break;
-                                            case "SelectedItemAdapterViewId":
-                                                commandParameterSelectedItemAdapterViewId = AndroidHelpers.FindResourceId(value);
-                                                if (commandParameterSelectedItemAdapterView == null && commandParameterSelectedItemAdapterViewId.HasValue) commandParameterSelectedItemAdapterView = rootView.FindViewById<AdapterView>(commandParameterSelectedItemAdapterViewId.Value);
+                                            case "ListId":
+                                                commandParameterListId = AndroidHelpers.FindResourceId(value);
+                                                if (commandParameterSelectedItemAdapterView == null && commandParameterListId.HasValue) commandParameterSelectedItemAdapterView = rootView.FindViewById<AdapterView>(commandParameterListId.Value);
                                                 break;
                                             default: throw new ArgumentException("Unknown tag binding parameter: " + name);
                                         }
@@ -250,8 +251,8 @@ namespace MvvmQuickCross
             var binding = new DataBinding { 
                 View = view, ResourceId = resourceId, Mode = mode, 
                 ViewModelPropertyInfo = viewModel.GetType().GetProperty(propertyName),
-                CommandParameterSelectedItemAdapterViewId = commandParameterSelectedItemAdapterViewId,
-                CommandParameterSelectedItemAdapterView = commandParameterSelectedItemAdapterView
+                CommandParameterListId = commandParameterListId,
+                CommandParameterListView = commandParameterSelectedItemAdapterView
             };
 
             if (binding.View is AdapterView)
@@ -320,7 +321,11 @@ namespace MvvmQuickCross
             if (binding.ViewModelListPropertyInfo != null && binding.ListAdapter != null)
             {
                 var list = (IList)binding.ViewModelListPropertyInfo.GetValue(viewModel);
-                binding.ListAdapter.SetList(list);
+                if (binding.ListAdapter.SetList(list))
+                {
+                    var listView = binding.View;
+                    if (listView is AbsListView) ((AbsListView)listView).ClearChoices(); // Apparently, calling BaseAdapter.NotifyDataSetChanged() does not clear the choices, so we do that here.
+                }
             }
         }
     }
