@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MvvmQuickCross;
+using MvvmQuickCross.Templates.ViewModels;
 
 namespace MvvmQuickCross.Templates
 {
@@ -24,6 +25,7 @@ namespace MvvmQuickCross.Templates
         /* TODO: For each view model, add a public property with a private setter like this:
            public _VIEWNAME_ViewModel _VIEWNAME_ViewModel { get; private set; }
          */
+        public _VIEWNAME_ViewModel _VIEWNAME_ViewModel { get; private set; }
 
         /* TODO: For each view, add a method (with any parameters needed) to initialize its view model
          * and then navigate to the view using the navigator, like this:
@@ -35,5 +37,12 @@ namespace MvvmQuickCross.Templates
                 }
          * The skipNavigation parameter is needed in cases where the OS has already navigated to the view for you;
          * in that case you only need to initialize the view model. */
+
+        public void ContinueTo_VIEWNAME_(bool skipNavigation = false)
+        {
+            if (_VIEWNAME_ViewModel == null) _VIEWNAME_ViewModel = new _VIEWNAME_ViewModel();
+            // Any actions to update the view model go here
+            if (!skipNavigation) RunOnUIThread(() => _navigator.NavigateTo_VIEWNAME_View(CurrentNavigationContext));
+        }
     }
 }

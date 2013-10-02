@@ -48,6 +48,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="MvvmQuickCross\_APPNAME_Navigator.cs" />
+    <Compile Include="MvvmQuickCross\Templates\_VIEWNAME_FragmentView.cs" />
+    <Compile Include="MvvmQuickCross\Templates\_VIEWNAME_ActivityView.cs" />
+    <None Include="MvvmQuickCross\_VIEWNAME_MainLauncherView.cs" />
     <Compile Include="SampleAppNavigator.cs" />
     <Compile Include="SampleItemListView.cs" />
     <Compile Include="MvvmQuickCross\ActivityViewBase.cs" />
