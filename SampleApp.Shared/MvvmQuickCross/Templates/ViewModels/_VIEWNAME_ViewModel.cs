@@ -11,9 +11,15 @@ namespace MvvmQuickCross.Templates.ViewModels
             // TODO: pass any services that this model needs as contructor parameters. 
         }
 
-#region Data-bindable properties and commands
+        #region Data-bindable properties and commands
         // TODO: Generate data-bindable properties and commands here with prop* and cmd* code snippets
+        
+        // Example data-bound property and command:
+        public int Count /* One-way data-bindable property generated with propdb1 snippet. Keep on one line - see http://goo.gl/Yg6QMd for why. */ { get { return _Count; } protected set { if (_Count != value) { _Count = value; RaisePropertyChanged(PROPERTYNAME_Count); } } } private int _Count; public const string PROPERTYNAME_Count = "Count";
+        public RelayCommand IncreaseCountCommand /* Data-bindable command that calls IncreaseCount(), generated with cmd snippet. Keep on one line - see http://goo.gl/Yg6QMd for why. */ { get { if (_IncreaseCountCommand == null) _IncreaseCountCommand = new RelayCommand(IncreaseCount); return _IncreaseCountCommand; } } private RelayCommand _IncreaseCountCommand;
         #endregion
+
+        private void IncreaseCount() { Count++; } // Example command method
     }
 }
 

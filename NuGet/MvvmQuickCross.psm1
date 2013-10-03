@@ -43,6 +43,7 @@ function AddProjectItemsFromDirectory
         [Hashtable]$contentReplacements
     )
 
+    if (-not(Test-Path -Path $sourceDirectory)) { return }
     if ("$destinationDirectory" -eq '') { $destinationDirectory = Split-Path -Path $project.FullName -Parent }
 
     Get-ChildItem $sourceDirectory | ForEach-Object {
@@ -171,9 +172,14 @@ function Install-Mvvm
     }
 
     if ($isApplication) {
-        Write-Host "Installing MvvmQuickCross app files"
-        $appSourceDirectory = Join-Path -Path $toolsPath -ChildPath app.android
+        Write-Host "Installing MvvmQuickCross app files for platform $platform"
+        $appSourceDirectory = Join-Path -Path $toolsPath -ChildPath "app.$platform"
         AddProjectItemsFromDirectory -project $project -sourceDirectory $appSourceDirectory -nameReplacements $nameReplacements -contentReplacements $contentReplacements
+
+        if ($platform -eq 'android')
+        {
+            # TODO: Set build action of Resources\Layout\_VIEWNAME_View.axml to None
+        }
     }
 
     $platformDefines = @{
@@ -204,6 +210,7 @@ function New-ViewModel
         return
     }
 
+    # TODO: use AddProjectItem
     $projectFolder = Split-Path -Path $project.FullName -Parent
     $templatePath = Join-Path -Path $projectFolder -ChildPath 'ViewModels\_VIEWNAME_ViewModel.cs'
     if (-not(Test-Path $templatePath))
@@ -223,7 +230,7 @@ function New-ViewModel
         'MvvmQuickCross.Templates' = $defaultNamespace;
         '_VIEWMODEL_' = $ViewModelName;
         '(?m)^\s*#if\s+TEMPLATE\s+[^\r\n]*[\r\n]+' = '';
-        '(?m)^\s*#endif\s+//\s*TEMPLATE[^\r\n]*[\r\n]*' = '';
+        '(?m)^\s*#endif\s+//\s*TEMPLATE[^\r\n]*[\r\n]*' = ''
     }
 
     ReplaceStringsInFile -filePath $destinationPath -replacements $contentReplacements
@@ -232,5 +239,85 @@ function New-ViewModel
     $null = $dte.ItemOperations.OpenFile($destinationPath)
 }
 
+function AddProjectItem
+{
+    Param(
+        [Parameter(Mandatory=$true)] $project,
+        [Parameter(Mandatory=$true)] [string]$templateProjectRelativePath,
+        [Parameter(Mandatory=$true)] [string]$destinationProjectRelativePath,
+        [Hashtable] $contentReplacements
+    )
+
+    $projectFolder = Split-Path -Path $project.FullName -Parent
+
+    $templatePath = Join-Path -Path $projectFolder -ChildPath $templateProjectRelativePath
+    if (-not(Test-Path $templatePath))
+    {
+        $toolsPath = $PSScriptRoot
+        $templatePath = Join-Path -Path $toolsPath -ChildPath "app.android\$templateProjectRelativePath"
+        if (-not(Test-Path $templatePath)) { throw "Template file not found: $templatePath" }
+    }
+
+    $destinationPath = Join-Path -Path $projectFolder -ChildPath $destinationProjectRelativePath
+    $destinationFolder = Split-Path -Path $destinationPath -Parent
+    if (-not(Test-Path -Path $destinationFolder)) { $null = New-Item $destinationFolder -ItemType Directory -Force }
+
+    if (Test-Path -Path $destinationPath) { Write-Host "Project item not created because it already exists: $destinationPath"; return }
+    Copy-Item -Path $templatePath -Destination $destinationPath -Force
+    ReplaceStringsInFile -filePath $destinationPath -replacements $contentReplacements
+
+    $null = $project.ProjectItems.AddFromFile($destinationPath)
+    $null = $dte.ItemOperations.OpenFile($destinationPath)
+}
+
+function New-View
+{
+    Param(
+        [Parameter(Mandatory=$true)] [string]$ViewName,
+        [string]$ProjectName
+    )
+
+    if ("$ProjectName" -eq '') { $project = Get-Project } else { $project = Get-Project $ProjectName }
+    if ($project -eq $null)  { Write-Host "Project '$ProjectName' not found."; return }
+    $ProjectName = $project.Name
+    
+    if (-not(IsApplicationProject -project $project))
+    {
+        Write-Host "Project $ProjectName is not an application project; views should be coded in an application project. Specify an application project with the ProjectName parameter or select an application project as the default project in the Package Manager Console."
+        return
+    }
+
+    $solutionName = Split-Path ($project.DTE.Solution.FullName) -Leaf
+    $appName = $solutionName.Split('.')[0]
+    $defaultNamespace = $project.Properties.Item("DefaultNamespace").Value
+
+    # TODO: Move to function
+    $csContentReplacements = @{
+        'MvvmQuickCross.Templates' = $defaultNamespace;
+        '_APPNAME_' = $appName;
+        '_VIEWNAME_' = $ViewName;
+        '(?m)^\s*#if\s+TEMPLATE\s+[^\r\n]*[\r\n]+' = '';
+        '(?m)^\s*#endif\s+//\s*TEMPLATE[^\r\n]*[\r\n]*' = ''
+    }
+
+    $platform = GetProjectPlatform -project $project
+    switch ($platform)
+    {
+        'android' {
+            AddProjectItem -project $project `
+                           -templateProjectRelativePath    'MvvmQuickCross\_VIEWNAME_ActivityView.cs' `
+                           -destinationProjectRelativePath ('{0}View.cs' -f $ViewName) `
+                           -contentReplacements            $csContentReplacements
+            AddProjectItem -project $project `
+                           -templateProjectRelativePath    'MvvmQuickCross\_VIEWNAME_View.axml' `
+                           -destinationProjectRelativePath ('Resources\Layout\{0}View.axml' -f $ViewName) `
+                           -contentReplacements            @{ '_VIEWNAME_' = $ViewName }
+        }
+
+        default { Write-Host "New-View currenty only supports Android application projects"; return }
+    }
+}
+
 Export-ModuleMember -Function Install-Mvvm
 Export-ModuleMember -Function New-ViewModel
+Export-ModuleMember -Function New-View

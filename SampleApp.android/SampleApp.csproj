@@ -48,10 +48,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="MvvmQuickCross\_APPNAME_Navigator.cs" />
-    <Compile Include="MvvmQuickCross\Templates\_VIEWNAME_FragmentView.cs" />
-    <Compile Include="MvvmQuickCross\Templates\_VIEWNAME_ActivityView.cs" />
-    <None Include="MvvmQuickCross\_VIEWNAME_MainLauncherView.cs" />
+    <None Include="MvvmQuickCross\Templates\_APPNAME_Navigator.cs" />
+    <Compile Include="MvvmQuickCross\_VIEWNAME_FragmentView.cs" />
+    <Compile Include="MvvmQuickCross\_VIEWNAME_ActivityView.cs" />
+    <None Include="MvvmQuickCross\Templates\_VIEWNAME_MainLauncherView.cs" />
     <Compile Include="SampleAppNavigator.cs" />
     <Compile Include="SampleItemListView.cs" />
     <Compile Include="MvvmQuickCross\ActivityViewBase.cs" />
@@ -67,6 +67,9 @@
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
+    <None Include="MvvmQuickCross\_VIEWNAME_View.axml">
+      <SubType>AndroidResource</SubType>
+    </None>
     <AndroidResource Include="Resources\Layout\SampleItemListView.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>

@@ -23,16 +23,19 @@ MvvmQuickCross is lightweight and easy to modify: it adds no binaries, just one 
     <tags>iOS Android WP8 Win8 MVVM CrossPlatform Xamarin Mobile App</tags>
   </metadata>
   <files>
-    <file src="Init.ps1"            target="tools\Init.ps1" />
-    <file src="MvvmQuickCross.psm1" target="tools\MvvmQuickCross.psm1" />
-    <file src="..\SampleApp.Shared\MvvmQuickCross\ApplicationBase.cs"                          target="tools\library\MvvmQuickCross\ApplicationBase.cs" />
-    <file src="..\SampleApp.Shared\MvvmQuickCross\RelayCommand.cs"                             target="tools\library\MvvmQuickCross\RelayCommand.cs" />
-    <file src="..\SampleApp.Shared\MvvmQuickCross\ViewModelBase.cs"                            target="tools\library\MvvmQuickCross\ViewModelBase.cs" />
-    <file src="..\SampleApp.Shared\MvvmQuickCross\MvvmQuickCross.snippet"                      target="tools\library\MvvmQuickCross\MvvmQuickCross.snippet" />
-    <file src="..\SampleApp.Shared\MvvmQuickCross\Templates\_APPNAME_Application.cs"           target="tools\library\_APPNAME_Application.cs" />
-    <file src="..\SampleApp.Shared\MvvmQuickCross\Templates\I_APPNAME_Navigator.cs"            target="tools\library\I_APPNAME_Navigator.cs" />
-    <file src="..\SampleApp.Shared\MvvmQuickCross\Templates\ViewModels\_VIEWNAME_ViewModel.cs" target="tools\library\ViewModels\_VIEWNAME_ViewModel.cs" />
-    <!--<file src="readme.txt" target="" />-->
-    <file src="..\SampleApp.android\MvvmQuickCross\*.*"                                       target="tools\app.android\MvvmQuickCross\" />
+    <!--<file src="readme.txt"                                       target="" />-->
+
+    <!-- Tools -->
+    <file src="Init.ps1"                                             target="tools\Init.ps1" />
+    <file src="MvvmQuickCross.psm1"                                  target="tools\MvvmQuickCross.psm1" />
+
+    <!-- Cross-platform library project files -->
+    <file src="..\SampleApp.Shared\MvvmQuickCross\*.*"               target="tools\library\MvvmQuickCross\" />
+    <file src="..\SampleApp.Shared\MvvmQuickCross\Templates\**\*.*"  target="tools\library\" />
+
+    <!-- Android application project files -->
+    <file src="..\SampleApp.android\MvvmQuickCross\*.*"              target="tools\app.android\MvvmQuickCross\" />
+    <file src="..\SampleApp.android\MvvmQuickCross\Templates\**\*.*" target="tools\app.android\" />
+
   </files>
 </package>
