@@ -1,4 +1,5 @@
-﻿using System;
+#if TEMPLATE // To add an application class: in the Visual Studio Package Manager Console (menu View | Other Windows), enter "Install-Mvvm". Alternatively: copy this file, then in the copy remove the enclosing #if TEMPLATE ... #endif lines and replace _APPNAME_ with the application name.
+using System;
 using System.Threading.Tasks;
 using MvvmQuickCross;
 using MvvmQuickCross.Templates.ViewModels;
@@ -25,7 +26,7 @@ namespace MvvmQuickCross.Templates
         /* TODO: For each view model, add a public property with a private setter like this:
            public _VIEWNAME_ViewModel _VIEWNAME_ViewModel { get; private set; }
          */
-        public _VIEWNAME_ViewModel _VIEWNAME_ViewModel { get; private set; }
+        public MainViewModel MainViewModel { get; private set; }
 
         /* TODO: For each view, add a method (with any parameters needed) to initialize its view model
          * and then navigate to the view using the navigator, like this:
@@ -38,11 +39,13 @@ namespace MvvmQuickCross.Templates
          * The skipNavigation parameter is needed in cases where the OS has already navigated to the view for you;
          * in that case you only need to initialize the view model. */
 
-        public void ContinueTo_VIEWNAME_(bool skipNavigation = false)
+        public void ContinueToMain(bool skipNavigation = false)
         {
-            if (_VIEWNAME_ViewModel == null) _VIEWNAME_ViewModel = new _VIEWNAME_ViewModel();
+            if (MainViewModel == null) MainViewModel = new MainViewModel();
             // Any actions to update the view model go here
-            if (!skipNavigation) RunOnUIThread(() => _navigator.NavigateTo_VIEWNAME_View(CurrentNavigationContext));
+            if (!skipNavigation) RunOnUIThread(() => _navigator.NavigateToMainView(CurrentNavigationContext));
         }
     }
 }
+
+#endif // TEMPLATE

@@ -1,7 +1,8 @@
-﻿using System;
+﻿#if TEMPLATE // To add a navigator class: in the Visual Studio Package Manager Console (menu View | Other Windows), enter "Install-Mvvm". Alternatively: copy this file, then in the copy remove the enclosing #if TEMPLATE ... #endif lines and replace _APPNAME_ with the application name.
+using System;
 
 using Android.Content;
-using MvvmQuickCross.Templates.Shared;
+using MvvmQuickCrossLibrary.Templates;
 
 namespace MvvmQuickCross.Templates
 {
@@ -13,9 +14,10 @@ namespace MvvmQuickCross.Templates
             context.StartActivity(type);
         }
 
-        public void NavigateTo_VIEWNAME_View(object navigationContext)
+        public void NavigateToMainView(object navigationContext)
         {
-            Navigate(navigationContext, typeof(_VIEWNAME_View));
+            Navigate(navigationContext, typeof(MainView));
         }
     }
 }
+#endif // TEMPLATE

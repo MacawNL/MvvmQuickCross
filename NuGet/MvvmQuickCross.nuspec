@@ -30,12 +30,10 @@ MvvmQuickCross is lightweight and easy to modify: it adds no binaries, just one 
     <file src="MvvmQuickCross.psm1"                                  target="tools\MvvmQuickCross.psm1" />
 
     <!-- Cross-platform library project files -->
-    <file src="..\SampleApp.Shared\MvvmQuickCross\*.*"               target="tools\library\MvvmQuickCross\" />
-    <file src="..\SampleApp.Shared\MvvmQuickCross\Templates\**\*.*"  target="tools\library\" />
+    <file src="..\SampleApp.Shared\MvvmQuickCross\**\*.*"               target="tools\library\MvvmQuickCross\" />
 
     <!-- Android application project files -->
-    <file src="..\SampleApp.android\MvvmQuickCross\*.*"              target="tools\app.android\MvvmQuickCross\" />
-    <file src="..\SampleApp.android\MvvmQuickCross\Templates\**\*.*" target="tools\app.android\" />
+    <file src="..\SampleApp.android\MvvmQuickCross\**\*.*"              target="tools\app.android\MvvmQuickCross\" />
 
   </files>
 </package>

@@ -1,4 +1,4 @@
-﻿//#if TEMPLATE // To add a new viewmodel class: in the Visual Studio Package Manager Console (menu View | Other Windows), enter "New-ViewModel <viewmodel name>". Alternatively: copy this file, then in the copy remove the enclosing #if TEMPLATE ... #endif lines and replace _VIEWMODEL_ with the viewmodel name.
+﻿#if TEMPLATE // To add a new viewmodel class: in the Visual Studio Package Manager Console (menu View | Other Windows), enter "New-ViewModel <viewmodel name>". Alternatively: copy this file, then in the copy remove the enclosing #if TEMPLATE ... #endif lines and replace _VIEWMODEL_ with the viewmodel name.
 using System;
 using MvvmQuickCross;
 
@@ -37,4 +37,4 @@ namespace MvvmQuickCross.Templates.ViewModels.Design
 }
 #endif
 
-//#endif // TEMPLATE
+#endif // TEMPLATE

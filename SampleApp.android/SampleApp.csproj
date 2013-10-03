@@ -49,8 +49,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="MvvmQuickCross\Templates\_APPNAME_Navigator.cs" />
-    <Compile Include="MvvmQuickCross\_VIEWNAME_FragmentView.cs" />
-    <Compile Include="MvvmQuickCross\_VIEWNAME_ActivityView.cs" />
+    <Compile Include="MvvmQuickCross\Templates\_VIEWNAME_FragmentView.cs" />
+    <Compile Include="MvvmQuickCross\Templates\_VIEWNAME_ActivityView.cs" />
     <None Include="MvvmQuickCross\Templates\_VIEWNAME_MainLauncherView.cs" />
     <Compile Include="SampleAppNavigator.cs" />
     <Compile Include="SampleItemListView.cs" />
@@ -67,7 +67,7 @@
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
-    <None Include="MvvmQuickCross\_VIEWNAME_View.axml">
+    <None Include="MvvmQuickCross\Templates\_VIEWNAME_View.axml.template">
       <SubType>AndroidResource</SubType>
     </None>
     <AndroidResource Include="Resources\Layout\SampleItemListView.axml">
