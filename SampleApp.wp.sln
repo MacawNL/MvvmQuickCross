@@ -7,6 +7,22 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleApp.Shared.wp", "Samp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleApp", "SampleApp.wp\SampleApp.csproj", "{F0B4BFA6-FBD7-45C6-8380-1D1732F5A65C}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GitHub", "GitHub", "{68625B97-38C7-43FF-A199-DD82E24896A9}"
+	ProjectSection(SolutionItems) = preProject
+		Readme.md = Readme.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuGet", "NuGet", "{FB6691B4-E603-4030-8387-4699B9BF1783}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\CreatePackage.cmd = NuGet\CreatePackage.cmd
+		NuGet\Init.ps1 = NuGet\Init.ps1
+		NuGet\MvvmQuickCross.nuspec = NuGet\MvvmQuickCross.nuspec
+		NuGet\MvvmQuickCross.psm1 = NuGet\MvvmQuickCross.psm1
+		NuGet\NuGet.exe = NuGet\NuGet.exe
+		NuGet\PublishToPublicNuGet.cmd = NuGet\PublishToPublicNuGet.cmd
+		NuGet\readme.txt = NuGet\readme.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
