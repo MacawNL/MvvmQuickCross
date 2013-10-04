@@ -1,17 +1,23 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Resources;
 using System.Windows;
 using System.Windows.Markup;
 using System.Windows.Navigation;
+using System.Windows.Controls;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using SampleApp.Resources;
+using SampleApp.Shared;
 
 namespace SampleApp
 {
     public partial class App : Application
     {
+        public static SampleAppApplication EnsureSampleAppApplication(Frame navigationContext)
+        {
+            return SampleAppApplication.Instance ?? new SampleAppApplication(new SampleAppNavigator(), navigationContext);
+        }
+
         /// <summary>
         /// Provides easy access to the root frame of the Phone Application.
         /// </summary>
@@ -61,12 +67,14 @@ namespace SampleApp
         // This code will not execute when the application is reactivated
         private void Application_Launching(object sender, LaunchingEventArgs e)
         {
+            EnsureSampleAppApplication(RootFrame).ContinueToSampleItemList(skipNavigation: true);
         }
 
         // Code to execute when the application is activated (brought to foreground)
         // This code will not execute when the application is first launched
         private void Application_Activated(object sender, ActivatedEventArgs e)
         {
+            EnsureSampleAppApplication(RootFrame); // TODO check whether we need to navigate to a view or whether this is done for us by the Windows Phone OS
         }
 
         // Code to execute when the application is deactivated (sent to background)
