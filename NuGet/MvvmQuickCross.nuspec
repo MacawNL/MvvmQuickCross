@@ -23,7 +23,7 @@ MvvmQuickCross is lightweight and easy to modify: it adds no binaries, just one 
     <tags>iOS Android WP8 Win8 MVVM CrossPlatform Xamarin Mobile App</tags>
   </metadata>
   <files>
-    <!--<file src="readme.txt"                                       target="" />-->
+    <file src="readme.txt"                                       target="" />
 
     <!-- Tools -->
     <file src="Init.ps1"                                             target="tools\Init.ps1" />
