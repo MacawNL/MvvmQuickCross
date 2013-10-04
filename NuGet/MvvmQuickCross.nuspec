@@ -35,5 +35,8 @@ MvvmQuickCross is lightweight and easy to modify: it adds no binaries, just one 
     <!-- Android application project files -->
     <file src="..\SampleApp.android\MvvmQuickCross\**\*.*"              target="tools\app.android\MvvmQuickCross\" />
 
+    <!-- Windows Phone application project files -->
+    <file src="..\SampleApp.wp\MvvmQuickCross\**\*.*"              target="tools\app.wp\MvvmQuickCross\" />
+
   </files>
 </package>

@@ -253,14 +253,28 @@ function Install-Mvvm
             AddProjectItemsFromDirectory -project $project -sourceDirectory $appSourceDirectory -contentReplacements $contentReplacements
 
             # Create default project items
-            if ($platform -eq 'android')
+            switch ($platform)
             {
-                AddProjectItem -project $project `
-                               -destinationProjectRelativePath ('{0}Navigator.cs' -f $appName) `
-                               -templatePackageFolder          'app.android' `
-                               -templateProjectRelativePath    'MvvmQuickCross\Templates\_APPNAME_Navigator.cs' `
-                               -contentReplacements            $csContentReplacements
-                New-View -ViewName Main -ViewType MainLauncher
+                'android' {
+                    AddProjectItem -project $project `
+                                   -destinationProjectRelativePath ('{0}Navigator.cs' -f $appName) `
+                                   -templatePackageFolder          'app.android' `
+                                   -templateProjectRelativePath    'MvvmQuickCross\Templates\_APPNAME_Navigator.cs' `
+                                   -contentReplacements            $csContentReplacements
+                    New-View -ViewName Main -ViewType MainLauncher
+                }
+                'wp' {
+                    AddProjectItem -project $project `
+                                   -destinationProjectRelativePath ('MvvmQuickCross\App.xaml.cs' -f $appName) `
+                                   -templatePackageFolder          'app.wp' `
+                                   -templateProjectRelativePath    'MvvmQuickCross\Templates\App.xaml.cs' `
+                                   -contentReplacements            $csContentReplacements
+                    AddProjectItem -project $project `
+                                   -destinationProjectRelativePath ('{0}Navigator.cs' -f $appName) `
+                                   -templatePackageFolder          'app.wp' `
+                                   -templateProjectRelativePath    'MvvmQuickCross\Templates\_APPNAME_Navigator.cs' `
+                                   -contentReplacements            $csContentReplacements
+                }
             }
         }
 
