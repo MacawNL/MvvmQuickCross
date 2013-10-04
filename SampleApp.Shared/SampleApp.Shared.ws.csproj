@@ -102,8 +102,8 @@
     <Compile Include="MvvmQuickCross\ApplicationBase.cs" />
     <Compile Include="MvvmQuickCross\RelayCommand.cs" />
     <Compile Include="MvvmQuickCross\Templates\I_APPNAME_Navigator.cs" />
-    <Compile Include="MvvmQuickCross\Templates\ViewModels\_VIEWNAME_ViewModel.cs" />
     <Compile Include="MvvmQuickCross\Templates\_APPNAME_Application.cs" />
+    <Compile Include="MvvmQuickCross\Templates\_VIEWNAME_ViewModel.cs" />
     <Compile Include="MvvmQuickCross\ViewModelBase.cs" />
     <Compile Include="SampleAppApplication.cs" />
     <Compile Include="ISampleAppNavigator.cs" />
@@ -114,7 +114,7 @@
     <Compile Include="ViewModels\SampleItemViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="MvvmQuickCross\MvvmQuickCross.snippet" />
+    <None Include="MvvmQuickCross\Templates\MvvmQuickCross.snippet" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '11.0' ">
     <VisualStudioVersion>11.0</VisualStudioVersion>

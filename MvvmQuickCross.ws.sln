@@ -10,11 +10,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuGet", "NuGet", "{D0AD395C
 	ProjectSection(SolutionItems) = preProject
 		NuGet\CreatePackage.cmd = NuGet\CreatePackage.cmd
 		NuGet\Init.ps1 = NuGet\Init.ps1
-		NuGet\Install.ps1 = NuGet\Install.ps1
 		NuGet\MvvmQuickCross.nuspec = NuGet\MvvmQuickCross.nuspec
 		NuGet\MvvmQuickCross.psm1 = NuGet\MvvmQuickCross.psm1
 		NuGet\NuGet.exe = NuGet\NuGet.exe
 		NuGet\PublishToPublicNuGet.cmd = NuGet\PublishToPublicNuGet.cmd
+		NuGet\readme.txt = NuGet\readme.txt
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleApp.Shared.ws", "SampleApp.Shared\SampleApp.Shared.ws.csproj", "{3C1B89C8-2834-49D6-A0EF-6013593F4652}"
