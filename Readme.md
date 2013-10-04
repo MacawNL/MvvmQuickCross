@@ -65,8 +65,8 @@ To code your app for more platforms:
 
 1. Create a new solution for each platform, with a class library project for that platform and an application project for that platform, just like you did for the first platform.
 
-2. Then add all code files from the existing class library project to the class library project for the new platform.
+2. Add all code files from the existing class library project to the class library project for the new platform.
 
-3. Then install the MvvmQuickCross NuGet package and execute the Install-Mvvm command again (it won't overwrite existing files).
+3. Install the MvvmQuickCross NuGet package and execute the Install-Mvvm command again (it won't overwrite existing files).
 
 4. Code the views, navigator and any platform specific service implementations in the application project.
