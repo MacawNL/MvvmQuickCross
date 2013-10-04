@@ -2,17 +2,15 @@
 <package>
   <metadata>
     <id>MvvmQuickCross</id>
-    <version>1.5.0.0</version>
+    <version>1.5.0.1</version>
     <authors>Vincent Hoogendoorn [Macaw]</authors>
     <owners>Vincent Hoogendoorn [Macaw]</owners>
     <description>
-MvvmQuickCross is a cross-platform MVVM pattern to quickly build native iOS, Android, Windows Phone and Windows Store Apps with shared C# code and Xamarin.
+MvvmQuickCross is a lightweight cross-platform MVVM pattern to quickly build native Xamarin.iOS, Xamarin.Android, Windows Phone and Windows Store Apps with shared C# code.
 
-MvvmQuickCross delivers the benefit of data binding and design-time data to speed up development, while eliminating the coding overhead that data binding brings - by using code snippets - on all platforms.
+MvvmQuickCross accelerates development, also for a single platform app. For cross-platform apps MvvmQuickCross increases code sharing.
 
-MvvmQuickCross also aims to maximize the percentage of shared code across platforms, including navigation logic, with a specific Application+Navigator pattern.
-
-MvvmQuickCross is lightweight and easy to modify: it adds no binaries, just one Visual Studio C# code snippets file and a few C# source files.
+MvvmQuickCross aims to leave you in full control; it does not get in the way if you want to do some things differently, and you can simply extend it.
     </description>
     <summary>
        Quickly build cross-platform apps in C# with the MVVM pattern and Xamarin.
