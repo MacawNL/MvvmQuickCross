@@ -12,18 +12,13 @@ namespace MvvmQuickCross.Templates
             ((Frame)navigationContext).Navigate(new Uri(uri, UriKind.Relative));
         }
 
-        public void NavigateToMainView(object navigationContext)
-        {
-            Navigate(navigationContext, "/MainView.xaml");
-        }
-
         /* TODO: For each view, add a method to navigate to that view like this:
 
-        void NavigateTo_VIEWNAME_View(object navigationContext)
+        public void NavigateTo_VIEWNAME_View(object navigationContext)
         {
             Navigate(navigationContext, "/_VIEWNAME_View.xaml");
         }
-        */
+         */
     }
 }
 #endif // TEMPLATE

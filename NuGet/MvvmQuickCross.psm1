@@ -57,13 +57,14 @@ function AddProjectItem
     $destinationFolder = Split-Path -Path $destinationPath -Parent
     if (-not(Test-Path -Path $destinationFolder)) { $null = New-Item $destinationFolder -ItemType Directory -Force }
 
-    if (Test-Path -Path $destinationPath) { Write-Host "NOT adding project item because it already exists: $destinationPath"; return }
+    if (Test-Path -Path $destinationPath) { Write-Host "NOT adding project item because it already exists: $destinationPath"; return $false }
     Write-Host "Adding project item: $destinationPath"
     Copy-Item -Path $templatePath -Destination $destinationPath -Force
     ReplaceStringsInFile -filePath $destinationPath -replacements $contentReplacements
 
     $null = $project.ProjectItems.AddFromFile($destinationPath)
     $null = $dte.ItemOperations.OpenFile($destinationPath)
+    return $true
 }
 
 function AddProjectItemsFromDirectory
@@ -191,7 +192,7 @@ function AddCsCodeFromInlineTemplate
     # * optional comment lines
     # */
 
-    $match = [regex]::Match($csCode, "(?m)\r\n\s*\r\n\s*/\*\s*TODO:\s+For\s+each\s+$templateName,[^\r\n]*\r\n(\s*\*\s[^\r\n]*\r\n)*(?<Template>(\s*[^\*\s][^\r\n]*\r\n)+)(\s*\*\s[^\r\n]*\r\n)*\s*\*/")
+    $match = [regex]::Match($csCode, "(?m)\r\n[ \t]*\r\n[ \t]*/\*[ \t]*TODO:[ \t]+For[ \t]+each[ \t]+$templateName,[^\r\n]*\r\n([ \t]*\*[ \t][^\r\n]*\r\n)*(?<Template>([ \t]*([^\* \t\r\n][^\r\n]*)?\r\n)+)([ \t]*\*[ \t][^\r\n]*\r\n)*[ \t]*(\*[ \t][^\r\n]*)?\*/")
     if (-not ($match.Success)) { return $null }
     $captures = $match.Captures
     if (($captures -eq $null) -or ($captures.Count -eq 0)) { return $null }
@@ -203,11 +204,39 @@ function AddCsCodeFromInlineTemplate
         $capture.Groups['Template'].Captures | ForEach-Object {
             $template = $_.Value
             $newCode = ReplaceStringsInString -text $template -replacements $replacements
+            Write-Host $newCode
             $csCode = $csCode.Insert($insertPosition, $newCode)
         }
     }
 
     $csCode
+}
+
+function AddCsCodeFromInlineTemplateInVsEditor
+{
+    Param(
+        [Parameter(Mandatory=$true)] [string]$itemPath,
+        [Parameter(Mandatory=$true)] [string]$templateName,
+        [Hashtable]$replacements
+    )
+
+    if (-not (Test-Path $itemPath)) {
+        Write-Host "NOT adding $templateName code to file because it does not exist: $itemPath"
+        return
+    }
+
+    $window = $dte.ItemOperations.OpenFile($itemPath)
+    $document = $window.Document
+    $textDocument = $document.Object('TextDocument')
+    $editPoint = $textDocument.StartPoint.CreateEditPoint()
+    $csCode = $editPoint.GetText($textDocument.EndPoint)
+    Write-Host "Adding $templateName code to file $itemPath ..."
+    $csCode = AddCsCodeFromInlineTemplate -csCode $csCode -templateName $templateName -replacements $replacements
+    if ($csCode -eq $null) {
+        Write-Host "NOT added $templateName code to file because the file does not contain an inline template that matches '/* TODO: For each $templateName, ... */' : $itemPath"
+        return
+    }
+    $editPoint.ReplaceText($textDocument.EndPoint, $csCode, 1) # 1 = vsEPReplaceTextKeepMarkers
 }
 
 function Install-Mvvm
@@ -265,16 +294,16 @@ function Install-Mvvm
             AddProjectItemsFromDirectory -project $project -sourceDirectory $librarySourceDirectory -contentReplacements $contentReplacements
 
             # Create default project items
-            AddProjectItem -project $project `
-                            -destinationProjectRelativePath ('I{0}Navigator.cs' -f $appName) `
-                            -templatePackageFolder          'library' `
-                            -templateProjectRelativePath    'MvvmQuickCross\Templates\I_APPNAME_Navigator.cs' `
-                            -contentReplacements            $csContentReplacements
-            AddProjectItem -project $project `
-                            -destinationProjectRelativePath ('{0}Application.cs' -f $appName) `
-                            -templatePackageFolder          'library' `
-                            -templateProjectRelativePath    'MvvmQuickCross\Templates\_APPNAME_Application.cs' `
-                            -contentReplacements            $csContentReplacements
+            $null = AddProjectItem  -project $project `
+                                    -destinationProjectRelativePath ('I{0}Navigator.cs' -f $appName) `
+                                    -templatePackageFolder          'library' `
+                                    -templateProjectRelativePath    'MvvmQuickCross\Templates\I_APPNAME_Navigator.cs' `
+                                    -contentReplacements            $csContentReplacements
+            $null = AddProjectItem  -project $project `
+                                    -destinationProjectRelativePath ('{0}Application.cs' -f $appName) `
+                                    -templatePackageFolder          'library' `
+                                    -templateProjectRelativePath    'MvvmQuickCross\Templates\_APPNAME_Application.cs' `
+                                    -contentReplacements            $csContentReplacements
             New-ViewModel -ViewModelName Main
         }
 
@@ -292,24 +321,24 @@ function Install-Mvvm
             switch ($platform)
             {
                 'android' {
-                    AddProjectItem -project $project `
-                                   -destinationProjectRelativePath ('{0}Navigator.cs' -f $appName) `
-                                   -templatePackageFolder          'app.android' `
-                                   -templateProjectRelativePath    'MvvmQuickCross\Templates\_APPNAME_Navigator.cs' `
-                                   -contentReplacements            $csContentReplacements
+                    $null = AddProjectItem -project $project `
+                                           -destinationProjectRelativePath ('{0}Navigator.cs' -f $appName) `
+                                           -templatePackageFolder          'app.android' `
+                                           -templateProjectRelativePath    'MvvmQuickCross\Templates\_APPNAME_Navigator.cs' `
+                                           -contentReplacements            $csContentReplacements
                     New-View -ViewName Main -ViewType MainLauncher
                 }
                 'wp' {
-                    AddProjectItem -project $project `
-                                   -destinationProjectRelativePath ('MvvmQuickCross\App.xaml.cs' -f $appName) `
-                                   -templatePackageFolder          'app.wp' `
-                                   -templateProjectRelativePath    'MvvmQuickCross\Templates\App.xaml.cs' `
-                                   -contentReplacements            $csContentReplacements
-                    AddProjectItem -project $project `
-                                   -destinationProjectRelativePath ('{0}Navigator.cs' -f $appName) `
-                                   -templatePackageFolder          'app.wp' `
-                                   -templateProjectRelativePath    'MvvmQuickCross\Templates\_APPNAME_Navigator.cs' `
-                                   -contentReplacements            $csContentReplacements
+                    $null = AddProjectItem -project $project `
+                                           -destinationProjectRelativePath ('MvvmQuickCross\App.xaml.cs' -f $appName) `
+                                           -templatePackageFolder          'app.wp' `
+                                           -templateProjectRelativePath    'MvvmQuickCross\Templates\App.xaml.cs' `
+                                           -contentReplacements            $csContentReplacements
+                    $null = AddProjectItem -project $project `
+                                           -destinationProjectRelativePath ('{0}Navigator.cs' -f $appName) `
+                                           -templatePackageFolder          'app.wp' `
+                                           -templateProjectRelativePath    'MvvmQuickCross\Templates\_APPNAME_Navigator.cs' `
+                                           -contentReplacements            $csContentReplacements
                     New-View -ViewName Main
                 }
             }
@@ -364,7 +393,8 @@ function New-ViewModel
 {
     Param(
         [Parameter(Mandatory=$true)] [string]$ViewModelName,
-        [string]$ProjectName
+        [string]$ProjectName,
+        [switch]$NotInApplication
     )
 
     if ("$ProjectName" -eq '') { $project = GetDefaultProject } else { $project = Get-Project $ProjectName }
@@ -380,11 +410,18 @@ function New-ViewModel
     $csContentReplacements = GetContentReplacements -project $project -cs
     $csContentReplacements.Add('_VIEWNAME_', $ViewModelName)
 
-    AddProjectItem -project $project `
-                   -destinationProjectRelativePath ('ViewModels\{0}ViewModel.cs' -f $ViewModelName) `
-                   -templatePackageFolder          'library' `
-                   -templateProjectRelativePath    'MvvmQuickCross\Templates\_VIEWNAME_ViewModel.cs' `
-                   -contentReplacements            $csContentReplacements
+    $addedViewModel = AddProjectItem   -project $project `
+                                       -destinationProjectRelativePath ('ViewModels\{0}ViewModel.cs' -f $ViewModelName) `
+                                       -templatePackageFolder          'library' `
+                                       -templateProjectRelativePath    'MvvmQuickCross\Templates\_VIEWNAME_ViewModel.cs' `
+                                       -contentReplacements            $csContentReplacements
+
+    if ($addedViewModel -and (-not $NotInApplication))
+    {
+        $libraryProjectDirectory = Split-Path -Path $project.FullName -Parent
+        $appName = $csContentReplacements._APPNAME_
+        AddCsCodeFromInlineTemplateInVsEditor -itemPath (Join-Path -Path $libraryProjectDirectory -ChildPath ('{0}Application.cs' -f $appName)) -templateName 'viewmodel' -replacements $csContentReplacements
+    }
 }
 
 function GetDefaultProject
@@ -404,32 +441,14 @@ function GetDefaultProject
     return $null
 }
 
-function AddCsCodeFromInlineTemplateInVsEditor
-{
-    Param(
-        [Parameter(Mandatory=$true)] [string]$itemPath,
-        [Parameter(Mandatory=$true)] [string]$templateName,
-        [Hashtable]$replacements
-    )
-
-    $window = $dte.ItemOperations.OpenFile($destinationPath)
-    $document = $window.Document
-    $textDocument = $document.Object('TextDocument')
-    $editPoint = $textDocument.StartPoint.CreateEditPoint()
-    $csCode = $editPoint.GetText($textDocument.EndPoint)
-    
-    $csCode = AddCsCodeFromInlineTemplate -csCode $csCode -templateName $templateName -replacements $replacements
-
-}
-
-
 function New-View
 {
     Param(
         [Parameter(Mandatory=$true)] [string]$ViewName,
         [string]$ViewType,
         [string]$ViewModelName,
-        [string]$ProjectName
+        [string]$ProjectName,
+        [switch]$WithoutNavigation
     )
 
     if ("$ViewModelName" -eq '') { $ViewModelName = $ViewName }
@@ -446,42 +465,50 @@ function New-View
     # Create the view model if it does not exist:
     New-ViewModel -ViewModelName $ViewModelName
 
-    # Add the shared navigation code for the new view:
-    $libraryProject = GetDefaultProject
-    # TODO
-
     $csContentReplacements = GetContentReplacements -project $project -cs -isApplication
     $csContentReplacements.Add('_VIEWNAME_', $ViewName)
+
+    if (-not $WithoutNavigation)
+    {
+        # Add the navigation code for the new view:
+        $appName = $csContentReplacements._APPNAME_
+        $libraryProject = GetDefaultProject
+        $libraryProjectDirectory = Split-Path -Path $libraryProject.FullName -Parent
+        $applicationProjectDirectory = Split-Path -Path $project.FullName -Parent
+        AddCsCodeFromInlineTemplateInVsEditor -itemPath (Join-Path -Path $libraryProjectDirectory     -ChildPath ('I{0}Navigator.cs'  -f $appName)) -templateName 'view' -replacements $csContentReplacements
+        AddCsCodeFromInlineTemplateInVsEditor -itemPath (Join-Path -Path $applicationProjectDirectory -ChildPath ('{0}Navigator.cs'   -f $appName)) -templateName 'view' -replacements $csContentReplacements
+        AddCsCodeFromInlineTemplateInVsEditor -itemPath (Join-Path -Path $libraryProjectDirectory     -ChildPath ('{0}Application.cs' -f $appName)) -templateName 'view' -replacements $csContentReplacements
+    }
 
     $platform = GetProjectPlatform -project $project
     switch ($platform)
     {
         'android' {
             if ("$ViewType" -eq '') { $ViewType = 'Activity' }
-            AddProjectItem -project $project `
-                           -destinationProjectRelativePath ('{0}View.cs' -f $ViewName) `
-                           -templatePackageFolder          'app.android' `
-                           -templateProjectRelativePath    ('MvvmQuickCross\Templates\_VIEWNAME_{0}View.cs' -f $ViewType) `
-                           -contentReplacements            $csContentReplacements
-            AddProjectItem -project $project `
-                           -destinationProjectRelativePath ('Resources\Layout\{0}View.axml' -f $ViewName) `
-                           -templatePackageFolder          'app.android' `
-                           -templateProjectRelativePath    'MvvmQuickCross\Templates\_VIEWNAME_View.axml.template' `
-                           -contentReplacements            @{ '_VIEWNAME_' = $ViewName }
+            $null = AddProjectItem -project $project `
+                                   -destinationProjectRelativePath ('{0}View.cs' -f $ViewName) `
+                                   -templatePackageFolder          'app.android' `
+                                   -templateProjectRelativePath    ('MvvmQuickCross\Templates\_VIEWNAME_{0}View.cs' -f $ViewType) `
+                                   -contentReplacements            $csContentReplacements
+            $null = AddProjectItem -project $project `
+                                   -destinationProjectRelativePath ('Resources\Layout\{0}View.axml' -f $ViewName) `
+                                   -templatePackageFolder          'app.android' `
+                                   -templateProjectRelativePath    'MvvmQuickCross\Templates\_VIEWNAME_View.axml.template' `
+                                   -contentReplacements            @{ '_VIEWNAME_' = $ViewName }
         }
 
         'wp' {
             if ("$ViewType" -eq '') { $ViewType = 'Page' }
-            AddProjectItem -project $project `
-                           -destinationProjectRelativePath ('{0}View.xaml' -f $ViewName) `
-                           -templatePackageFolder          'app.wp' `
-                           -templateProjectRelativePath    ('MvvmQuickCross\Templates\_VIEWNAME_{0}View.xaml.template' -f $ViewType) `
-                           -contentReplacements            $csContentReplacements
-            AddProjectItem -project $project `
-                           -destinationProjectRelativePath ('{0}View.xaml.cs' -f $ViewName) `
-                           -templatePackageFolder          'app.wp' `
-                           -templateProjectRelativePath    ('MvvmQuickCross\Templates\_VIEWNAME_{0}View.xaml.cs' -f $ViewType) `
-                           -contentReplacements            $csContentReplacements
+            $null = AddProjectItem -project $project `
+                                   -destinationProjectRelativePath ('{0}View.xaml' -f $ViewName) `
+                                   -templatePackageFolder          'app.wp' `
+                                   -templateProjectRelativePath    ('MvvmQuickCross\Templates\_VIEWNAME_{0}View.xaml.template' -f $ViewType) `
+                                   -contentReplacements            $csContentReplacements
+            $null = AddProjectItem -project $project `
+                                   -destinationProjectRelativePath ('{0}View.xaml.cs' -f $ViewName) `
+                                   -templatePackageFolder          'app.wp' `
+                                   -templateProjectRelativePath    ('MvvmQuickCross\Templates\_VIEWNAME_{0}View.xaml.cs' -f $ViewType) `
+                                   -contentReplacements            $csContentReplacements
         }
 
         default { Write-Host "New-View currenty only supports Android application projects"; return }
