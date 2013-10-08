@@ -14,7 +14,7 @@ namespace MvvmQuickCross.Templates
 
         public void NavigateToMainView(object navigationContext)
         {
-            Navigate(navigationContext, "/MainView.xaml"); // TODO: Specify the correct main view uri 
+            Navigate(navigationContext, "/MainView.xaml");
         }
     }
 }

@@ -24,7 +24,7 @@ namespace MvvmQuickCross
 
             CurrentNavigationContext = currentNavigationContext;
             _uiTaskScheduler = (uiTaskScheduler != null) ? uiTaskScheduler : TaskScheduler.FromCurrentSynchronizationContext();
-            // TODO: add platform-specific check that _uiTaskScheduler can access the UI thread - e.g. try something that requires UI acces and catch the exception, rethrow with clear error message.
+            // We could add a platform-specific check here to ensure that _uiTaskScheduler can access the UI thread - e.g. try something that requires UI acces and catch the exception, rethrow with clear error message.
         }
 
         public static ApplicationBase Instance { get { return _instance; } }

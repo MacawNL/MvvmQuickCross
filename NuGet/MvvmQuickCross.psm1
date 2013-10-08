@@ -274,6 +274,7 @@ function Install-Mvvm
                                    -templatePackageFolder          'app.wp' `
                                    -templateProjectRelativePath    'MvvmQuickCross\Templates\_APPNAME_Navigator.cs' `
                                    -contentReplacements            $csContentReplacements
+                    New-View -ViewName Main
                 }
             }
         }
@@ -309,6 +310,8 @@ function GetContentReplacements
             if ($libraryProject -eq $null)  { throw "No library project found. Add a class library project for your target platform to the solution." }
             $libraryDefaultNamespace = $libraryProject.Properties.Item("DefaultNamespace").Value
             $contentReplacements.Add('MvvmQuickCrossLibrary\.Templates', $libraryDefaultNamespace)
+            $libraryAssemblyName =  $libraryProject.Properties.Item("AssemblyName").Value
+            $contentReplacements.Add('MvvmQuickCrossLibraryAssembly', $libraryAssemblyName)
         }
     } else {
         $contentReplacements = @{ }
@@ -374,7 +377,6 @@ function New-View
         [string]$ProjectName
     )
 
-    if ("$ViewType" -eq '') { $ViewType = 'Activity' }
     if ("$ViewModelName" -eq '') { $ViewModelName = $ViewName }
     if ("$ProjectName" -eq '') { $project = Get-Project } else { $project = Get-Project $ProjectName }
     if ($project -eq $null)  { Write-Host "Project '$ProjectName' not found."; return }
@@ -389,13 +391,14 @@ function New-View
     # Create the view model if it does not exist:
     New-ViewModel -ViewModelName $ViewModelName
 
-    $csContentReplacements = GetContentReplacements -project $project -cs
+    $csContentReplacements = GetContentReplacements -project $project -cs -isApplication
     $csContentReplacements.Add('_VIEWNAME_', $ViewName)
 
     $platform = GetProjectPlatform -project $project
     switch ($platform)
     {
         'android' {
+            if ("$ViewType" -eq '') { $ViewType = 'Activity' }
             AddProjectItem -project $project `
                            -destinationProjectRelativePath ('{0}View.cs' -f $ViewName) `
                            -templatePackageFolder          'app.android' `
@@ -406,6 +409,20 @@ function New-View
                            -templatePackageFolder          'app.android' `
                            -templateProjectRelativePath    'MvvmQuickCross\Templates\_VIEWNAME_View.axml.template' `
                            -contentReplacements            @{ '_VIEWNAME_' = $ViewName }
+        }
+
+        'wp' {
+            if ("$ViewType" -eq '') { $ViewType = 'Page' }
+            AddProjectItem -project $project `
+                           -destinationProjectRelativePath ('{0}View.xaml' -f $ViewName) `
+                           -templatePackageFolder          'app.wp' `
+                           -templateProjectRelativePath    ('MvvmQuickCross\Templates\_VIEWNAME_{0}View.xaml.template' -f $ViewType) `
+                           -contentReplacements            $csContentReplacements
+            AddProjectItem -project $project `
+                           -destinationProjectRelativePath ('{0}View.xaml.cs' -f $ViewName) `
+                           -templatePackageFolder          'app.wp' `
+                           -templateProjectRelativePath    ('MvvmQuickCross\Templates\_VIEWNAME_{0}View.xaml.cs' -f $ViewType) `
+                           -contentReplacements            $csContentReplacements
         }
 
         default { Write-Host "New-View currenty only supports Android application projects"; return }

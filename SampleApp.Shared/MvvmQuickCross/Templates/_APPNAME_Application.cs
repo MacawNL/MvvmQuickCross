@@ -23,28 +23,29 @@ namespace MvvmQuickCross.Templates
 
         new public static _APPNAME_Application Instance { get { return (_APPNAME_Application)ApplicationBase.Instance; } }
 
-        /* TODO: For each view model, add a public property with a private setter like this:
-           public _VIEWNAME_ViewModel _VIEWNAME_ViewModel { get; private set; }
-         */
         public MainViewModel MainViewModel { get; private set; }
-
-        /* TODO: For each view, add a method (with any parameters needed) to initialize its view model
-         * and then navigate to the view using the navigator, like this:
-                public void ContinueTo_VIEWNAME_(bool skipNavigation = false)
-                {
-                    if (_VIEWNAME_ViewModel == null) _VIEWNAME_ViewModel = new _VIEWNAME_ViewModel(any parameters);
-                    // Any actions to update the view model go here
-                    if (!skipNavigation) RunOnUIThread(() => _navigator.NavigateTo_VIEWNAME_View(CurrentNavigationContext));
-                }
-         * The skipNavigation parameter is needed in cases where the OS has already navigated to the view for you;
-         * in that case you only need to initialize the view model. */
+        /* TODO: For each viewmodel, add a public property with a private setter like this:
+        public _VIEWNAME_ViewModel _VIEWNAME_ViewModel { get; private set; }
+         */
 
         public void ContinueToMain(bool skipNavigation = false)
         {
             if (MainViewModel == null) MainViewModel = new MainViewModel();
-            // Any actions to update the view model go here
+            // Any actions to update the viewmodel go here
             if (!skipNavigation) RunOnUIThread(() => _navigator.NavigateToMainView(CurrentNavigationContext));
         }
+
+        /* TODO: For each view, add a method (with any parameters needed) to initialize its viewmodel
+         * and then navigate to the view using the navigator, like this:
+        public void ContinueTo_VIEWNAME_(bool skipNavigation = false)
+        {
+            if (_VIEWNAME_ViewModel == null) _VIEWNAME_ViewModel = new _VIEWNAME_ViewModel(any parameters);
+            // Any actions to update the viewmodel go here
+            if (!skipNavigation) RunOnUIThread(() => _navigator.NavigateTo_VIEWNAME_View(CurrentNavigationContext));
+        }
+
+         * The skipNavigation parameter is needed in cases where the OS has already navigated to the view for you;
+         * in that case you only need to initialize the viewmodel. */
     }
 }
 
