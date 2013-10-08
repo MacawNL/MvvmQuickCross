@@ -24,6 +24,7 @@ namespace MvvmQuickCross.Templates
         new public static _APPNAME_Application Instance { get { return (_APPNAME_Application)ApplicationBase.Instance; } }
 
         public MainViewModel MainViewModel { get; private set; }
+
         /* TODO: For each viewmodel, add a public property with a private setter like this:
         public _VIEWNAME_ViewModel _VIEWNAME_ViewModel { get; private set; }
          */
@@ -43,7 +44,6 @@ namespace MvvmQuickCross.Templates
             // Any actions to update the viewmodel go here
             if (!skipNavigation) RunOnUIThread(() => _navigator.NavigateTo_VIEWNAME_View(CurrentNavigationContext));
         }
-
          * The skipNavigation parameter is needed in cases where the OS has already navigated to the view for you;
          * in that case you only need to initialize the viewmodel. */
     }

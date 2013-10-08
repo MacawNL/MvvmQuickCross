@@ -174,6 +174,42 @@ function EnsureConditionalCompilationSymbol
     }
 }
 
+function AddCsCodeFromInlineTemplate
+{
+    Param(
+        [Parameter(Mandatory=$true)] [string]$csCode,
+        [Parameter(Mandatory=$true)] [string]$templateName,
+        [Hashtable]$replacements
+    )
+
+    # Format of an inline code template (first is an empty line):
+
+    #
+    # /* TODO: For each $templateName, any text
+    # * optional comment lines
+    # template lines
+    # * optional comment lines
+    # */
+
+    $match = [regex]::Match($csCode, "(?m)\r\n\s*\r\n\s*/\*\s*TODO:\s+For\s+each\s+$templateName,[^\r\n]*\r\n(\s*\*\s[^\r\n]*\r\n)*(?<Template>(\s*[^\*\s][^\r\n]*\r\n)+)(\s*\*\s[^\r\n]*\r\n)*\s*\*/")
+    if (-not ($match.Success)) { return $null }
+    $captures = $match.Captures
+    if (($captures -eq $null) -or ($captures.Count -eq 0)) { return $null }
+
+    for ($i = $captures.Count - 1; $i -ge 0; $i--) # Iterate backwards through the text to keep unprocessed match positions valid while we insert text
+    {
+        $capture = $captures.Item($i)
+        $insertPosition = $capture.Index + 2 # Insert right after the starting newline of the match
+        $capture.Groups['Template'].Captures | ForEach-Object {
+            $template = $_.Value
+            $newCode = ReplaceStringsInString -text $template -replacements $replacements
+            $csCode = $csCode.Insert($insertPosition, $newCode)
+        }
+    }
+
+    $csCode
+}
+
 function Install-Mvvm
 {
     Param(
@@ -368,6 +404,25 @@ function GetDefaultProject
     return $null
 }
 
+function AddCsCodeFromInlineTemplateInVsEditor
+{
+    Param(
+        [Parameter(Mandatory=$true)] [string]$itemPath,
+        [Parameter(Mandatory=$true)] [string]$templateName,
+        [Hashtable]$replacements
+    )
+
+    $window = $dte.ItemOperations.OpenFile($destinationPath)
+    $document = $window.Document
+    $textDocument = $document.Object('TextDocument')
+    $editPoint = $textDocument.StartPoint.CreateEditPoint()
+    $csCode = $editPoint.GetText($textDocument.EndPoint)
+    
+    $csCode = AddCsCodeFromInlineTemplate -csCode $csCode -templateName $templateName -replacements $replacements
+
+}
+
+
 function New-View
 {
     Param(
@@ -390,6 +445,10 @@ function New-View
 
     # Create the view model if it does not exist:
     New-ViewModel -ViewModelName $ViewModelName
+
+    # Add the shared navigation code for the new view:
+    $libraryProject = GetDefaultProject
+    # TODO
 
     $csContentReplacements = GetContentReplacements -project $project -cs -isApplication
     $csContentReplacements.Add('_VIEWNAME_', $ViewName)
