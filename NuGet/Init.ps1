@@ -20,3 +20,4 @@ Import-Module -Name $modulePath
 $commands = Get-Command -Module MvvmQuickCross -Syntax | Out-String
 $commands = $commands -replace '[\r\n]+', "`r`n"
 Write-Host "Available MvvmQuickCross Commands:`r`n$commands"
+Write-Host 'For detailed help, type "Get-Help <command> -Online"'

@@ -247,8 +247,60 @@ function AddCsCodeFromInlineTemplateInVsEditor
     $editPoint.ReplaceText($textDocument.EndPoint, $csCode, 1) # 1 = vsEPReplaceTextKeepMarkers
 }
 
+function GetContentReplacements
+{
+    Param(
+        [Parameter(Mandatory=$true)] $project,
+        [switch]$cs,
+        [switch]$isApplication
+    )
+
+    if ($cs) {
+        $defaultNamespace = $project.Properties.Item("DefaultNamespace").Value
+        $contentReplacements = @{
+            'MvvmQuickCross.Templates' = $defaultNamespace;
+            '(?m)^\s*#if\s+TEMPLATE\s+[^\r\n]*[\r\n]+' = '';
+            '(?m)^\s*#endif\s+//\s*TEMPLATE[^\r\n]*[\r\n]*' = ''
+        } 
+        if ($isApplication) {
+            $libraryProject = GetDefaultProject
+            if ($libraryProject -eq $null)  { throw "No library project found. Add a class library project for your target platform to the solution." }
+            $libraryDefaultNamespace = $libraryProject.Properties.Item("DefaultNamespace").Value
+            $contentReplacements.Add('MvvmQuickCrossLibrary\.Templates', $libraryDefaultNamespace)
+            $libraryAssemblyName =  $libraryProject.Properties.Item("AssemblyName").Value
+            $contentReplacements.Add('MvvmQuickCrossLibraryAssembly', $libraryAssemblyName)
+        }
+    } else {
+        $contentReplacements = @{ }
+    }
+
+    $solutionName = Split-Path ($project.DTE.Solution.FullName) -Leaf
+    $appName = $solutionName.Split('.')[0]
+    $contentReplacements.Add('_APPNAME_', $appName)
+
+    $contentReplacements
+}
+
+function GetDefaultProject
+{
+    Param([switch]$application)
+
+    foreach ($project in $dte.Solution.Projects)
+    {
+        $platform = GetProjectPlatform -project $project -allowUnknown
+        if ($platform -ne '')
+        {
+            $isApplication = IsApplicationProject -project $project
+            if (-not ($application -xor $isApplication)) { return $project }
+        }
+    }
+
+    return $null
+}
+
 function Install-Mvvm
 {
+    [CmdletBinding(HelpURI="http://github.com/MacawNL/MvvmQuickCross#getting-started")]
     Param(
        [string]$ProjectName
     )
@@ -365,42 +417,9 @@ function Install-Mvvm
     }
 }
 
-function GetContentReplacements
-{
-    Param(
-        [Parameter(Mandatory=$true)] $project,
-        [switch]$cs,
-        [switch]$isApplication
-    )
-
-    if ($cs) {
-        $defaultNamespace = $project.Properties.Item("DefaultNamespace").Value
-        $contentReplacements = @{
-            'MvvmQuickCross.Templates' = $defaultNamespace;
-            '(?m)^\s*#if\s+TEMPLATE\s+[^\r\n]*[\r\n]+' = '';
-            '(?m)^\s*#endif\s+//\s*TEMPLATE[^\r\n]*[\r\n]*' = ''
-        } 
-        if ($isApplication) {
-            $libraryProject = GetDefaultProject
-            if ($libraryProject -eq $null)  { throw "No library project found. Add a class library project for your target platform to the solution." }
-            $libraryDefaultNamespace = $libraryProject.Properties.Item("DefaultNamespace").Value
-            $contentReplacements.Add('MvvmQuickCrossLibrary\.Templates', $libraryDefaultNamespace)
-            $libraryAssemblyName =  $libraryProject.Properties.Item("AssemblyName").Value
-            $contentReplacements.Add('MvvmQuickCrossLibraryAssembly', $libraryAssemblyName)
-        }
-    } else {
-        $contentReplacements = @{ }
-    }
-
-    $solutionName = Split-Path ($project.DTE.Solution.FullName) -Leaf
-    $appName = $solutionName.Split('.')[0]
-    $contentReplacements.Add('_APPNAME_', $appName)
-
-    $contentReplacements
-}
-
 function New-ViewModel
 {
+    [CmdletBinding(HelpURI="http://github.com/MacawNL/MvvmQuickCross#getting-started")]
     Param(
         [Parameter(Mandatory=$true)] [string]$ViewModelName,
         [string]$ProjectName,
@@ -434,25 +453,9 @@ function New-ViewModel
     }
 }
 
-function GetDefaultProject
-{
-    Param([switch]$application)
-
-    foreach ($project in $dte.Solution.Projects)
-    {
-        $platform = GetProjectPlatform -project $project -allowUnknown
-        if ($platform -ne '')
-        {
-            $isApplication = IsApplicationProject -project $project
-            if (-not ($application -xor $isApplication)) { return $project }
-        }
-    }
-
-    return $null
-}
-
 function New-View
 {
+    [CmdletBinding(HelpURI="http://github.com/MacawNL/MvvmQuickCross#getting-started")]
     Param(
         [Parameter(Mandatory=$true)] [string]$ViewName,
         [string]$ViewType,

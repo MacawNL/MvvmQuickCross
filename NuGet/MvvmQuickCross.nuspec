@@ -21,20 +21,21 @@ MvvmQuickCross aims to leave you in full control; it does not get in the way if 
     <tags>iOS Android WP8 Win8 MVVM CrossPlatform Xamarin Mobile App</tags>
   </metadata>
   <files>
-    <file src="readme.txt"                                       target="" />
+    <file src="readme.txt"                                 target="" />
 
     <!-- Tools -->
-    <file src="Init.ps1"                                             target="tools\Init.ps1" />
-    <file src="MvvmQuickCross.psm1"                                  target="tools\MvvmQuickCross.psm1" />
+    <file src="Init.ps1"                                   target="tools\Init.ps1" />
+    <file src="MvvmQuickCross.psm1"                        target="tools\MvvmQuickCross.psm1" />
+    <file src="about_MvvmQuickCross.help.txt"              target="tools\about_MvvmQuickCross.help.txt" />
 
     <!-- Cross-platform library project files -->
-    <file src="..\SampleApp.Shared\MvvmQuickCross\**\*.*"               target="tools\library\MvvmQuickCross\" />
+    <file src="..\SampleApp.Shared\MvvmQuickCross\**\*.*"  target="tools\library\MvvmQuickCross\" />
 
     <!-- Android application project files -->
-    <file src="..\SampleApp.android\MvvmQuickCross\**\*.*"              target="tools\app.android\MvvmQuickCross\" />
+    <file src="..\SampleApp.android\MvvmQuickCross\**\*.*" target="tools\app.android\MvvmQuickCross\" />
 
     <!-- Windows Phone application project files -->
-    <file src="..\SampleApp.wp\MvvmQuickCross\**\*.*"              target="tools\app.wp\MvvmQuickCross\" />
+    <file src="..\SampleApp.wp\MvvmQuickCross\**\*.*"      target="tools\app.wp\MvvmQuickCross\" />
 
   </files>
 </package>
