@@ -212,7 +212,20 @@ function AddCsCodeFromInlineTemplate
         $capture.Groups['Template'].Captures | ForEach-Object {
             $template = $_.Value
             $newCode = ReplaceStringsInString -text $template -replacements $replacements
-            Write-Host $newCode
+
+            # Check if the new code already exists:
+            if ($newCode -match '(?m)\s*(?<Id>[\w][\w\t ]*)')
+            {
+                $id = $Matches.Id
+                if ($csCode -match ('(?m)\b{0}\b' -f $id)) {
+                    Write-Host ('NOT adding {0} ... code because it is already present' -f $id)
+                    continue
+                }
+                Write-Host ('{0} ...' -f $id)
+            } else {
+                Write-Host $newCode
+            }
+
             $csCode = $csCode.Insert($insertPosition, $newCode)
         }
     }
