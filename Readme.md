@@ -1,16 +1,17 @@
 NuGet package: [http://nuget.org/packages/MvvmQuickCross](http://nuget.org/packages/mvvmquickcross)
+> NOTE: Work in progress - this readme describes version 1.5.1, of which the NuGet release is imminent.
 
-# MvvmQuickCross
+# MvvmQuickCross #
 Quickly build cross-platform apps in C# with the MVVM pattern and [Xamarin](http://xamarin.com/).
 
-## Summary
+## Summary ##
 MvvmQuickCross is a lightweight cross-platform MVVM pattern to quickly build native Xamarin.iOS, Xamarin.Android, Windows Phone and Windows Store Apps with shared C# code.
 
 MvvmQuickCross accelerates development, also for a single platform app. For cross-platform apps MvvmQuickCross increases code sharing.
 
 MvvmQuickCross aims to leave you in full control; it does not get in the way if you want to do some things differently, and you can simply extend it.
 
-##Features
+## Features ##
 
 **Lightweight and easy to modify**.<br />No binaries, only adds a code snippets file and C# source files to your projects.
 
@@ -28,7 +29,7 @@ Override virtual methods in your activity or fragment to handle specific propert
 
 **Simple iOS data binding**.<br />This will be added in the **upcoming v2.0 release**.
 
-## Getting Started
+## Getting Started ##
 **Note: for a detailed step-by-step guide on how to build the CloudAuction example app that can be found in this repository, see [here](http://vincenth.net/blog/archive/2013/08/30/creating-a-cross-platform-native-app-using-mvvmquickcross-and-xamarin-part-1-cross-platform-code-and-windows-8-app.aspx) (however, be aware that this post has not yet been updated to show the new NuGet package install procedure; follow the steps below for that).**
 
 **Coming up next: updated and detailed guidance (will be posted and linked to from here shortly), simple iOS data binding and an iOS example app.**
@@ -40,7 +41,7 @@ To create an app with MvvmQuickCross, follow these steps:
 2. Install the [MvvmQuickCross NuGet package](http://nuget.org/packages/mvvmquickcross)
 
 	The available MvvmQuickCross commands are now displayed in the package manager console.
-	Type Get-Help followed by a command for details.
+	Type "**Get-Help *command* -Online**" for details.
 
 3. In the Visual Studio package manager console (*menu View | Other Windows*) enter:
 
@@ -55,11 +56,11 @@ To create an app with MvvmQuickCross, follow these steps:
 	**Note** do not select the MvvmQuickCross\Templates folder itself as the location to import snippets **to**; that may prevent the snippets to be imported correctly, as this would mean copying the snippets file over itself.
 
 5. Add new viewmodels with the **New-ViewModel** command.
-	For android, you can also create new views with the **New-View** command.
+	For Android and Windows Phone, you can also create new views with the **New-View** command.
 
-6. Build the solution and check the TODO comments in the Visual Studio Task List *(menu View | Tast List)* to find guidance on how to complete the viewmodel, application and navigator classes. You can also check out the SampleApp and CloudAuction example apps in this GitHub repository. Detailed guidance will be added shortly.
+6. Check the TODO comments in the Visual Studio Task List *(menu View | Tast List)* to find guidance on how to complete the viewmodel, application and navigator classes. You can also check out the SampleApp and CloudAuction example apps in this GitHub repository. Detailed guidance will be added shortly.
 
-## Adding platforms
+## Adding platforms ##
 To code your app for more platforms:
 
 
@@ -70,3 +71,92 @@ To code your app for more platforms:
 3. Install the MvvmQuickCross NuGet package and execute the Install-Mvvm command again (it won't overwrite existing files).
 
 4. Code the views, navigator and any platform specific service implementations in the application project.
+
+## Commands ##
+After installing the MvvmQuickCross NuGet package, below commands are available in the Visual Studio **Package Manager Console**.
+
+**Note** that except for Install-Mvvm, anything that these commands do can also be done by hand; the manual steps are documented inline in the files that you add to your projects with Install-Mvvm. This makes it possible to create your initial solutions in (a [free version](http://go.microsoft.com/fwlink/?linkid=244366) of) Visual Studio, and then continue working in [Xamarin Studio](http://xamarin.com/studio) for Android or iOS.
+
+### Install-Mvvm ###
+    Install-Mvvm
+Installs the MvvmQuickCross support files in both your library project and your application project, in a subfolder MvvmQuickCross. The files in the MvvmQuickCross folders are not application specific; unless you want to modify the standard MvvmQuickCross templates, code snippets and/or functionality you don't need to edit these.
+
+Install-Mvvm also generates a few application-specific project items for you. The generated project items are opened in the Visual Studio editor for your inspection.
+
+**Note** that Install-Mvvm uses the first part of the solution filename (before the first dot) as the **application name** for naming generated project items, classes, properties and methods.
+
+Check the **TODO comments** in the Visual Studio **Task List** to find guidance on how to complete the generated project items.
+
+Install-Mvvm will not overwrite existing files or code. If you want to recreate the default files, remove the files that you want to recreate before running Install-Mvvm.
+
+### New-View ###
+    New-View [-ViewName] <string> [[-ViewType] <string>] [[-ViewModelName] <string>] [-WithoutNavigation]
+Generates a new view. Currently only supports Android and Windows Phone.
+
+The specified **ViewName** will be suffixed with "View", and the specified **ViewModelName** will be suffixed with "ViewModel". If no ViewModelName is specified, it will be the same as the ViewName. If the view model does not exist, it will be generated with the **New-ViewModel** command.
+
+Unless the **-WithoutNavigation** switch is specified, New-View will also add basic navigation code to the navigator and application classes. The -WithoutNavigation switch is useful when creating views such as list item views, that do not need to navigated to directly from the application class.
+
+E.g. this command:
+
+    New-View Person
+will generate:
+
+- A PersonView view markup file + class
+- A PersonViewModel viewmodel class
+- A PersonViewModelDesign viewmodel class
+- A PersonViewModel property in the application class
+- A NavigateToPersonView() method signature in the navigator interface
+- A NavigateToPersonView() method implementation in the navigator class
+- A ContinueToPerson() method in the application class
+
+Now the only thing needed to display the view, bound to the view model, is to call the ContinueToPerson() method on the application.
+
+Check the **TODO comments** in the Visual Studio **Task List** to find guidance on how to complete the generated project items.
+  
+### New-ViewModel ###
+    New-ViewModel [-ViewModelName] <string> [-NotInApplication]
+Generates a new viewmodel. You can use this command to create viewmodels without creating any corresponding views (yet).
+
+The specified **ViewModelName** will be suffixed with "ViewModel".
+
+Unless the **-NotInApplication** switch is specified, New-ViewModel will also add a property to contain the instance of the viewmodel to the application class. The application class will then be responsible for providing an initialized viewmodel instance before navigating to the corresponding view. The -NotInApplication switch is useful when creating viewmodels such as list item viewmodels, that do not need to instantiated and initialized directly by the application class.
+
+E.g. this command:
+
+    New-ViewModel Person
+will generate:
+
+- A PersonViewModel viewmodel class
+- A PersonViewModelDesign viewmodel class
+- A PersonViewModel property in the application class
+
+Check the **TODO comments** in the Visual Studio **Task List** to find guidance on how to complete the generated project items.
+
+## Code Snippets ##
+When you run the Install-Mvvm command, the C# code snippets file **MvvmQuickCross\Templates\MvvmQuickCross.snippet** is added to your class library project. When you import this snippets file into Visual Studio with the Code Snippets Manager (see [how](http://msdn.microsoft.com/en-us/library/ms165394\(v=vs.110\).aspx)), the code snippets described below become available for coding viewmodels.
+
+Note that the code snippets and their parameters have intellisense when you invoke them in the Visual Studio C# editor.
+
+To instantiate a code snippet, place your cursor on an empty line in the "**Data-bindable properties and commands**" region of a viewmodel class .cs file, type the code snippet shortcut (e.g. propdb1), and press Tab twice. Now you can enter the parameters of the code snippet (press Tab to cycle through all parameters). Press Enter to complete the snippet instance.
+
+### propdb1 ###
+Adds a one-way data-bindable property to a Viewmodel. You can specify the property type and name.
+### propdbcol ###
+Adds a one-way data-bindable collection property, a corresponding **(name)HasItems** property and an **Update(name)HasItems()** method to a Viewmodel. You can specify the generic collection type (e.g. **ObservableCollection** or **List**), the collection element type and the property name.
+
+If you want specific UI elements in your view to only be visible when the collection has elements (e.g. a list of error messages), you can use the HasItems property to bind to the visibility of those UI elements. In that case, you should also call the UpdateHasItems() method after you have added or removed items (this is necessary even if this is an ObservableCollection).
+
+**Note** that if you suffix a collection property name with **"List"**, you can benefit from data binding naming conventions in Android.
+
+### propdb2 ###
+Adds a two-way data-bindable property to a Viewmodel. You can specify the property type and name.
+### propdb2c ###
+Adds a two-way data-bindable property and a **On(name)Changed()** method for custom setter code to a Viewmodel. You can specify the property type and name.
+### cmd ###
+Adds a data-bindable command to a Viewmodel. You can specify the command name, which will be suffixed with **"Command"**.
+### cmdp ###
+Adds a data-bindable command with a parameter to a Viewmodel. You can specify the command name, which will be suffixed with **"Command"**, the parameter type and the parameter name.
+
+## Android ##
+TODO: Document how to use the Android specific MvvmQuickCross features (Android Simple Data Binding).

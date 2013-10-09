@@ -313,7 +313,7 @@ function GetDefaultProject
 
 function Install-Mvvm
 {
-    [CmdletBinding(HelpURI="http://github.com/MacawNL/MvvmQuickCross#getting-started")]
+    [CmdletBinding(HelpURI="http://github.com/MacawNL/MvvmQuickCross#install-mvvm")]
     Param(
        [string]$ProjectName
     )
@@ -432,7 +432,7 @@ function Install-Mvvm
 
 function New-ViewModel
 {
-    [CmdletBinding(HelpURI="http://github.com/MacawNL/MvvmQuickCross#getting-started")]
+    [CmdletBinding(HelpURI="http://github.com/MacawNL/MvvmQuickCross#new-viewmodel")]
     Param(
         [Parameter(Mandatory=$true)] [string]$ViewModelName,
         [string]$ProjectName,
@@ -468,7 +468,7 @@ function New-ViewModel
 
 function New-View
 {
-    [CmdletBinding(HelpURI="http://github.com/MacawNL/MvvmQuickCross#getting-started")]
+    [CmdletBinding(HelpURI="http://github.com/MacawNL/MvvmQuickCross#new-view")]
     Param(
         [Parameter(Mandatory=$true)] [string]$ViewName,
         [string]$ViewType,

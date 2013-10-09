@@ -18,7 +18,7 @@ namespace MvvmQuickCross.Templates
         {
             Navigate(navigationContext, "/_VIEWNAME_View.xaml");
         }
-         */
+         * Note that the New-View command adds the above code automatically (see http://github.com/MacawNL/MvvmQuickCross#new-view). */
     }
 }
 #endif // TEMPLATE

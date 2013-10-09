@@ -26,7 +26,7 @@ namespace MvvmQuickCross.Templates
 
         /* TODO: For each viewmodel, add a public property with a private setter like this:
         public _VIEWNAME_ViewModel _VIEWNAME_ViewModel { get; private set; }
-         */
+         * Note that the New-View and New-ViewModel commands add the above code automatically (see http://github.com/MacawNL/MvvmQuickCross#new-viewmodel). */
 
         /* TODO: For each view, add a method (with any parameters needed) to initialize its viewmodel
          * and then navigate to the view using the navigator, like this:
@@ -38,7 +38,8 @@ namespace MvvmQuickCross.Templates
             if (!skipNavigation) RunOnUIThread(() => _navigator.NavigateTo_VIEWNAME_View(CurrentNavigationContext));
         }
          * The skipNavigation parameter is needed in cases where the OS has already navigated to the view for you;
-         * in that case you only need to initialize the viewmodel. */
+         * in that case you only need to initialize the viewmodel.
+         * Note that the New-View command adds the above code automatically (see http://github.com/MacawNL/MvvmQuickCross#new-view). */
     }
 }
 
