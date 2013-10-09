@@ -12,7 +12,7 @@ MvvmQuickCross accelerates development, also for a single platform app. For cros
 MvvmQuickCross aims to leave you in full control; it does not get in the way if you want to do some things differently, and you can simply extend it.
 
 ## News ##
-**Coming up**: Guidance on using the Android specific features in release 1.5.1 (Android simple data binding)
+**Coming up**: Guidance on using the Android specific features in release 1.5.1 (Android simple data binding). Next planned release: 2.0, which will add simple iOS data binding and an iOS example app.
 
 **October 9, 2013**: Version 1.5.1 is published. This release adds navigation code generation, Windows Phone support and more documentation.
 
@@ -38,8 +38,6 @@ Override virtual methods in your activity or fragment to handle specific propert
 
 ## Getting Started ##
 **Note: for a detailed step-by-step guide on how to build the CloudAuction example app that can be found in this repository, see [here](http://vincenth.net/blog/archive/2013/08/30/creating-a-cross-platform-native-app-using-mvvmquickcross-and-xamarin-part-1-cross-platform-code-and-windows-8-app.aspx) (however, be aware that this post has not yet been updated to show the new NuGet package install procedure; follow the steps below for that).**
-
-**Coming up next: updated and detailed guidance (will be posted and linked to from here shortly), simple iOS data binding and an iOS example app.**
 
 To create an app with MvvmQuickCross, follow these steps:
 
