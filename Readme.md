@@ -45,20 +45,23 @@ To create an app with MvvmQuickCross, follow these steps:
 
 3. In the Visual Studio package manager console (*menu View | Other Windows*) enter:
 
-	**Install-Mvvm**
+	**[Install-Mvvm](#install-mvvm)**
 
 	An MvvmQuickCross folder is now added to your library project and your application project, and a few application-specific projects items are generated and opened in Visual Studio.
 
-	**Note** that the package installation uses the first part of the solution filename (before the first dot) as the application name for naming new project items and classes.
+	**Note** that the package installation uses the first part of the solution filename (before the first dot) as the **application name** for naming new project items and classes.
 
 4. Import the C# code snippets from the MvvmQuickCross\Templates\MvvmQuickCross.snippet file in your class library project into Visual Studio with the Code Snippets Manager (see [how](http://msdn.microsoft.com/en-us/library/ms165394\(v=vs.110\).aspx)).
 	
 	**Note** do not select the MvvmQuickCross\Templates folder itself as the location to import snippets **to**; that may prevent the snippets to be imported correctly, as this would mean copying the snippets file over itself.
 
-5. Add new viewmodels with the **New-ViewModel** command.
-	For Android and Windows Phone, you can also create new views with the **New-View** command.
+5. Add new views and viewmodels with the **[New-View](#new-view)** and **[New-ViewModel](#new-viewmodel)** commands.
 
-6. Check the TODO comments in the Visual Studio Task List *(menu View | Tast List)* to find guidance on how to complete the viewmodel, application and navigator classes. You can also check out the SampleApp and CloudAuction example apps in this GitHub repository. Detailed guidance will be added shortly.
+	**Note** that currently New-View only supports Android and Windows Phone.
+
+6. Add new data-bindable properties and commands to your viewmodels with the [code snippets](#code-snippets).
+
+7. Check the TODO comments in the Visual Studio Task List *(menu View | Tast List)* to find guidance on how to complete the viewmodel, application and navigator classes. You can also check out the CloudAuction example app in this GitHub repository. More guidance will be added here shortly.
 
 ## Adding platforms ##
 To code your app for more platforms:
@@ -73,7 +76,7 @@ To code your app for more platforms:
 4. Code the views, navigator and any platform specific service implementations in the application project.
 
 ## Commands ##
-After installing the MvvmQuickCross NuGet package, below commands are available in the Visual Studio **Package Manager Console**.
+After installing the MvvmQuickCross NuGet package, the below commands are available in the Visual Studio **Package Manager Console**.
 
 **Note** that except for Install-Mvvm, anything that these commands do can also be done by hand; the manual steps are documented inline in the files that you add to your projects with Install-Mvvm. This makes it possible to create your initial solutions in (a [free version](http://go.microsoft.com/fwlink/?linkid=244366) of) Visual Studio, and then continue working in [Xamarin Studio](http://xamarin.com/studio) for Android or iOS.
 
