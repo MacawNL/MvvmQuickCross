@@ -125,7 +125,7 @@ Generates a new viewmodel. You can use this command to create viewmodels without
 
 The specified **ViewModelName** will be suffixed with "ViewModel".
 
-Unless the **-NotInApplication** switch is specified, New-ViewModel will also add a property to contain the instance of the viewmodel to the application class. The application class will then be responsible for providing an initialized viewmodel instance before navigating to the corresponding view. The -NotInApplication switch is useful when creating viewmodels such as list item viewmodels, that do not need to instantiated and initialized directly by the application class.
+Unless the **-NotInApplication** switch is specified, New-ViewModel will also add a property to contain the instance of the viewmodel to the application class. The application class will then be responsible for providing an initialized viewmodel instance before navigating to the corresponding view. The -NotInApplication switch is useful when creating viewmodels such as list item viewmodels, that do not need to be instantiated and initialized directly by the application class.
 
 E.g. this command:
 
