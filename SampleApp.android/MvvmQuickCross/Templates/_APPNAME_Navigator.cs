@@ -14,10 +14,13 @@ namespace MvvmQuickCross.Templates
             context.StartActivity(type);
         }
 
-        public void NavigateToMainView(object navigationContext)
+        /* TODO: For each view, add a method to navigate to that view like this:
+
+        public void NavigateTo_VIEWNAME_View(object navigationContext)
         {
-            Navigate(navigationContext, typeof(MainView));
+            Navigate(navigationContext, typeof(_VIEWNAME_View));
         }
+         * Note that the New-View command adds the above code automatically (see http://github.com/MacawNL/MvvmQuickCross#new-view). */
     }
 }
 #endif // TEMPLATE

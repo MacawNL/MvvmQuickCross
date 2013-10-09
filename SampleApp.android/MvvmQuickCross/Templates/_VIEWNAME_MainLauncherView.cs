@@ -8,7 +8,7 @@ using MvvmQuickCrossLibrary.Templates.ViewModels;
 
 namespace MvvmQuickCross.Templates
 {
-    [Activity(Label = "_VIEWNAME_", MainLauncher = true, LaunchMode = LaunchMode.SingleTask, Icon = "@drawable/icon")]
+    [Activity(Label = "_APPNAME_ _VIEWNAME_", MainLauncher = true, LaunchMode = LaunchMode.SingleTask, Icon = "@drawable/icon")]
     public class _VIEWNAME_View : ActivityViewBase<_VIEWNAME_ViewModel>
     {
         private _APPNAME_Application EnsureApplication()

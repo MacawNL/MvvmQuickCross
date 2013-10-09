@@ -2,13 +2,14 @@
 // To add a new activity view class: copy this file, then in the copy remove the enclosing #if TEMPLATE ... #endif lines, replace _VIEWNAME_ with the view name and implement any missing _APPNAME_Application members that are called from below code.
 using Android.App;
 using Android.OS;
+using Android.Content.PM;
 using MvvmQuickCross;
 using MvvmQuickCrossLibrary.Templates;
 using MvvmQuickCrossLibrary.Templates.ViewModels;
 
 namespace MvvmQuickCross.Templates
 {
-    [Activity(Label = "_VIEWNAME_")]
+    [Activity(Label = "_APPNAME_ _VIEWNAME_", LaunchMode = LaunchMode.SingleTask, Icon = "@drawable/icon")]
     public class _VIEWNAME_View : ActivityViewBase<_VIEWNAME_ViewModel>
     {
         protected override void OnCreate(Bundle bundle)

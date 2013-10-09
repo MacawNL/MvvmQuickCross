@@ -221,7 +221,7 @@ function AddCsCodeFromInlineTemplate
                     Write-Host ('NOT adding {0} ... code because it is already present' -f $id)
                     continue
                 }
-                Write-Host ('{0} ...' -f $id)
+                Write-Host ('    {0} ...' -f $id)
             } else {
                 Write-Host $newCode
             }
