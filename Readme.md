@@ -98,6 +98,8 @@ Generates a new view. Currently only supports Android and Windows Phone.
 
 The specified **ViewName** will be suffixed with "View", and the specified **ViewModelName** will be suffixed with "ViewModel". If no ViewModelName is specified, it will be the same as the ViewName. If the view model does not exist, it will be generated with the **New-ViewModel** command.
 
+On Windows Phone, the **ViewType** can be **Page** (default) or **UserControl**. On Android, it can be **MainLauncher**, **Activity** (default) or **Fragment**. The specified view type determines which view templates are used. You can find these templates in the MvvmQuickCross\Templates folder of your application project. You can simply modify these templates or add your own (which is better) by adding similar named files there.
+
 Unless the **-WithoutNavigation** switch is specified, New-View will also add basic navigation code to the navigator and application classes. The -WithoutNavigation switch is useful when creating views such as list item views, that do not need to navigated to directly from the application class.
 
 E.g. this command:
