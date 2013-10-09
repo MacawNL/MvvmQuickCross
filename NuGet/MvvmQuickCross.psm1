@@ -57,14 +57,23 @@ function AddProjectItem
     $destinationFolder = Split-Path -Path $destinationPath -Parent
     if (-not(Test-Path -Path $destinationFolder)) { $null = New-Item $destinationFolder -ItemType Directory -Force }
 
-    if (Test-Path -Path $destinationPath) { Write-Host "NOT adding project item because it already exists: $destinationPath"; return $false }
-    Write-Host "Adding project item: $destinationPath"
+    if (Test-Path -Path $destinationPath) { Write-Host ('NOT adding project item because it already exists: {0}' -f (SolutionRelativePath -path $destinationPath)); return $false }
+    Write-Host ('Adding project item: {0}' -f (SolutionRelativePath -path $destinationPath))
     Copy-Item -Path $templatePath -Destination $destinationPath -Force
     ReplaceStringsInFile -filePath $destinationPath -replacements $contentReplacements
 
     $null = $project.ProjectItems.AddFromFile($destinationPath)
     $null = $dte.ItemOperations.OpenFile($destinationPath)
     return $true
+}
+
+function SolutionRelativePath
+{
+    Param([Parameter(Mandatory=$true)] [string]$path)
+
+    $solutionFolder = (Split-Path -Path $dte.Solution.FullName -Parent) + '\'
+    if ($path.StartsWith($solutionFolder)) { return $path.Substring($solutionFolder.Length) }
+    return $path
 }
 
 function AddProjectItemsFromDirectory
@@ -90,9 +99,8 @@ function AddProjectItemsFromDirectory
             AddProjectItemsFromDirectory -project $project -sourceDirectory $_.FullName -destinationDirectory $destinationPath -nameReplacements $nameReplacements -contentReplacements $contentReplacements
         } else {
             if ($destinationPathExists) {
-                Write-Host "NOT adding project item because it already exists: $destinationPath"
+                Write-Host ('NOT adding project item because it already exists: {0}' -f (SolutionRelativePath -path $destinationPath))
             } else {
-                Write-Host "Adding project item: $destinationPath"
                 Copy-Item -Path $_.FullName -Destination $destinationPath -Force
                 ReplaceStringsInFile -filePath $destinationPath -replacements $contentReplacements
             }
@@ -157,7 +165,7 @@ function EnsureConditionalCompilationSymbol
     if ($define -ne $null)
     {
         # Add the #define for the target framework, if needed.
-        Write-Host "Ensuring $define conditional compilation symbol for all project configurations and platforms"
+        Write-Host "Ensuring $define conditional compilation symbol for all $($project.Name) project configurations and platforms"
         $project.ConfigurationManager.ConfigurationRowNames | foreach-object {
             $project.ConfigurationManager.ConfigurationRow($_) | foreach-object { 
                 $property = $_.Properties.Item('DefineConstants')
@@ -221,7 +229,7 @@ function AddCsCodeFromInlineTemplateInVsEditor
     )
 
     if (-not (Test-Path $itemPath)) {
-        Write-Host "NOT adding $templateName code to file because it does not exist: $itemPath"
+        Write-Host ('NOT adding {0} code to file because file does not exist: {1}' -f $templateName, (SolutionRelativePath -path $itemPath))
         return
     }
 
@@ -230,10 +238,10 @@ function AddCsCodeFromInlineTemplateInVsEditor
     $textDocument = $document.Object('TextDocument')
     $editPoint = $textDocument.StartPoint.CreateEditPoint()
     $csCode = $editPoint.GetText($textDocument.EndPoint)
-    Write-Host "Adding $templateName code to file $itemPath ..."
+    Write-Host ('Adding {0} code to file {1} ...' -f $templateName, (SolutionRelativePath -path $itemPath))
     $csCode = AddCsCodeFromInlineTemplate -csCode $csCode -templateName $templateName -replacements $replacements
     if ($csCode -eq $null) {
-        Write-Host "NOT added $templateName code to file because the file does not contain an inline template that matches '/* TODO: For each $templateName, ... */' : $itemPath"
+        Write-Host ('NOT added {0} code to file because the file does not contain an inline template that matches "/* TODO: For each {0}, ... */" : {1}' -f $templateName, (SolutionRelativePath -path $itemPath))
         return
     }
     $editPoint.ReplaceText($textDocument.EndPoint, $csCode, 1) # 1 = vsEPReplaceTextKeepMarkers
@@ -268,11 +276,13 @@ function Install-Mvvm
         # Get the application name from the solution file name
         $solutionName = Split-Path ($project.DTE.Solution.FullName) -Leaf
         $appName = $solutionName.Split('.')[0]
+
         $defaultNamespace = $project.Properties.Item("DefaultNamespace").Value
         $platform = GetProjectPlatform -project $project
         $isApplication = IsApplicationProject -project $project
         $projectType = ('library', 'application')[$isApplication]
 
+        Write-Host '-------------------------'
         Write-Host "Installing MvvmQuickCross $platform $projectType files in project $ProjectName ..."
 
         $toolsPath = $PSScriptRoot
@@ -511,7 +521,7 @@ function New-View
                                    -contentReplacements            $csContentReplacements
         }
 
-        default { Write-Host "New-View currenty only supports Android application projects"; return }
+        default { Write-Host "New-View currenty only supports Android and Windows Phone application projects"; return }
     }
 }
 
