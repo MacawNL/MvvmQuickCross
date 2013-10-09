@@ -1,5 +1,5 @@
 NuGet package: [http://nuget.org/packages/MvvmQuickCross](http://nuget.org/packages/mvvmquickcross)
-> NOTE: Work in progress - this readme describes version 1.5.1, of which the NuGet release is imminent.
+> NOTE: This readme describes version 1.5.1, which is the current NuGet release.
 
 # MvvmQuickCross #
 Quickly build cross-platform apps in C# with the MVVM pattern and [Xamarin](http://xamarin.com/).
@@ -11,17 +11,20 @@ MvvmQuickCross accelerates development, also for a single platform app. For cros
 
 MvvmQuickCross aims to leave you in full control; it does not get in the way if you want to do some things differently, and you can simply extend it.
 
+## News ##
+On October 5th, I gave a presentation on MvvmQuickCross at the Windows Phone Developer Day in The Netherlands. See [the slides](http://www.slideshare.net/VincentHoogendoorn/mvvm-quickcross-windows-phone-devday-2013) for an overview of the MvvmQuickCross shared code pattern and Windows Phone specifics.
+
 ## Features ##
 
 **Lightweight and easy to modify**.<br />No binaries, only adds a code snippets file and C# source files to your projects.
 
-**Scaffolders**.<br />Quickly add viewmodels and views from within the Visual Studio package manager console with the New-ViewModel and New-View commands.
+**Scaffolders**.<br />Quickly add viewmodels and views from within the Visual Studio package manager console with the New-ViewModel and New-View [commands](#commands).
 
-**Viewmodel code snippets**.<br />Quickly add data-bindable properties and commands to viewmodels.
+**Viewmodel code snippets**.<br />Quickly add data-bindable properties and commands to viewmodels with [code snippets](#code-snippets).
 
-**Application-Navigator pattern**.<br />Maximize code sharing, including navigation logic, across platforms.
+**Application-Navigator pattern**.<br />Maximize code sharing, including navigation logic, across platforms. See [these slides](http://www.slideshare.net/VincentHoogendoorn/mvvm-quickcross-windows-phone-devday-2013) for an overview of the MvvmQuickCross shared code pattern.
 
-**Simple Android data binding**.<br />Specify bindings by naming conventions, in tag markup or in code. Use observable collections. Create performant data-bound list views without writing an adapter.
+**Simple Android data binding**.<br />Specify [data bindings in Android](#android) by using naming conventions, tag markup or code. Use observable collections. Create performant data-bound list views without writing an adapter.
 
 Override virtual methods in your activity or fragment to handle specific property change events with custom code instead of with data binding. Or customize how the data binding sets a value to a specific control. Add a few lines of code to make new view types data bindable.
 
