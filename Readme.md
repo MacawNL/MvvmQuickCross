@@ -170,4 +170,4 @@ Adds a data-bindable command with a parameter to a Viewmodel. You can specify th
 
 ## Android ##
 TODO: Document how to use the Android specific MvvmQuickCross features (Android Simple Data Binding).
-For now, see the Android version of the [CloudAuction example application](/MacawNL/MvvmQuickCross/tree/master/Examples/CloudAuction) in this repository for details.
+For now, see the Android version of the [CloudAuction example application](http://github.com/MacawNL/MvvmQuickCross/tree/master/Examples/CloudAuction) in this repository for details.
