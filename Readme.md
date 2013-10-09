@@ -12,7 +12,11 @@ MvvmQuickCross accelerates development, also for a single platform app. For cros
 MvvmQuickCross aims to leave you in full control; it does not get in the way if you want to do some things differently, and you can simply extend it.
 
 ## News ##
-On October 5th, I gave a presentation on MvvmQuickCross at the Windows Phone Developer Day in The Netherlands. See [the slides](http://www.slideshare.net/VincentHoogendoorn/mvvm-quickcross-windows-phone-devday-2013) for an overview of the MvvmQuickCross shared code pattern and Windows Phone specifics.
+**Coming up**: Guidance on using the Android specific features in release 1.5.1 (Android simple data binding)
+
+**October 9, 2013**: Version 1.5.1 is published. This release adds navigation code generation, Windows Phone support and more documentation.
+
+**October 5, 2013**: Vincent Hoogendoorn gave a presentation on MvvmQuickCross at the Windows Phone Developer Day in The Netherlands. See [the slides](http://www.slideshare.net/VincentHoogendoorn/mvvm-quickcross-windows-phone-devday-2013) for an overview of the MvvmQuickCross shared code pattern and Windows Phone specifics.
 
 ## Features ##
 
