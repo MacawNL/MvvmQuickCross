@@ -15,7 +15,7 @@ namespace SampleApp.Shared
         public SampleAppApplication(ISampleAppNavigator navigator, object currentNavigationContext = null, TaskScheduler uiTaskScheduler = null)
             : base(currentNavigationContext, uiTaskScheduler)
         {
-            // TODO: create instances for all services that have a cross-platform implementation
+            // TODO: Create instances for all services that have a cross-platform implementation
             // (services that have a platform-specific implementation, such as the navigator,
             // are instantiated in a platform-specific project and passed to this application 
             // as a cross-platform interface).

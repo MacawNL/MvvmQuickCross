@@ -8,7 +8,7 @@ namespace MvvmQuickCross.Templates.ViewModels
     {
         public _VIEWNAME_ViewModel()
         {
-            // TODO: pass any services that the _VIEWNAME_ viewmodel needs as contructor parameters. 
+            // TODO: Pass any services that the _VIEWNAME_ viewmodel needs as contructor parameters. 
         }
 
 #region Data-bindable properties and commands

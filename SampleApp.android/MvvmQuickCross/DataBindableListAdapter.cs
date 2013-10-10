@@ -103,7 +103,7 @@ namespace MvvmQuickCross
         /// <param name="e">See http://blog.stephencleary.com/2009/07/interpreting-notifycollectionchangedeve.html for details</param>
         protected virtual void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            NotifyDataSetChanged(); // TODO: Check if this should & can be optimized, see for details documentation at http://blog.stephencleary.com/2009/07/interpreting-notifycollectionchangedeve.html
+            NotifyDataSetChanged(); // MQC TODO: Check if this should & can be optimized, see for details documentation at http://blog.stephencleary.com/2009/07/interpreting-notifycollectionchangedeve.html
             if (viewExtensionPoints != null) viewExtensionPoints.OnCollectionChanged(sender, e);
         }
 
