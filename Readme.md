@@ -123,6 +123,8 @@ will generate:
 Now the only thing needed to display the view, bound to the view model, is to call the ContinueToPerson() method on the application.
 
 Check the **TODO comments** in the Visual Studio **Task List** to find guidance on how to complete the generated project items.
+
+New-View will not overwrite existing files or code. If you want to recreate files or code fragments, remove the existing one(s) first.
   
 ### New-ViewModel ###
     New-ViewModel [-ViewModelName] <string> [-NotInApplication]
@@ -142,6 +144,8 @@ will generate:
 - A PersonViewModel property in the application class
 
 Check the **TODO comments** in the Visual Studio **Task List** to find guidance on how to complete the generated project items.
+
+New-ViewModel will not overwrite existing files or code. If you want to recreate files or code fragments, remove the existing one(s) first.
 
 ## Code Snippets ##
 When you run the Install-Mvvm command, the C# code snippets file **MvvmQuickCross\Templates\MvvmQuickCross.snippet** is added to your class library project. When you import this snippets file into Visual Studio with the Code Snippets Manager (see [how](http://msdn.microsoft.com/en-us/library/ms165394\(v=vs.110\).aspx)), the code snippets described below become available for coding viewmodels.
