@@ -33,7 +33,7 @@ namespace MvvmQuickCross.Templates
 
         public void ContinueTo_VIEWNAME_(bool skipNavigation = false)
         {
-            if (_VIEWNAME_ViewModel == null) _VIEWNAME_ViewModel = new _VIEWNAME_ViewModel();
+            if (_VIEWNAME_ViewModel == null) _VIEWNAME_ViewModel = new _VIEWNAME_ViewModelDesign(); // TODO: Once _VIEWNAME_ViewModel has runtime data, instantiate that instead of _VIEWNAME_ViewModelDesign
             // Any actions to update the viewmodel go here
             if (!skipNavigation) RunOnUIThread(() => _navigator.NavigateTo_VIEWNAME_View(CurrentNavigationContext));
         }
