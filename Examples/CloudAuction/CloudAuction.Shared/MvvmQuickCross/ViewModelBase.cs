@@ -6,7 +6,7 @@ namespace MvvmQuickCross
 {
     public abstract class ViewModelBase : INotifyPropertyChanged
     {
-#if __ANDROID__ || __IOS__
+        #if __ANDROID__ || __IOS__
         private List<string> propertyNames;
         private List<string> commandNames;
 
@@ -30,8 +30,7 @@ namespace MvvmQuickCross
         {
             get
             {
-                if (commandNames == null)
-                {
+                if (commandNames == null) {
                     commandNames = new List<string>();
                     foreach (var propertyInfo in this.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
                     {
@@ -49,7 +48,7 @@ namespace MvvmQuickCross
         {
             return (T)GetType().GetProperty(propertyName).GetValue(this);
         }
-#endif
+        #endif
 
         public event PropertyChangedEventHandler PropertyChanged;
 

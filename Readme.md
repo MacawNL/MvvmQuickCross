@@ -56,7 +56,7 @@ To create an app with MvvmQuickCross, follow these steps:
 
 	**Note** that the package installation uses the first part of the solution filename (before the first dot) as the **application name** for naming new project items and classes.
 
-4. Import the C# code snippets from the MvvmQuickCross\Templates\MvvmQuickCross.snippet file in your class library project into Visual Studio with the Code Snippets Manager (see [how](http://msdn.microsoft.com/en-us/library/ms165394\(v=vs.110\).aspx)).
+4. Import the C# code snippets from the MvvmQuickCross\Templates\MvvmQuickCross.snippet file in your class library project into Visual Studio with the Code Snippets Manager (see [how](http://msdn.microsoft.com/en-us/library/ms165394\(v=vs.110\).aspx)). If you get a "Snippet With Same Name Exists" dialog, select Overwrite. 
 	
 	**Note** do not select the MvvmQuickCross\Templates folder itself as the location to import snippets **to**; that may prevent the snippets to be imported correctly, as this would mean copying the snippets file over itself.
 
@@ -173,5 +173,6 @@ Adds a data-bindable command to a Viewmodel. You can specify the command name, w
 Adds a data-bindable command with a parameter to a Viewmodel. You can specify the command name, which will be suffixed with **"Command"**, the parameter type and the parameter name.
 
 ## Android ##
+
 TODO: Document how to use the Android specific MvvmQuickCross features (Android Simple Data Binding).
 For now, see the Android version of the [CloudAuction example application](http://github.com/MacawNL/MvvmQuickCross/tree/master/Examples/CloudAuction) in this repository for details.

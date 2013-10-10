@@ -1,7 +1,8 @@
-using System;
+﻿using System;
 
 using Android.Views;
 using Android.Widget;
+using System.Collections;
 
 namespace MvvmQuickCross
 {
@@ -48,7 +49,45 @@ namespace MvvmQuickCross
             if (binding != null)
             {
                 var command = (RelayCommand)binding.ViewModelPropertyInfo.GetValue(viewModel);
-                command.Execute(null);
+                object parameter = null;
+                if (binding.CommandParameterListView != null)
+                {
+                    var adapter = binding.CommandParameterListView.GetAdapter() as IDataBindableListAdapter;
+                    if (adapter != null) 
+                    {
+                        var adapterView = binding.CommandParameterListView;
+                        if (adapterView is AbsListView)
+                        {
+                            var absListView = (AbsListView)adapterView;
+                            switch (absListView.ChoiceMode)
+                            {
+                                case ChoiceMode.Single:
+                                    parameter = adapter.GetItemAsObject(absListView.CheckedItemPosition);
+                                    break;
+                                case ChoiceMode.Multiple:
+                                    {
+                                        var checkedItems = new ArrayList();
+                                        var positions = absListView.CheckedItemPositions;
+                                        for (int i = 0; i < positions.Size(); i++)
+                                        {
+                                            if (positions.ValueAt(i))
+                                            {
+                                                int position = positions.KeyAt(i);
+                                                checkedItems.Add(adapter.GetItemAsObject(position));
+                                            }
+                                        }
+                                        if (checkedItems.Count > 0) parameter = checkedItems;
+                                    }
+                                    break;
+                            }
+                        } 
+                        else 
+                        {
+                            parameter = adapter.GetItemAsObject(adapterView.SelectedItemPosition);
+                        }
+                    }
+                }
+                command.Execute(parameter);
             }
         }
 
@@ -65,19 +104,35 @@ namespace MvvmQuickCross
                 {
                     // TODO: Add cases here for specialized view types, as needed
                     case "Android.Widget.ProgressBar":
-                        ((ProgressBar)view).Progress = (int)(value ?? 0);
+                        {
+                            var progressBar = (ProgressBar)view;
+                            int progressValue = (int)(value ?? 0);
+                            if (progressBar.Progress != progressValue) progressBar.Progress = progressValue;
+                        }
                         break;
 
                     case "Android.Webkit.WebView":
-                        var webView = (Android.Webkit.WebView)view;
-                        if (value is Uri) webView.LoadUrl(value.ToString()); else webView.LoadData(value == null ? "" : value.ToString(), "text/html", null);
+                        {
+                            var webView = (Android.Webkit.WebView)view;
+                            if (value is Uri)
+                            {
+                                string newUrl = value.ToString();
+                                if (webView.Url != newUrl) webView.LoadUrl(newUrl);
+                            }
+                            else
+                            {
+                                webView.LoadData(value == null ? "" : value.ToString(), "text/html", null);
+                            }
+                        }
                         break;
 
                     case "Macaw.UIComponents.MultiImageView":
-                        if (value is Uri) value = ((Uri)value).AbsoluteUri;
-                        var multiImageView = (Macaw.UIComponents.MultiImageView)view;
-                        multiImageView.LoadImageList(value == null ? null : new[] { (string)value });
-                        multiImageView.LoadImage(); // TODO: Update to MultiImageView 1.2 when it is published, to fix hang on no connection and to get rid of this LoadImage call.
+                        {
+                            if (value is Uri) value = ((Uri)value).AbsoluteUri;
+                            var multiImageView = (Macaw.UIComponents.MultiImageView)view;
+                            multiImageView.LoadImageList(value == null ? null : new[] { (string)value });
+                            multiImageView.LoadImage(); // TODO: Update to MultiImageView 1.2 when it is published, to fix hang on no connection and to get rid of this LoadImage call.
+                        }
                         break;
 
                     default:

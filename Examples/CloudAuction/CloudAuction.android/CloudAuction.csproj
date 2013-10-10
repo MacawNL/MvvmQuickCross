@@ -33,7 +33,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;__ANDROID__</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AndroidUseSharedRuntime>False</AndroidUseSharedRuntime>
@@ -52,22 +52,27 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CloudAuctionNavigator.cs" />
+    <Compile Include="MvvmQuickCross\ActivityViewBase.cs" />
+    <Compile Include="MvvmQuickCross\AndroidHelpers.cs" />
+    <Compile Include="MvvmQuickCross\DataBindableListAdapter.cs" />
+    <Compile Include="MvvmQuickCross\FragmentViewBase.cs" />
+    <Compile Include="MvvmQuickCross\Templates\_APPNAME_Navigator.cs" />
+    <Compile Include="MvvmQuickCross\Templates\_VIEWNAME_ActivityView.cs" />
+    <Compile Include="MvvmQuickCross\Templates\_VIEWNAME_FragmentView.cs" />
+    <Compile Include="MvvmQuickCross\Templates\_VIEWNAME_MainLauncherView.cs" />
+    <Compile Include="MvvmQuickCross\ViewDataBindings.cs" />
+    <Compile Include="MvvmQuickCross\ViewDataBindings.UI.cs" />
     <Compile Include="ProductView.cs" />
     <Compile Include="OrderResultView.cs" />
     <Compile Include="MainView.cs" />
     <Compile Include="AuctionView.cs" />
-    <Compile Include="MvvmQuickCross\ActivityViewBase.cs" />
-    <Compile Include="MvvmQuickCross\FragmentViewBase.cs" />
-    <Compile Include="MvvmQuickCross\DataBindableListAdapter.cs" />
-    <Compile Include="MvvmQuickCross\AndroidHelpers.cs" />
-    <Compile Include="MvvmQuickCross\ViewDataBindings.UI.cs" />
     <Compile Include="OrderView.cs" />
     <Compile Include="ProductsView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
-    <Compile Include="MvvmQuickCross\ViewDataBindings.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="MvvmQuickCross\Templates\_VIEWNAME_View.axml.template" />
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
     <AndroidResource Include="Resources\Layout\MainView.axml">

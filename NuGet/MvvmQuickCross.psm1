@@ -40,7 +40,8 @@ function AddProjectItem
         [Parameter(Mandatory=$true)] [string]$destinationProjectRelativePath,
         [Parameter(Mandatory=$true)] [string]$templatePackageFolder,
         [Parameter(Mandatory=$true)] [string]$templateProjectRelativePath,
-        [Hashtable]$contentReplacements
+        [Hashtable]$contentReplacements,
+        [switch]$isOptionalItem
     )
 
     $projectFolder = Split-Path -Path $project.FullName -Parent
@@ -50,7 +51,10 @@ function AddProjectItem
     {
         $toolsPath = $PSScriptRoot
         $templatePath = Join-Path -Path $toolsPath -ChildPath "$templatePackageFolder\$templateProjectRelativePath"
-        if (-not(Test-Path $templatePath)) { throw "Template file not found: $templatePath" }
+        if (-not(Test-Path $templatePath)) 
+        { 
+            if ($isOptionalItem) { return $false } else { throw "Template file not found: $templatePath" }
+        }
     }
 
     $destinationPath = Join-Path -Path $projectFolder -ChildPath $destinationProjectRelativePath
@@ -489,7 +493,7 @@ function New-View
     }
 
     # Create the view model if it does not exist:
-    New-ViewModel -ViewModelName $ViewModelName
+    New-ViewModel -ViewModelName $ViewModelName -NotInApplication:$WithoutNavigation
 
     $csContentReplacements = GetContentReplacements -project $project -cs -isApplication
     $csContentReplacements.Add('_VIEWNAME_', $ViewName)
@@ -517,7 +521,8 @@ function New-View
                                    -destinationProjectRelativePath ('Resources\Layout\{0}View.axml' -f $ViewName) `
                                    -templatePackageFolder          'app.android' `
                                    -templateProjectRelativePath    ('MvvmQuickCross\Templates\_VIEWNAME_{0}View.axml.template' -f $markupType) `
-                                   -contentReplacements            @{ '_VIEWNAME_' = $ViewName })
+                                   -contentReplacements            @{ '_VIEWNAME_' = $ViewName } `
+                                   -isOptionalItem:($markupType -ne ''))
                 { break }
             }
             $null = AddProjectItem -project $project `
@@ -535,7 +540,8 @@ function New-View
                                    -destinationProjectRelativePath ('{0}View.xaml' -f $ViewName) `
                                    -templatePackageFolder          'app.wp' `
                                    -templateProjectRelativePath    ('MvvmQuickCross\Templates\_VIEWNAME_{0}View.xaml.template' -f $markupType) `
-                                   -contentReplacements            $csContentReplacements)
+                                   -contentReplacements            $csContentReplacements `
+                                   -isOptionalItem:($markupType -ne ''))
                 { break }
             }
             $null = AddProjectItem -project $project `

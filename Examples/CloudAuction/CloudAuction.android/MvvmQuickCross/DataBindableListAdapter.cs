@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 
@@ -13,7 +13,7 @@ namespace MvvmQuickCross
     {
         int GetItemPosition(object item);
         object GetItemAsObject(int position);
-        void SetList(IList list);
+        bool SetList(IList list);
         void AddHandlers();
         void RemoveHandlers();
     }
@@ -103,7 +103,7 @@ namespace MvvmQuickCross
         /// <param name="e">See http://blog.stephencleary.com/2009/07/interpreting-notifycollectionchangedeve.html for details</param>
         protected virtual void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            NotifyDataSetChanged(); // TODO: Check if this should & can be optimized, see for details documentation at http://blog.stephencleary.com/2009/07/interpreting-notifycollectionchangedeve.html
+            NotifyDataSetChanged(); // MQC TODO: Check if this should & can be optimized, see for details documentation at http://blog.stephencleary.com/2009/07/interpreting-notifycollectionchangedeve.html
             if (viewExtensionPoints != null) viewExtensionPoints.OnCollectionChanged(sender, e);
         }
 
@@ -119,16 +119,17 @@ namespace MvvmQuickCross
 
         public object GetItemAsObject(int position)
         {
-            return (list == null) ? null : list[position];
+            return (list == null || position < 0 || position >= list.Count) ? null : list[position];
         }
 
-        public void SetList(IList list)
+        public bool SetList(IList list)
         {
-            if (Object.ReferenceEquals(this.list, list)) return;
+            if (Object.ReferenceEquals(this.list, list)) return false;
             RemoveListHandler();
             this.list = list;
             AddListHandler();
             NotifyDataSetChanged();
+            return true;
         }
 
         public override int Count
@@ -138,13 +139,20 @@ namespace MvvmQuickCross
 
         public override Java.Lang.Object GetItem(int position)
         {
-            return position; // Bogus implementation required by BaseAdapter - nobody wants a Java object.
+            return (Wrapper<Object>)GetItemAsObject(position);
         }
 
         public override long GetItemId(int position)
         {
-            return position; // Bogus implementation required by BaseAdapter - Id adds nothing to position
+            object item = GetItemAsObject(position);
+            return item == null? 0 : item.GetHashCode();
+                // The default GetHashCode implementation represents the instance. Note however that after the object is
+                // reclaimed during garbage collection, another object may then return the same hash.
+                // To prevent this (highly unlikely) event, override GetHashCode on your list item object to return a 
+                // unique stable int value that is calculated from a unique stable Id field (or combination of fields).
         }
+
+        public override bool HasStableIds { get { return true; } }
 
         private string IdName(string name) { return idPrefix + name; }
 

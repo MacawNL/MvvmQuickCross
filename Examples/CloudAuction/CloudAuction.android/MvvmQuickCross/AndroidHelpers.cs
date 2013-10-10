@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Reflection;
 using Android.Widget;
 using Android.App;
@@ -30,7 +30,7 @@ namespace MvvmQuickCross
         public static int? FindResourceId(string name, ResourceCategory category = ResourceCategory.Id)
         {
             if (string.IsNullOrEmpty(name) || resourceClassType == null) return null;
-            var categoryClassType = resourceClassType.GetNestedType(category.ToString()); // TODO: check if optimize perf by caching type for each category is needed?
+            var categoryClassType = resourceClassType.GetNestedType(category.ToString()); // MQC TODO: Check if optimize perf by caching type for each category is needed?
             if (categoryClassType == null) return null;
             var fieldInfo = categoryClassType.GetField(name);
             if (fieldInfo == null) return null;
