@@ -43,6 +43,10 @@ To create an app with MvvmQuickCross, follow these steps:
 
 1. In Visual Studio, create a new solution with an application project for the platform (Windows Store, Windows Phone, Android, iOS) that you are most productive with. Add a class library project for that platform to the solution. Reference the class library from the application project.
 
+	**Note for Android:** Set the API level to 12 (Android 3.1) or higher in the Project properties for both projects. This is needed to support the Fragment view type. You can target lower API versions by either using the [Android Support Library](http://developer.android.com/tools/support-library/index.html) (which is supported in Xamarin) or by removing the Fragment view base class and template from the MvvmQuickCross folder in your application project.
+
+	**Note for Windows Phone:** Select Windows Phone OS 8.0 or higher.
+
 2. Install the [MvvmQuickCross NuGet package](http://nuget.org/packages/mvvmquickcross)
 
 	The available MvvmQuickCross commands are now displayed in the package manager console.
@@ -173,6 +177,34 @@ Adds a data-bindable command to a Viewmodel. You can specify the command name, w
 Adds a data-bindable command with a parameter to a Viewmodel. You can specify the command name, which will be suffixed with **"Command"**, the parameter type and the parameter name.
 
 ## Android ##
+Below is an overview of using MvvmQuickCross with Xamarin.Android. For a more detailed example, see the Android version of the [CloudAuction example application](http://github.com/MacawNL/MvvmQuickCross/tree/master/Examples/CloudAuction) in this repository.
+
+### Create an Android App ###
+To create an Android app that demonstrates simple data binding, follow these steps:
+
+1.  Create a working Android app by following steps 1 though 4 of [Getting Started](#getting-started) above; choose an "**Android Application**" and an "**Android Class Library**" project.
+
+2.  Remove the **Activity1.cs** and **Class1.cs** files that were included by the Xamarin.Android project templates
+
+3.  Now you can run the app on your device and test the example MainView that was generated.
+
+4.  In **MainViewModel.cs** in your library project, in the region **Data-bindable properties and commands**, add these properties and commands with the [code snippets](#code-snippets) that are indicated in the comments:
+
+        public string Tweet /* Two-way data-bindable property that calls custom code in OnTweetChanged() from setter, generated with propdb2c snippet. Keep on one line - see http://goo.gl/Yg6QMd for why. */ { get { return _Tweet; } set { if (_Tweet != value) { _Tweet = value; RaisePropertyChanged(PROPERTYNAME_Tweet); OnTweetChanged(); } } } private string _Tweet; public const string PROPERTYNAME_Tweet = "Tweet";
+        public int CharactersLeft /* One-way data-bindable property generated with propdb1 snippet. Keep on one line - see http://goo.gl/Yg6QMd for why. */ { get { return _CharactersLeft; } set { if (_CharactersLeft != value) { _CharactersLeft = value; RaisePropertyChanged(PROPERTYNAME_CharactersLeft); } } } private int _CharactersLeft; public const string PROPERTYNAME_CharactersLeft = "CharactersLeft";
+        public RelayCommand SendCommand /* Data-bindable command that calls Send(), generated with cmd snippet. Keep on one line - see http://goo.gl/Yg6QMd for why. */ { get { if (_SendCommand == null) _SendCommand = new RelayCommand(Send); return _SendCommand; } } private RelayCommand _SendCommand;
+
+        private void OnTweetChanged()
+        {
+            throw new NotImplementedException(); // TODO: Implement OnTweetChanged()
+        }
+
+        private void Send()
+        {
+            throw new NotImplementedException(); // TODO: Implement Send()
+        }
+
+WORK IN PROGRESS: this example is in writing; eta is October 11, 2013.
 
 TODO: Document how to use the Android specific MvvmQuickCross features (Android Simple Data Binding).
-For now, see the Android version of the [CloudAuction example application](http://github.com/MacawNL/MvvmQuickCross/tree/master/Examples/CloudAuction) in this repository for details.
+

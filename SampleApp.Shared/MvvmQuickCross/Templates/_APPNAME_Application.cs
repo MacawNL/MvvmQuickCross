@@ -3,6 +3,7 @@ using System;
 using System.Threading.Tasks;
 using MvvmQuickCross;
 using MvvmQuickCross.Templates.ViewModels;
+using MvvmQuickCross.Templates.ViewModels.Design;
 
 namespace MvvmQuickCross.Templates
 {
