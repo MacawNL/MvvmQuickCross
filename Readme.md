@@ -190,19 +190,9 @@ To create an Android app that demonstrates simple data binding, follow these ste
 
 4.  In **MainViewModel.cs** in your library project, in the region **Data-bindable properties and commands**, add these properties and commands with the [code snippets](#code-snippets) that are indicated in the comments:
 
-        public string Tweet /* Two-way data-bindable property that calls custom code in OnTweetChanged() from setter, generated with propdb2c snippet. Keep on one line - see http://goo.gl/Yg6QMd for why. */ { get { return _Tweet; } set { if (_Tweet != value) { _Tweet = value; RaisePropertyChanged(PROPERTYNAME_Tweet); OnTweetChanged(); } } } private string _Tweet; public const string PROPERTYNAME_Tweet = "Tweet";
-        public int CharactersLeft /* One-way data-bindable property generated with propdb1 snippet. Keep on one line - see http://goo.gl/Yg6QMd for why. */ { get { return _CharactersLeft; } set { if (_CharactersLeft != value) { _CharactersLeft = value; RaisePropertyChanged(PROPERTYNAME_CharactersLeft); } } } private int _CharactersLeft; public const string PROPERTYNAME_CharactersLeft = "CharactersLeft";
-        public RelayCommand SendCommand /* Data-bindable command that calls Send(), generated with cmd snippet. Keep on one line - see http://goo.gl/Yg6QMd for why. */ { get { if (_SendCommand == null) _SendCommand = new RelayCommand(Send); return _SendCommand; } } private RelayCommand _SendCommand;
-
-        private void OnTweetChanged()
-        {
-            throw new NotImplementedException(); // TODO: Implement OnTweetChanged()
-        }
-
-        private void Send()
-        {
-            throw new NotImplementedException(); // TODO: Implement Send()
-        }
+        public string Tweet /* Two-way data-bindable property that calls custom code in OnTweetChanged() from setter, generated with propdb2c snippet. */
+        public int CharactersLeft /* One-way data-bindable property generated with propdb1 snippet. */
+        public RelayCommand SendCommand /* Data-bindable command that calls Send(), generated with cmd snippet. */
 
 WORK IN PROGRESS: this example is in writing; eta is October 11, 2013.
 
