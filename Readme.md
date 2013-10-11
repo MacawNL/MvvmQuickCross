@@ -92,7 +92,7 @@ After installing the MvvmQuickCross NuGet package, the below commands are availa
 ### Install-Mvvm ###
 
 ```posh
-    Install-Mvvm
+Install-Mvvm
 ```
 Installs the MvvmQuickCross support files in both your library project and your application project, in a subfolder MvvmQuickCross. The files in the MvvmQuickCross folders are not application specific; unless you want to modify the standard MvvmQuickCross templates, code snippets and/or functionality you don't need to edit these.
 
@@ -107,7 +107,7 @@ Install-Mvvm will not overwrite existing files or code. If you want to recreate 
 ### New-View ###
 
 ```posh
-    New-View [-ViewName] <string> [[-ViewType] <string>] [[-ViewModelName] <string>] [-WithoutNavigation]
+New-View [-ViewName] <string> [[-ViewType] <string>] [[-ViewModelName] <string>] [-WithoutNavigation]
 ```
 Generates a new view. Currently only supports Android and Windows Phone.
 
@@ -120,7 +120,7 @@ Unless the **-WithoutNavigation** switch is specified, New-View will also add ba
 E.g. this command:
 
 ```posh
-    New-View Person
+New-View Person
 ```
 will generate:
 
@@ -141,7 +141,7 @@ New-View will not overwrite existing files or code. If you want to recreate file
 ### New-ViewModel ###
 
 ```posh
-    New-ViewModel [-ViewModelName] <string> [-NotInApplication]
+New-ViewModel [-ViewModelName] <string> [-NotInApplication]
 ```
 Generates a new viewmodel. You can use this command to create viewmodels without creating any corresponding views (yet).
 
@@ -152,7 +152,7 @@ Unless the **-NotInApplication** switch is specified, New-ViewModel will also ad
 E.g. this command:
 
 ```posh
-    New-ViewModel Person
+New-ViewModel Person
 ```
 will generate:
 
@@ -220,7 +220,12 @@ Here is how to create an Android Twitter app that demonstrates simple data bindi
 
 	<table border="0">
 	<tr><td><b>Snippet</b></td><td><b>Parameters</b></td><td><b>Generated code</b></td></tr>
-	<tr><td><a href="#propdb2c">propdb2c</a></td><td>string Tweet</td><td><pre><code>public string Tweet ...<br />private void OnTweetChanged() { ... }</code></pre></td></tr>
+	<tr><td><a href="#propdb2c">propdb2c</a></td><td>string Tweet</td><td>
+
+```csharp
+public string Tweet ...<br />private void OnTweetChanged() { ... }
+```
+</td></tr>
 	<tr><td><a href="#propdb">propdb</a></td><td>int CharactersLeft</td><td><pre><code>public int CharactersLeft ...</code></pre></td></tr>
 	<tr><td><a href="#cmd">cmd</a></td><td>Send</td><td><pre><code>public RelayCommand SendCommand ...<br />private void Send() { ... }</code></pre></td></tr>
 	</table>
