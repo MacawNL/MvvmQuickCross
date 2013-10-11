@@ -196,9 +196,9 @@ Here is how to create an Android Twitter app that demonstrates simple data bindi
 
 	<table>
 	<tr><td><b>Snippet</b></td><td><b>Parameters</b></td><td><b>Generated code</b></td></tr>
-	<tr><td>[propdb2c](#propdb2c)</td><td>string Tweet</td><td>public string Tweet ...<br />private void OnTweetChanged() { ... }</td></tr>
-	<tr><td>[propdb](#propdb)</td><td>int CharactersLeft</td><td>public int CharactersLeft ...</td></tr>
-	<tr><td>[cmd](#cmd)</td><td>Send</td><td>public RelayCommand SendCommand ...<br />private void Send() { ... }</td></tr>
+	<tr><td><a href="#propdb2c">propdb2c</a></td><td>string Tweet</td><td>public string Tweet ...<br />private void OnTweetChanged() { ... }</td></tr>
+	<tr><td><a href="#propdb">propdb</a></td><td>int CharactersLeft</td><td>public int CharactersLeft ...</td></tr>
+	<tr><td><a href="#cmd">cmd</a></td><td>Send</td><td>public RelayCommand SendCommand ...<br />private void Send() { ... }</td></tr>
 	</table>
 
 
