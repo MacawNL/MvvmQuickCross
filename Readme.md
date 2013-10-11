@@ -223,12 +223,21 @@ Here is how to create an Android Twitter app that demonstrates simple data bindi
 	<tr><td><a href="#propdb2c">propdb2c</a></td><td>string Tweet</td><td>
 
 ```csharp
-public string Tweet ...<br />private void OnTweetChanged() { ... }
+public string Tweet ...
+private void OnTweetChanged() { ... }
 ```
 </td></tr>
-	<tr><td><a href="#propdb">propdb</a></td><td>int CharactersLeft</td><td><pre><code>public int CharactersLeft ...</code></pre></td></tr>
-	<tr><td><a href="#cmd">cmd</a></td><td>Send</td><td><pre><code>public RelayCommand SendCommand ...<br />private void Send() { ... }</code></pre></td></tr>
-	</table>
+	<tr><td><a href="#propdb">propdb</a></td><td>int CharactersLeft</td><td>
+```csharp
+public int CharactersLeft ...
+```
+</td></tr><tr><td><a href="#cmd">cmd</a></td><td>Send</td><td>
+
+```csharp
+public RelayCommand SendCommand ...
+private void Send() { ... }
+```
+</td></tr></table>
 
 
 TODO: Document how to use the Android specific MvvmQuickCross features (Android Simple Data Binding).
