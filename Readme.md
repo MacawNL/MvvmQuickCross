@@ -90,7 +90,10 @@ After installing the MvvmQuickCross NuGet package, the below commands are availa
 **Note** that except for Install-Mvvm, anything that these commands do can also be done by hand; the manual steps are documented inline in the files that you add to your projects with Install-Mvvm. This makes it possible to create your initial solutions in (a [free version](http://go.microsoft.com/fwlink/?linkid=244366) of) Visual Studio, and then continue working in [Xamarin Studio](http://xamarin.com/studio) for Android or iOS, if you prefer that.
 
 ### Install-Mvvm ###
+
+```posh
     Install-Mvvm
+```
 Installs the MvvmQuickCross support files in both your library project and your application project, in a subfolder MvvmQuickCross. The files in the MvvmQuickCross folders are not application specific; unless you want to modify the standard MvvmQuickCross templates, code snippets and/or functionality you don't need to edit these.
 
 Install-Mvvm also generates a few application-specific project items for you. The generated project items are opened in the Visual Studio editor for your inspection.
@@ -102,7 +105,10 @@ Check the **TODO comments** in the Visual Studio **Task List** to find guidance 
 Install-Mvvm will not overwrite existing files or code. If you want to recreate the default files, remove the files that you want to recreate before running Install-Mvvm.
 
 ### New-View ###
+
+```posh
     New-View [-ViewName] <string> [[-ViewType] <string>] [[-ViewModelName] <string>] [-WithoutNavigation]
+```
 Generates a new view. Currently only supports Android and Windows Phone.
 
 The specified **ViewName** will be suffixed with "View", and the specified **ViewModelName** will be suffixed with "ViewModel". If no ViewModelName is specified, it will be the same as the ViewName. If the view model does not exist, it will be generated with the **New-ViewModel** command.
@@ -113,7 +119,9 @@ Unless the **-WithoutNavigation** switch is specified, New-View will also add ba
 
 E.g. this command:
 
+```posh
     New-View Person
+```
 will generate:
 
 - A PersonView view markup file + class
@@ -131,7 +139,10 @@ Check the **TODO comments** in the Visual Studio **Task List** to find guidance 
 New-View will not overwrite existing files or code. If you want to recreate files or code fragments, remove the existing one(s) first.
   
 ### New-ViewModel ###
+
+```posh
     New-ViewModel [-ViewModelName] <string> [-NotInApplication]
+```
 Generates a new viewmodel. You can use this command to create viewmodels without creating any corresponding views (yet).
 
 The specified **ViewModelName** will be suffixed with "ViewModel".
@@ -140,7 +151,9 @@ Unless the **-NotInApplication** switch is specified, New-ViewModel will also ad
 
 E.g. this command:
 
+```posh
     New-ViewModel Person
+```
 will generate:
 
 - A PersonViewModel viewmodel class
@@ -191,17 +204,17 @@ Here is how to create an Android Twitter app that demonstrates simple data bindi
 
 4.  Create a **Models** folder in your Twitter.Shared project and create this **Tweet.cs** class in it.
 
-```csharp
-namespace Twitter.Shared.Models
-{
-    public class Tweet
-    {
-        public string Text { get; set; }
-        public string UserName { get; set; }
-        public int RetweetCount { get; set; }
-    }
-}
-```
+	```csharp
+	namespace Twitter.Shared.Models
+	{
+	    public class Tweet
+	    {
+	        public string Text { get; set; }
+	        public string UserName { get; set; }
+	        public int RetweetCount { get; set; }
+	    }
+	}
+	```
 
 5.  In **ViewModels\MainViewModel.cs** in your library project, in the **region Data-bindable properties and commands**, add these properties and commands with the indicated [code snippets](#code-snippets):
 
