@@ -191,19 +191,21 @@ Here is how to create an Android Twitter app that demonstrates simple data bindi
 
 4.  Create a **Models** folder in your Twitter.Shared project and create this **Tweet.cs** class in it.
 
-		namespace Twitter.Shared.Models
-		{
-		    public class Tweet
-		    {
-		        public string Text { get; set; }
-		        public string UserName { get; set; }
-		        public int RetweetCount { get; set; }
-		    }
-		}
+```csharp
+namespace Twitter.Shared.Models
+{
+    public class Tweet
+    {
+        public string Text { get; set; }
+        public string UserName { get; set; }
+        public int RetweetCount { get; set; }
+    }
+}
+```
 
 5.  In **ViewModels\MainViewModel.cs** in your library project, in the **region Data-bindable properties and commands**, add these properties and commands with the indicated [code snippets](#code-snippets):
 
-	<table border="">
+	<table border="0">
 	<tr><td><b>Snippet</b></td><td><b>Parameters</b></td><td><b>Generated code</b></td></tr>
 	<tr><td><a href="#propdb2c">propdb2c</a></td><td>string Tweet</td><td><pre><code>public string Tweet ...<br />private void OnTweetChanged() { ... }</code></pre></td></tr>
 	<tr><td><a href="#propdb">propdb</a></td><td>int CharactersLeft</td><td><pre><code>public int CharactersLeft ...</code></pre></td></tr>
