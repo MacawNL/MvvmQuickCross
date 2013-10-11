@@ -203,11 +203,11 @@ Here is how to create an Android Twitter app that demonstrates simple data bindi
 
 5.  In **ViewModels\MainViewModel.cs** in your library project, in the **region Data-bindable properties and commands**, add these properties and commands with the indicated [code snippets](#code-snippets):
 
-	<table>
+	<table border="">
 	<tr><td><b>Snippet</b></td><td><b>Parameters</b></td><td><b>Generated code</b></td></tr>
-	<tr><td><a href="#propdb2c">propdb2c</a></td><td>string Tweet</td><td>public string Tweet ...<br />private void OnTweetChanged() { ... }</td></tr>
-	<tr><td><a href="#propdb">propdb</a></td><td>int CharactersLeft</td><td>public int CharactersLeft ...</td></tr>
-	<tr><td><a href="#cmd">cmd</a></td><td>Send</td><td>public RelayCommand SendCommand ...<br />private void Send() { ... }</td></tr>
+	<tr><td><a href="#propdb2c">propdb2c</a></td><td>string Tweet</td><td><pre><code>public string Tweet ...<br />private void OnTweetChanged() { ... }</code></pre></td></tr>
+	<tr><td><a href="#propdb">propdb</a></td><td>int CharactersLeft</td><td><pre><code>public int CharactersLeft ...</code></pre></td></tr>
+	<tr><td><a href="#cmd">cmd</a></td><td>Send</td><td><pre><code>public RelayCommand SendCommand ...<br />private void Send() { ... }</code></pre></td></tr>
 	</table>
 
 
