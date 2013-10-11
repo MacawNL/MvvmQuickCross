@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="MvvmQuickCross\Templates\_APPNAME_Navigator.cs" />
+    <Compile Include="MvvmQuickCross\CheckableLinearLayout.cs" />
     <Compile Include="MvvmQuickCross\Templates\_VIEWNAME_FragmentView.cs" />
     <Compile Include="MvvmQuickCross\Templates\_VIEWNAME_ActivityView.cs" />
     <None Include="MvvmQuickCross\Templates\_VIEWNAME_MainLauncherView.cs" />
