@@ -92,7 +92,7 @@ After installing the MvvmQuickCross NuGet package, the below commands are availa
 ### Install-Mvvm ###
 
 ```posh
-Install-Mvvm
+Install-Mvvm 
 ```
 Installs the MvvmQuickCross support files in both your library project and your application project, in a subfolder MvvmQuickCross. The files in the MvvmQuickCross folders are not application specific; unless you want to modify the standard MvvmQuickCross templates, code snippets and/or functionality you don't need to edit these.
 
@@ -218,13 +218,21 @@ Here is how to create an Android Twitter app that demonstrates simple data bindi
 
 5.  In **ViewModels\MainViewModel.cs** in your library project, in the **region Data-bindable properties and commands**, add these properties and commands with the indicated [code snippets](#code-snippets):
 
-	<table border="0">
+	<table>
 	<tr><td><b>Snippet</b></td><td><b>Parameters</b></td><td><b>Generated code</b></td></tr>
-	<tr><td><a href="#propdb2c">propdb2c</a></td><td>string Tweet</td><td>
+	<tr><td><a href="#propdbcol">propdbcol</a></td><td>ObservableCollection Tweet TweetList</td><td>
 
 ```csharp
-public string Tweet ...
-private void OnTweetChanged() { ... }
+public ObservableCollection<Tweet> TweetList  ...
+public bool TweetListHasItems ...
+protected void UpdateTweetListHasItems() { ... }
+```
+</td></tr>
+	<tr><td><a href="#propdb2c">propdb2c</a></td><td>string Text</td><td>
+
+```csharp
+public string Text ...
+private void OnTextChanged() { ... }
 ```
 </td></tr>
 	<tr><td><a href="#propdb">propdb</a></td><td>int CharactersLeft</td><td>

@@ -21,7 +21,16 @@ namespace MvvmQuickCross
                 default:
                     if (view is AbsSpinner) ((AdapterView)view).ItemSelected += AdapterView_ItemSelected;
                     else if (view is AdapterView) ((AdapterView)view).ItemClick += AdapterView_ItemClick;
-                    else view.Click += View_Click;
+                    else
+                    {
+                        view.Click += View_Click;
+                        var command = (RelayCommand)binding.ViewModelPropertyInfo.GetValue(viewModel);
+                        if (command != null)
+                        {
+                            command.CanExecuteChanged += binding.Command_CanExecuteChanged;
+                            view.Enabled = command.IsEnabled;
+                        }
+                    }
                     break;
             }
         }
@@ -37,7 +46,12 @@ namespace MvvmQuickCross
                 default:
                     if (view is AbsSpinner) ((AdapterView)view).ItemSelected -= AdapterView_ItemSelected;
                     else if (view is AdapterView) ((AdapterView)view).ItemClick -= AdapterView_ItemClick;
-                    else view.Click -= View_Click;
+                    else
+                    {
+                        var command = (RelayCommand)binding.ViewModelPropertyInfo.GetValue(viewModel);
+                        if (command != null) command.CanExecuteChanged -= binding.Command_CanExecuteChanged;
+                        view.Click -= View_Click;
+                    }
                     break;
             }
         }
