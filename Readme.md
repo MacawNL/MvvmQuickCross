@@ -241,16 +241,16 @@ Here is how to create an Android Twitter app that demonstrates simple data bindi
 	private void Delete() { ... }
 	```
 </td></tr><tr><td><a href="#propdb2c">propdb2c</a></td><td>string Text</td><td>
-
-```csharp
-public string Text { ... }
-private void OnTextChanged() { ... }
-```
+	
+	```csharp
+	public string Text { ... }
+	private void OnTextChanged() { ... }
+	```
 </td></tr><tr><td><a href="#propdb">propdb</a></td><td>int CharactersLeft</td><td>
-
-```csharp
-public int CharactersLeft { ... }
-```
+	
+	```csharp
+	public int CharactersLeft { ... }
+	```
 </td></tr><tr><td><a href="#cmd">cmd</a></td><td>Send</td><td>
 
 ```csharp
