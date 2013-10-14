@@ -222,10 +222,10 @@ Here is how to create an Android Twitter app that demonstrates simple data bindi
 	<table><tr><td><b>Snippet</b></td><td><b>Parameters</b></td><td><b>Generated code</b></td></tr>
 	<tr><td><a href="#propdb2c">propdb2c</a></td><td>Tweet Tweet</td><td>
 
-```csharp
-public Tweet Tweet { ... }
-private void OnTweetChanged() { ... }
-```
+	```csharp
+	public Tweet Tweet { ... }
+	private void OnTweetChanged() { ... }
+	```
     </td></tr><tr><td><a href="#propdbcol">propdbcol</a></td><td>ObservableCollection Tweet TweetList</td><td>
 
 	```csharp
