@@ -253,8 +253,10 @@ public int CharactersLeft { ... }
 ```
     </td></tr><tr><td><a href="#cmd">cmd</a></td><td>Send</td><td>
     
-        public RelayCommand SendCommand { ... }
-        private void Send() { ... }
+```csharp
+public RelayCommand SendCommand { ... }
+private void Send() { ... }
+```
     </td></tr>
 	</table>
     	
@@ -293,7 +295,7 @@ public int CharactersLeft { ... }
         Text = "";
     }
 	```
-7.  Place this markup in the application project in **Resources\Layout\MainView.axml**:
+7.  In the application project, in the file **Resources\Layout\MainView.axml**, replace the existing markup with this:
 
 	```xml
 	<?xml version="1.0" encoding="utf-8"?>
