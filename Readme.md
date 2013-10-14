@@ -222,37 +222,37 @@ Here is how to create an Android Twitter app that demonstrates simple data bindi
 	<table>
 	<tr><td><b>Snippet</b></td><td><b>Parameters</b></td><td><b>Generated code</b></td></tr>
 	<tr><td><a href="#propdb2c">propdb2c</a></td><td>Tweet Tweet</td><td>
-		
+
 	```csharp
 	public Tweet Tweet { ... }
 	private void OnTweetChanged() { ... }
 	```
 	</td></tr><tr><td><a href="#propdbcol">propdbcol</a></td><td>ObservableCollection Tweet TweetList</td><td>
-		
+
 	```csharp
 	public ObservableCollection<Tweet> TweetList  { ... }
 	public bool TweetListHasItems { ... }
 	protected void UpdateTweetListHasItems() { ... }
 	```
 	</td></tr><tr><td><a href="#cmd">cmd</a></td><td>Delete</td><td>
-		
+
 	```csharp
 	public RelayCommand DeleteCommand { ... }
 	private void Delete() { ... }
 	```
 	</td></tr><tr><td><a href="#propdb2c">propdb2c</a></td><td>string Text</td><td>
-		
+
 	```csharp
 	public string Text { ... }
 	private void OnTextChanged() { ... }
 	```
 	</td></tr><tr><td><a href="#propdb">propdb</a></td><td>int CharactersLeft</td><td>
-	
+
 	```csharp
 	public int CharactersLeft { ... }
 	```
 	</td></tr><tr><td><a href="#cmd">cmd</a></td><td>Send</td><td>
-		
+
 	```csharp
 	public RelayCommand SendCommand { ... }
 	private void Send() { ... }
@@ -407,11 +407,7 @@ Here is how to create an Android Twitter app that demonstrates simple data bindi
 	</resources>
 	```
 
-11. Now you can run the app on your device and test the MainView. Notice how the 
-
-
-
-
+11. Now you can run the app on your device and test the MainView. Notice how the buttons are enabled and disabled based on the text length and selected item state, and how the selected list item is highlighted both from the UI and from code (when adding a new tweet)
 
 
 
