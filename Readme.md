@@ -235,11 +235,11 @@ Here is how to create an Android Twitter app that demonstrates simple data bindi
 	protected void UpdateTweetListHasItems() { ... }
 	```
 </td></tr><tr><td><a href="#cmd">cmd</a></td><td>Delete</td><td>
-
-```csharp
-public RelayCommand DeleteCommand { ... }
-private void Delete() { ... }
-```
+	
+	```csharp
+	public RelayCommand DeleteCommand { ... }
+	private void Delete() { ... }
+	```
 </td></tr><tr><td><a href="#propdb2c">propdb2c</a></td><td>string Text</td><td>
 
 ```csharp
