@@ -223,9 +223,9 @@ Here is how to create an Android Twitter app that demonstrates simple data bindi
 	<tr><td><b>Snippet</b></td><td><b>Parameters</b></td><td><b>Generated code</b></td></tr>
 	<tr><td><a href="#propdb2c">propdb2c</a></td><td>Tweet Tweet</td><td>
     
-```csharp
-public Tweet Tweet { ... }
-private void OnTweetChanged() { ... }
+	```csharp
+	public Tweet Tweet { ... }
+	private void OnTweetChanged() { ... }
 ```
 </td></tr><tr><td><a href="#propdbcol">propdbcol</a></td><td>ObservableCollection Tweet TweetList</td><td>
     
@@ -408,7 +408,7 @@ private void Send() { ... }
 	</resources>
 	```
 
-11. Now you can run the app on your device and test the MainView. Notice how the buttons are enabled and disabled based on the text length and selected item state, and how the selected list item is highlighted both from the UI and from code (when adding a new tweet)
+11. Now you can run the app on your device and test the MainView. Notice how the buttons are enabled and disabled based on the text length and selected item state, and how the selected list item is highlighted both from the UI and from code (when adding a new tweet).
 
 
 
