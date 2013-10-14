@@ -1,5 +1,5 @@
 NuGet package: [http://nuget.org/packages/MvvmQuickCross](http://nuget.org/packages/mvvmquickcross)
-> NOTE: This readme describes version 1.5.1, which is the current NuGet release.
+> NOTE: This readme describes version 1.5.2, which is the current NuGet release.
 
 # MvvmQuickCross #
 Quickly build cross-platform apps in C# with the MVVM pattern and [Xamarin](http://xamarin.com/).
@@ -13,6 +13,8 @@ MvvmQuickCross aims to leave you in full control; it does not get in the way if 
 
 ## News ##
 **Coming up**: Guidance on using the Android specific features in release 1.5.1 (Android simple data binding). Next planned release: 2.0, which will add simple iOS data binding and an iOS example app.
+
+**October 14, 2013**: Version 1.5.2 is published. This release adds support for command enabling/disabling and for list highlighting in Android, and more documentation.
 
 **October 9, 2013**: Version 1.5.1 is published. This release adds navigation code generation, Windows Phone support and more documentation.
 
@@ -428,7 +430,7 @@ Here is how to create an Android Twitter app that demonstrates simple data bindi
 
 11. Now you can run the app on your device and test the MainView. Notice how the Send and Delete buttons are enabled and disabled based on the text length and selected item state. Also note how the selected list item is highlighted both from the UI when clicked and from code (when adding a new tweet).
 
-Now you have created a working app with MvvmQuickCross. Note that the only code that you needed to write was in the viewmodel. All that is needed to get data binding working, was some naming conventions in the markup and some binding parameters in the Tag markup.
+Now you have created a working app with MvvmQuickCross. Note that the only code that you needed to write is in the viewmodel. All that is needed to get data binding working, is using some naming conventions in the markup and specifying some binding parameters in the Tag.
 
 TODO: Document - Naming conventions; Binding parameters in markup Tag; Binding parameters in code; Customizing and extending data binding.
 
