@@ -252,11 +252,11 @@ Here is how to create an Android Twitter app that demonstrates simple data bindi
 	public int CharactersLeft { ... }
 	```
 </td></tr><tr><td><a href="#cmd">cmd</a></td><td>Send</td><td>
-	
-	```csharp
-	public RelayCommand SendCommand { ... }
-	private void Send() { ... }
-	```
+        
+        ```csharp
+        public RelayCommand SendCommand { ... }
+        private void Send() { ... }
+        ```
 </td></tr></table>
     	
 6.  Add this code in the generated MainModel methods:
