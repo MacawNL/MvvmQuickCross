@@ -296,7 +296,23 @@ Here is how to create an Android Twitter app that demonstrates simple data bindi
         Text = "";
     }
 	```
-7.  In the application project, in the file **Resources\Layout\MainView.axml**, replace the existing markup with this:
+
+7.  The MainViewModel.cs file also contains a **MainViewModelDesign** class where you can put some hardcoded viewmodel data. Put this code in the MainViewModelDesign constructor:
+		
+	```csharp
+    public MainViewModelDesign()
+    {
+        Text = "Text for a new tweet";
+        var now = DateTime.Now;
+        TweetList.Insert(0, new Tweet { Text = "Creating a simple Twitter app for Android with MvvmQuickCross", UserName = "Me", CreatedAt = now.AddSeconds(-115) });
+        TweetList.Insert(0, new Tweet { Text = "Created an Android solution with an application and a library project", UserName = "Me", CreatedAt = now.AddSeconds(-63) });
+        TweetList.Insert(0, new Tweet { Text = "Added Tweet model class", UserName = "Me", CreatedAt = now.AddSeconds(-45) });
+        TweetList.Insert(0, new Tweet { Text = "Added viewmodel properties and commands with code snippets", UserName = "Me", CreatedAt = now.AddSeconds(-25) });
+        TweetList.Insert(0, new Tweet { Text = "Added some hardcoded design data fot the viewmodel", UserName = "Me", CreatedAt = now.AddSeconds(-1) });
+    }
+	```
+
+8.  In the application project, in the file **Resources\Layout\MainView.axml**, replace the existing markup with this:
 
 	```xml
 	<?xml version="1.0" encoding="utf-8"?>
@@ -410,11 +426,11 @@ Here is how to create an Android Twitter app that demonstrates simple data bindi
 	</resources>
 	```
 
-11. Now you can run the app on your device and test the MainView. Notice how the buttons are enabled and disabled based on the text length and selected item state, and how the selected list item is highlighted both from the UI and from code (when adding a new tweet).
+11. Now you can run the app on your device and test the MainView. Notice how the Send and Delete buttons are enabled and disabled based on the text length and selected item state. Also note how the selected list item is highlighted both from the UI when clicked and from code (when adding a new tweet).
 
+Now you have created a working app with MvvmQuickCross. Note that the only code that you needed to write was in the viewmodel. All that is needed to get data binding working, was some naming conventions in the markup and some binding parameters in the Tag markup.
 
-
-
+TODO: Document - Naming conventions; Binding parameters in markup Tag; Binding parameters in code; Customizing and extending data binding.
 
 TODO: Document how to use the Android specific MvvmQuickCross features (Android Simple Data Binding).
 
