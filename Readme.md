@@ -347,7 +347,69 @@ Here is how to create an Android Twitter app that demonstrates simple data bindi
 	    </LinearLayout>
 	</LinearLayout>
 	```
-8. TODO
+8. Add a new Android Layout named **Resources\Layout\TweetListItem.axml**, with this markup:
+
+	```xml
+	<?xml version="1.0" encoding="utf-8"?>
+	<mvvmquickcross.CheckableLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:id="@+id/TweetListItem"
+	    android:orientation="vertical"
+	    android:background="@drawable/CustomSelector"
+	    android:addStatesFromChildren="true"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content">
+	    <LinearLayout
+	        android:orientation="horizontal"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content">
+	        <TextView
+	            android:id="@+id/TweetListItem_UserName"
+	            android:text="Me*"
+	            android:textAppearance="?android:attr/textAppearanceSmall"
+	            android:layout_width="40dp"
+	            android:layout_height="wrap_content" />
+	        <TextView
+	            android:id="@+id/TweetListItem_CreatedAt"
+	            android:text="friday october 11, 2013 14:08:2*"
+	            android:textAppearance="?android:attr/textAppearanceSmall"
+	            android:gravity="right"
+	            android:layout_width="0dp"
+	            android:layout_weight="1"
+	            android:layout_height="wrap_content" />
+	    </LinearLayout>
+	    <TextView
+	        android:id="@+id/TweetListItem_Text"
+	        android:text="Some example text*"
+	        android:textAppearance="?android:attr/textAppearanceMedium"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content" />
+	</mvvmquickcross.CheckableLinearLayout>
+	```
+    Note that the CheckableLinearLayout view is a simple extension of the standard LinearLayout view that implements the ICheckable to better support highlighting checked list items. If you dont care about highlighting checked items, you can use the standard LinearLayout (or any other layout view) for data binding as well.
+
+9. Add a new XML File named **Resources\Drawable\CustomSelector.xml**, with this markup:
+
+	```xml
+	<?xml version="1.0" encoding="utf-8"?>
+	<selector xmlns:android="http://schemas.android.com/apk/res/android">
+	  <item android:state_checked="true" android:drawable="@color/cellchecked" />
+	  <item android:drawable="@color/cellback" />
+	</selector>
+	```
+
+10. Add a new XML File named **Resources\Values\Colors.xml**, with this markup:
+
+	```xml
+	<?xml version="1.0" encoding="utf-8"?>
+	<resources>
+	  <color name="cellback">#00000000</color>
+	  <color name="cellchecked">#FF0000FF</color>
+	</resources>
+	```
+
+11. Now you can run the app on your device and test the MainView. Notice how the 
+
+
 
 
 
