@@ -257,9 +257,9 @@ public int CharactersLeft { ... }
 public RelayCommand SendCommand { ... }
 private void Send() { ... }
 ```
-    </td></tr></table>
-	
-6. Add this code in the generated MainModel methods:
+</td></tr></table>
+    	
+6.  Add this code in the generated MainModel methods:
 		
 	```csharp
     public MainViewModel()
@@ -294,7 +294,7 @@ private void Send() { ... }
         Text = "";
     }
 	```
-7. Place this markup in the application project in **Resources\Layout\MainView.axml**:
+7.  Place this markup in the application project in **Resources\Layout\MainView.axml**:
 
 	```xml
 	<?xml version="1.0" encoding="utf-8"?>
@@ -348,7 +348,7 @@ private void Send() { ... }
 	    </LinearLayout>
 	</LinearLayout>
 	```
-8. Add a new Android Layout named **Resources\Layout\TweetListItem.axml**, with this markup:
+8.  Add a new Android Layout named **Resources\Layout\TweetListItem.axml**, with this markup:
 
 	```xml
 	<?xml version="1.0" encoding="utf-8"?>
@@ -388,7 +388,7 @@ private void Send() { ... }
 	```
     Note that the CheckableLinearLayout view is a simple extension of the standard LinearLayout view that implements the ICheckable to better support highlighting checked list items. If you dont care about highlighting checked items, you can use the standard LinearLayout (or any other layout view) for data binding as well.
 
-9. Add a new XML File named **Resources\Drawable\CustomSelector.xml**, with this markup:
+9.  Add a new XML File named **Resources\Drawable\CustomSelector.xml**, with this markup:
 
 	```xml
 	<?xml version="1.0" encoding="utf-8"?>
