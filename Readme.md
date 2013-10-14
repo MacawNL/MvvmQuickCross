@@ -225,26 +225,26 @@ Here is how to create an Android Twitter app that demonstrates simple data bindi
         </tr>
         <tr>
             <td><a href="#propdb2c">propdb2c</a></td><td>Tweet Tweet</td><td>
-				public Tweet Tweet { ... }
+				public Tweet Tweet { ... }<br />
 				private void OnTweetChanged() { ... }
             </td>
         </tr>
         <tr>
             <td><a href="#propdbcol">propdbcol</a></td><td>ObservableCollection Tweet TweetList</td><td>
-				public ObservableCollection<Tweet> TweetList  { ... }
-				public bool TweetListHasItems { ... }
+				public ObservableCollection<Tweet> TweetList  { ... }<br />
+				public bool TweetListHasItems { ... }<br />
 				protected void UpdateTweetListHasItems() { ... }
             </td>
         </tr>
         <tr>
             <td><a href="#cmd">cmd</a></td><td>Delete</td><td>
-				public RelayCommand DeleteCommand { ... }
+				public RelayCommand DeleteCommand { ... }<br />
 				private void Delete() { ... }
             </td>
         </tr>
         <tr>
             <td><a href="#propdb2c">propdb2c</a></td><td>string Text</td><td>
-				public string Text { ... }
+				public string Text { ... }<br />
 				private void OnTextChanged() { ... }
             </td>
         </tr>
@@ -255,7 +255,7 @@ Here is how to create an Android Twitter app that demonstrates simple data bindi
         </tr>
         <tr>
             <td><a href="#cmd">cmd</a></td><td>Send</td><td>
-				public RelayCommand SendCommand { ... }
+				public RelayCommand SendCommand { ... }<br />
 				private void Send() { ... }
            </td>
         </tr>
