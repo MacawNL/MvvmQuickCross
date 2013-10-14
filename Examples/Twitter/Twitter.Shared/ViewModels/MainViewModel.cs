@@ -45,7 +45,7 @@ namespace Twitter.Shared.ViewModels
 
         private void Send()
         {
-            var newTweet = new Tweet { Text = this.Text, CreatedAt = DateTime.Now };
+            var newTweet = new Tweet { Text = this.Text, CreatedAt = DateTime.Now, UserName="Me" };
             TweetList.Insert(0, newTweet);
             Tweet = newTweet;
             Text = "";
