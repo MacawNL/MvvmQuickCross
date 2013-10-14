@@ -257,7 +257,7 @@ public int CharactersLeft { ... }
 public RelayCommand SendCommand { ... }
 private void Send() { ... }
 ```
-</td></tr></table>
+    </td></tr></table>
 	
 6. Add this code in the generated MainModel methods:
 		
@@ -295,6 +295,7 @@ private void Send() { ... }
     }
 	```
 7. Place this markup in the application project in **Resources\Layout\MainView.axml**:
+
 	```xml
 	<?xml version="1.0" encoding="utf-8"?>
 	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
