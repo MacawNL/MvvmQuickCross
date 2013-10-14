@@ -253,10 +253,8 @@ public int CharactersLeft { ... }
 ```
     </td></tr><tr><td><a href="#cmd">cmd</a></td><td>Send</td><td>
     
-```csharp
-public RelayCommand SendCommand { ... }
-private void Send() { ... }
-```
+        public RelayCommand SendCommand { ... }
+        private void Send() { ... }
     </td></tr>
 	</table>
     	
