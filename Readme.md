@@ -196,7 +196,7 @@ Below is an overview of using MvvmQuickCross with Xamarin.Android. For a more de
 
 ### Create an Android App ###
 Here is how to create an Android Twitter app that demonstrates simple data binding:
-> WORK IN PROGRESS: this example is in writing; eta is October 11, 2013.
+> Note that the complete source for this example is available in this repository, [here](http://github.com/MacawNL/MvvmQuickCross/tree/master/Examples/Twitter).
 
 1.  Create a working Android app by following steps 1 though 4 of [Getting Started](#getting-started) above - choose an **Android Application** project named "Twitter" and an **Android Class Library** project named "Twitter.Shared".
 
@@ -428,9 +428,72 @@ Here is how to create an Android Twitter app that demonstrates simple data bindi
 	</resources>
 	```
 
-11. Now you can run the app on your device and test the MainView. Notice how the Send and Delete buttons are enabled and disabled based on the text length and selected item state. Also note how the selected list item is highlighted both from the UI when clicked and from code (when adding a new tweet).
+11. Run the app and test the MainView. Notice how the Send and Delete buttons are enabled and disabled based on the text length and selected item state, and how the characters remaining count is updated as you type. Also note how the selected list item is highlighted both from the UI when tapped, and from code when adding a new tweet.
 
-Now you have created a working app with MvvmQuickCross. Note that the only code that you needed to write is in the viewmodel. All that is needed to get data binding working, is using some naming conventions in the markup and specifying some binding parameters in the Tag.
+You have created a working app with MvvmQuickCross. Note that the only code that you needed to write is in the viewmodel; no Android view or list adapter code is needed. To get data binding working, the markup follows some naming conventions and specifies some binding parameters in the Tag. 
+
+### Android Data Binding ###
+An Android data bindings is a one-on-one binding between an Android view, such as a TextBox or Button, and a viewmodel property or command. You can specify bindings with (a combination of):
+
+1. Code in the activity or fragment that creates the containing view
+2. Id naming convention in the view markup
+3. Tag binding parameters in the view markup
+
+#### Android Id Naming Convention ####
+To bind a view to a viewmodel property without using code, name the view **id** like this:
+
+```xml
+android:id="@+id/<activity or fragment class name>_<viewmodel property or command>"
+```
+E.g, the MainView in the Twitter example above is created by this class:
+
+```csharp
+public class MainView : ActivityViewBase<MainViewModel> { ... }
+```
+And in the markup this is how a view is bound to the CharactersLeft property on the view model:
+
+```xml
+<TextView android:id="@+id/MainView_CharactersLeft"	... />
+```
+Note that instead of using this id naming convention, you can specify the view in code. You can also change the default name prefix.
+
+#### Android Binding Parameters in Tag ####
+These are the binding parameters that you can specify in the view tag:
+
+```xml
+android:tag="... {Binding propertyName, Mode=OneWay|TwoWay|Command} {CommandParameter ListId=<view Id>} {List ItemsSource=listPropertyName, ItemIsValue=false|true, ItemTemplate=listItemTemplateName, ItemValueId=listItemValueId} ..."
+```
+
+All of these parameters are optional. You can also put any additional text outside the { } in the tag if you want to. Note that you can also specify binding parameters through code instead of in the tag attribute.
+
+**propertyName** is known by default from the naming convention in the view Id = &lt;rootview prefix&gt;&lt;propertyName&gt;; the default for the rootview prefix is the rootview class name + "_". Note that viewmodel commands are just a special type of viewmodel property, so you can use the propertyName to specify a command name as well.
+
+**Mode** default is **OneWay**. The mode specifies if you want one-way data binding (the viewmodel property updates the view - e.g. a display-only TextView), two-way data binding (the viewmodel property updates the view and vice versa, e.g. an editable EditText), or command binding (e.g. a Button).
+
+**ListId** passes the selected item of the specified adapter view as the command parameter. The specified view can be any view type that is derived from AdapterView (ListView, Spinner etc). E.g. this Remove button passes the selected item from the view with id=SampleItemListView_Items as the command parameter, when the button is tapped:
+
+```xml
+<ListView
+    android:id="@+id/SampleItemListView_Items"
+    android:tag="{List ItemsSource=Items, ItemTemplate=ListItem}"
+    android:choiceMode="singleChoice"
+    android:listSelector="@android:color/holo_blue_dark"
+	... />
+<Button
+    android:id="@+id/SampleItemListView_RemoveItemCommand"
+    android:text="Remove"
+    android:tag="{Binding Mode=Command} {CommandParameter ListId=SampleItemListView_Items}"
+	... />
+```
+
+
+Additional defaults for views derived from AdapterView (i.e. lists):
+  ItemsSource = propertyName + "List"
+  ItemIsValue = false
+  ItemTemplate = ItemsSource + "Item"
+  ItemValueId : if ItemIsValue = true then the default for ItemValueId = ItemTemplate
+
+
 
 TODO: Document - Naming conventions; Binding parameters in markup Tag; Binding parameters in code; Customizing and extending data binding.
 
