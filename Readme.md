@@ -461,14 +461,27 @@ Note that instead of using this id naming convention, you can specify the view i
 These are the binding parameters that you can specify in the view tag:
 
 ```xml
-android:tag="... {Binding propertyName, Mode=OneWay|TwoWay|Command} {CommandParameter ListId=&lt;view Id&gt;} {List ItemsSource=listPropertyName, ItemIsValue=false|true, ItemTemplate=listItemTemplateName, ItemValueId=listItemValueId} ..."
+android:tag="... {Binding propertyName, Mode=OneWay|TwoWay|Command} {CommandParameter ListId=<view-Id>} {List ItemsSource=listPropertyName, ItemIsValue=false|true, ItemTemplate=listItemTemplateName, ItemValueId=listItemValueId} ..."
 ```
 
 All of these parameters are optional. You can also put any additional text outside the { } in the tag if you want to. Note that you can also specify binding parameters through code instead of in the tag attribute.
 
 **Binding propertyName** is known by default from the naming convention for the view **id** = &lt;rootview prefix&gt;&lt;propertyName&gt;; the default for the rootview prefix is the rootview class name + "_". Note that viewmodel commands are just a special type of viewmodel property, so you can use the propertyName to specify a command name as well.
 
-**Binding Mode** is **OneWay** by default. The mode specifies if you want one-way data binding (the viewmodel property updates the view - e.g. a display-only TextView), two-way data binding (the viewmodel property updates the view and vice versa, e.g. an editable EditText), or command binding (e.g. a Button).
+**Binding Mode** is **OneWay** by default. The mode specifies:
+
+- OneWay data binding where the viewmodel property updates the view - e.g. a display-only TextView. The bound property can be generated with the propdb1 or propdbcol code snippet.
+- TwoWay data binding where the viewmodel property updates the view and vice versa, e.g. an editable EditText. The bound property can be generated with the propdb2, propdb2c or propdbcol code snippet.
+- Command binding (e.g. a Button). The bound command can be generated with the cmd or cmdp code snippet.
+
+Note that you can also use the binding mode Command in a view that derives from AdapterView (ListView, Spinner etc). When an item in the list is selected or checked, the bound command is invoked with the selected item as the command parameter. E.g. in below markup, selecting an item in the list navigates to a detail view of the item:
+
+```xml
+<ListView
+    android:id="@+id/ProductsView_ProductList"
+    android:tag="{Binding SelectProductCommand, Mode=Command} {List ItemsSource=ProductList}"
+	... />
+```
 
 **CommandParameter ListId** passes the selected item of the specified adapter view as the command parameter. The specified view can be any view type that is derived from AdapterView (ListView, Spinner etc). E.g. this Remove button passes the selected item from the view with id=SampleItemListView_Items as the command parameter, when the button is tapped:
 
@@ -500,7 +513,7 @@ private void RemoveItem(object parameter)
 
 ```
 
-The remaining **List** binding parameters are for use with views derived from AdapterView (ListView, Spinner etc):
+The **List** binding parameters are for use with views derived from AdapterView (ListView, Spinner etc):
 
 **List ItemsSource** specifies the name of the viewmodel collection property that contains the list items. The property must implement the standard .NET **IList** interface. If the property also implements the standard .NET **INotifyCollectionChanged** interface (e.g an **ObservableCollection**), the view will automatically reflect added, replaced or removed items. The default value of ItemsSource is **propertyName** + "**List**".
 
