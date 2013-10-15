@@ -433,7 +433,7 @@ Here is how to create an Android Twitter app that demonstrates simple data bindi
 You have created a working app with MvvmQuickCross. Note that the only code that you needed to write is in the viewmodel; no Android view or list adapter code is needed. To get data binding working, the markup follows some naming conventions and specifies some binding parameters in the Tag. 
 
 ### Android Data Binding ###
-An Android data bindings is a one-on-one binding between an Android view, such as a TextBox or Button, and a viewmodel property or command. You can specify bindings with (a combination of):
+An Android data binding is a one-on-one binding between an Android view, such as a TextBox or Button, and a viewmodel property or command. You can specify bindings with (a combination of):
 
 1. Code in the activity or fragment that creates the containing view
 2. Id naming convention in the view markup
@@ -443,14 +443,14 @@ An Android data bindings is a one-on-one binding between an Android view, such a
 To bind a view to a viewmodel property without using code, name the view **id** like this:
 
 ```xml
-android:id="@+id/<activity or fragment class name>_<viewmodel property or command>"
+android:id="@+id/<activity-or-fragment-class-name>_<viewmodel-property-or-command-name>"
 ```
 E.g, the MainView in the Twitter example above is created by this class:
 
 ```csharp
 public class MainView : ActivityViewBase<MainViewModel> { ... }
 ```
-And in the markup this is how a view is bound to the CharactersLeft property on the view model:
+And in the markup this is how a child view is bound to the CharactersLeft property on the view model:
 
 ```xml
 <TextView android:id="@+id/MainView_CharactersLeft"	... />
@@ -461,16 +461,16 @@ Note that instead of using this id naming convention, you can specify the view i
 These are the binding parameters that you can specify in the view tag:
 
 ```xml
-android:tag="... {Binding propertyName, Mode=OneWay|TwoWay|Command} {CommandParameter ListId=<view Id>} {List ItemsSource=listPropertyName, ItemIsValue=false|true, ItemTemplate=listItemTemplateName, ItemValueId=listItemValueId} ..."
+android:tag="... {Binding propertyName, Mode=OneWay|TwoWay|Command} {CommandParameter ListId=&lt;view Id&gt;} {List ItemsSource=listPropertyName, ItemIsValue=false|true, ItemTemplate=listItemTemplateName, ItemValueId=listItemValueId} ..."
 ```
 
 All of these parameters are optional. You can also put any additional text outside the { } in the tag if you want to. Note that you can also specify binding parameters through code instead of in the tag attribute.
 
-**propertyName** is known by default from the naming convention in the view Id = &lt;rootview prefix&gt;&lt;propertyName&gt;; the default for the rootview prefix is the rootview class name + "_". Note that viewmodel commands are just a special type of viewmodel property, so you can use the propertyName to specify a command name as well.
+**Binding propertyName** is known by default from the naming convention for the view **id** = &lt;rootview prefix&gt;&lt;propertyName&gt;; the default for the rootview prefix is the rootview class name + "_". Note that viewmodel commands are just a special type of viewmodel property, so you can use the propertyName to specify a command name as well.
 
-**Mode** default is **OneWay**. The mode specifies if you want one-way data binding (the viewmodel property updates the view - e.g. a display-only TextView), two-way data binding (the viewmodel property updates the view and vice versa, e.g. an editable EditText), or command binding (e.g. a Button).
+**Binding Mode** is **OneWay** by default. The mode specifies if you want one-way data binding (the viewmodel property updates the view - e.g. a display-only TextView), two-way data binding (the viewmodel property updates the view and vice versa, e.g. an editable EditText), or command binding (e.g. a Button).
 
-**ListId** passes the selected item of the specified adapter view as the command parameter. The specified view can be any view type that is derived from AdapterView (ListView, Spinner etc). E.g. this Remove button passes the selected item from the view with id=SampleItemListView_Items as the command parameter, when the button is tapped:
+**CommandParameter ListId** passes the selected item of the specified adapter view as the command parameter. The specified view can be any view type that is derived from AdapterView (ListView, Spinner etc). E.g. this Remove button passes the selected item from the view with id=SampleItemListView_Items as the command parameter, when the button is tapped:
 
 ```xml
 <ListView
@@ -486,16 +486,37 @@ All of these parameters are optional. You can also put any additional text outsi
 	... />
 ```
 
+The passed command parameter is the selected item object from the bound list, e.g. see the corresponding viewmodel code:
 
-Additional defaults for views derived from AdapterView (i.e. lists):
-  ItemsSource = propertyName + "List"
-  ItemIsValue = false
-  ItemTemplate = ItemsSource + "Item"
-  ItemValueId : if ItemIsValue = true then the default for ItemValueId = ItemTemplate
+```csharp
+public ObservableCollection<SampleItem> Items { ... }
+public RelayCommand RemoveItemCommand { ... }
 
+private void RemoveItem(object parameter)
+{
+    var item = (SampleItem)parameter;
+	...
+}
 
+```
 
-TODO: Document - Naming conventions; Binding parameters in markup Tag; Binding parameters in code; Customizing and extending data binding.
+The remaining **List** binding parameters are for use with views derived from AdapterView (ListView, Spinner etc):
+
+**List ItemsSource** specifies the name of the viewmodel collection property that contains the list items. The property must implement the standard .NET **IList** interface. If the property also implements the standard .NET **INotifyCollectionChanged** interface (e.g an **ObservableCollection**), the view will automatically reflect added, replaced or removed items. The default value of ItemsSource is **propertyName** + "**List**".
+
+The items in an ItemsSource viewmodel collection property can be:
+
+- An object with fields or properties (e.g. a POCO model object)
+- An 'ValueItem' object, meaning an object that implements **ToString()** to present the value of the entire object as a human-readable text
+- A viewmodel object that has data-bindable properties and/or commands. This is also called **composite viewmodels**, which makes it possible to e.g. automatically display changes of individual fields within existing list item objects.
+
+**List ItemTemplate** specified the name of the Android layout that represents a list item. E.g. the value "TweetListItem" corresponds to the view markup in the file Resources\Layout\TweetListItem.axml. The default value of ItemTemplate is the value of **ItemsSource** + "**Item**".
+
+**List ItemIsValue** is a boolean flag indicating whether the list item should be displayed as a single text string, by calling the **ToString()** method on the object. If this flag is set to **true**, the **ItemValueId** binding parameter is also used. The default for ItemIsValue is **false**.
+
+**List ItemValueId** if **ItemIsValue** is **true**, this parameter specifies the id of the child view within the item template view that should be used to display the object text. The default value of ItemValueId is the value of **ItemTemplate**. 
+
+TODO: Binding parameters in code; Customizing and extending data binding; Android helpers and checkable layouts.
 
 TODO: Document how to use the Android specific MvvmQuickCross features (Android Simple Data Binding).
 
