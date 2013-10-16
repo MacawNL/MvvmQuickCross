@@ -466,9 +466,11 @@ android:tag="... {Binding propertyName, Mode=OneWay|TwoWay|Command} {CommandPara
 
 All of these parameters are optional. You can also put any additional text outside the { } in the tag if you want to. Note that you can also specify binding parameters through code instead of in the tag attribute.
 
-**Binding propertyName** is known by default from the naming convention for the view **id** = &lt;rootview prefix&gt;&lt;propertyName&gt;; the default for the rootview prefix is the rootview class name + "_". Note that viewmodel commands are just a special type of viewmodel property, so you can use the propertyName to specify a command name as well.
+##### Binding propertyName #####
+Is known by default from the naming convention for the view **id** = &lt;rootview prefix&gt;&lt;propertyName&gt;; the default for the rootview prefix is the rootview class name + "_". Note that viewmodel commands are just a special type of viewmodel property, so you can use the propertyName to specify a command name as well.
 
-**Binding Mode** is **OneWay** by default. The mode specifies:
+##### Binding Mode #####
+Is **OneWay** by default. The mode specifies:
 
 - OneWay data binding where the viewmodel property updates the view - e.g. a display-only TextView. The bound property can be generated with the propdb1 or propdbcol code snippet.
 - TwoWay data binding where the viewmodel property updates the view and vice versa, e.g. an editable EditText. The bound property can be generated with the propdb2, propdb2c or propdbcol code snippet.
@@ -483,7 +485,8 @@ Note that you can also use the binding mode Command in a view that derives from 
 	... />
 ```
 
-**CommandParameter ListId** passes the selected item of the specified adapter view as the command parameter. The specified view can be any view type that is derived from AdapterView (ListView, Spinner etc). E.g. this Remove button passes the selected item from the view with id=SampleItemListView_Items as the command parameter, when the button is tapped:
+##### CommandParameter ListId #####
+Passes the selected item of the specified adapter view as the command parameter. The specified view can be any view type that is derived from AdapterView (ListView, Spinner etc). E.g. this Remove button passes the selected item from the view with id=SampleItemListView_Items as the command parameter, when the button is tapped:
 
 ```xml
 <ListView
@@ -515,7 +518,8 @@ private void RemoveItem(object parameter)
 
 The **List** binding parameters are for use with views derived from AdapterView (ListView, Spinner etc):
 
-**List ItemsSource** specifies the name of the viewmodel collection property that contains the list items. The property must implement the standard .NET **IList** interface. If the property also implements the standard .NET **INotifyCollectionChanged** interface (e.g an **ObservableCollection**), the view will automatically reflect added, replaced or removed items. The default value of ItemsSource is **propertyName** + "**List**".
+##### List ItemsSource #####
+Specifies the name of the viewmodel collection property that contains the list items. The property must implement the standard .NET **IList** interface. If the property also implements the standard .NET **INotifyCollectionChanged** interface (e.g an **ObservableCollection**), the view will automatically reflect added, replaced or removed items. The default value of ItemsSource is **propertyName** + "**List**".
 
 The items in an ItemsSource viewmodel collection property can be:
 
@@ -523,11 +527,60 @@ The items in an ItemsSource viewmodel collection property can be:
 - An 'ValueItem' object, meaning an object that implements **ToString()** to present the value of the entire object as a human-readable text
 - A viewmodel object that has data-bindable properties and/or commands. This is also called **composite viewmodels**, which makes it possible to e.g. automatically display changes of individual fields within existing list item objects.
 
-**List ItemTemplate** specified the name of the Android layout that represents a list item. E.g. the value "TweetListItem" corresponds to the view markup in the file Resources\Layout\TweetListItem.axml. The default value of ItemTemplate is the value of **ItemsSource** + "**Item**".
+##### List ItemTemplate #####
+Specifies the name of the Android layout that represents a list item. E.g. the value "TweetListItem" corresponds to the view markup in the file Resources\Layout\TweetListItem.axml. The default value of ItemTemplate is the value of **ItemsSource** + "**Item**".
 
-**List ItemIsValue** is a boolean flag indicating whether the list item should be displayed as a single text string, by calling the **ToString()** method on the object. If this flag is set to **true**, the **ItemValueId** binding parameter is also used. The default for ItemIsValue is **false**.
+##### List ItemIsValue #####
+Is a boolean flag indicating whether the list item should be displayed as a single text string, by calling the **ToString()** method on the object. If this flag is set to **true**, the **ItemValueId** binding parameter is also used. The default for ItemIsValue is **false**.
 
-**List ItemValueId** if **ItemIsValue** is **true**, this parameter specifies the id of the child view within the item template view that should be used to display the object text. The default value of ItemValueId is the value of **ItemTemplate**. 
+##### List ItemValueId #####
+If **ItemIsValue** is **true**, this parameter specifies the id of the child view within the item template view that should be used to display the object text. The default value of ItemValueId is the value of **ItemTemplate**. 
+
+#### Android Binding Parameters in Code ####
+As an alternative to using the Id naming convention and tag texts in markup, you can also specify bindings in code in an optional parameter of the **Initialize()** method. The Initialize method is implemented in the view base classes, and it is called in your view code from the **OnCreate()** (for an activity view) or **OnCreateView()** (for a fragment view) method. Here is an example of specifying binding parameters in code:
+
+```csharp
+var spinner = FindViewById<Android.Widget.Spinner>(Resource.Id.OrderView_DeliveryLocation);
+spinner.Adapter = new DataBindableListAdapter<string>(LayoutInflater, 
+    itemTemplateResourceId: Resource.Layout.TextListItem, 
+    idPrefix:               "TextListItem_", 
+    itemValueResourceId:    Resource.Id.TextListItem);
+
+var bindingsParameters = new BindingParameters[] {
+   new BindingParameters { 
+       Mode                                    = BindingMode.TwoWay, 
+       View                                    = spinner, 
+       PropertyName                            = OrderViewModel.PROPERTYNAME_DeliveryLocation, 
+       ListPropertyName                        = OrderViewModel.PROPERTYNAME_DeliveryLocationList, 
+       CommandParameterSelectedItemAdapterView = null
+   }
+};
+
+Initialize(
+	FindViewById(Resource.Id.OrderView), CloudAuctionApplication.Instance.OrderViewModel, 
+	bindingsParameters, 
+	idPrefix: "OrderView_"
+);
+```
+You can specify some or all of the bindings, and in each binding some or all of the binding parameters. If you also specify parameters for a binding in a markup tag, those will override or supplement any parameters that you specify in code.
+
+Note that you do not need to use the view id naming convention, since you specify a view instance in the **View** parameter. You could even create the view entirely in code and not even give it an id.
+
+The common binding parameters are specified in the Initialize call, while the List binding parameters are specified when constructing a data bindable list adapter for an AdapterView. When you use markup for data bindings and an AdapterView does not have an adapter assigned to it, a data bindable adapter is created and assigned to the AdapterView automatically.
+
+Here is how the code binding parameters correspond to the tag binding parameters:
+<table>
+<tr><td colspan="2"><b>Code</b></td><td colspan="2"><b>Markup</b></td></tr>
+<tr><td>BindingParameters</td><td>Mode</td><td>Binding</td><td><a href = "#">Mode</a></td></tr>
+<tr><td></td><td>View</td><td></td><td><a href = "#">id naming convention</a></td></tr>
+<tr><td></td><td>PropertyName</td><td>Binding</td><td><a href = "#">property name</a></td></tr>
+<tr><td></td><td>ListPropertyName</td><td>List</td><td><a href = "#">ItemsSource</a></td></tr>
+<tr><td></td><td>CommandParameterSelectedItemAdapterView</td><td>CommandParameter</td><td><a href = "#">ListId</a></td></tr>
+<tr><td>DataBindableListAdapter</td><td>itemTemplateResourceId</td><td>List</td><td><a href = "#">ItemTemplate</a></td></tr>
+<tr><td></td><td>itemValueResourceId</td><td>List</td><td><a href = "#">ItemValueId</a></td></tr>
+<tr><td></td><td>idPrefix</td><td></td><td><a href = "#">id naming convention</a></td></tr>
+<tr><td>Initialize</td><td>idPrefix</td><td></td><td><a href = "#">id naming convention</a></td></tr>
+</table>
 
 TODO: Binding parameters in code; Customizing and extending data binding; Android helpers and checkable layouts.
 
