@@ -745,7 +745,7 @@ public class OrderView : ListActivityViewBase<OrderViewModel>
 	...
 }
 ```
-It should take no more than a minute. To complete this, you could also [add a custom view template](#customizing-android-views) for this new view type.
+It should take no more than a minute. To complete this, you could also [add a custom view template](#customizing-and-extending-command-templates) for this new view type.
 
 TODO: Describe Android helpers and checkable layouts, View Lifecycle support
 
