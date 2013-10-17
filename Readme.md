@@ -189,13 +189,15 @@ public sealed class _APPNAME_Application : ApplicationBase
 
     public void ContinueTo_VIEWNAME_(bool skipNavigation = false)
     {
-        if (_VIEWNAME_ViewModel == null) _VIEWNAME_ViewModel = new _VIEWNAME_ViewModelDesign(); // TODO: Once _VIEWNAME_ViewModel has runtime data, instantiate that instead of _VIEWNAME_ViewModelDesign
-        // Any actions to update the viewmodel go here
-        if (!skipNavigation) RunOnUIThread(() => _navigator.NavigateTo_VIEWNAME_View(CurrentNavigationContext));
+        if (_VIEWNAME_ViewModel == null) _VIEWNAME_ViewModel = new _VIEWNAME_ViewModelDesign();
+        if (!skipNavigation) RunOnUIThread(
+			() => _navigator.NavigateTo_VIEWNAME_View(CurrentNavigationContext)
+		);
     }
-     * The skipNavigation parameter is needed in cases where the OS has already navigated to the view for you;
-     * in that case you only need to initialize the viewmodel.
-     * Note that the New-View command adds the above code automatically (see http://github.com/MacawNL/MvvmQuickCross#new-view). */
+     * The skipNavigation parameter is needed in cases where the OS has already navigated
+     * to the view for you; in that case you only need to initialize the viewmodel.
+     * Note that the New-View command adds the above code automatically 
+     * (see http://github.com/MacawNL/MvvmQuickCross#new-view). */
 }
 ```
 The format of an inline template is:
@@ -349,11 +351,21 @@ Here is how to create an Android Twitter app that demonstrates simple data bindi
     {
         Text = "Text for a new tweet";
         var now = DateTime.Now;
-        TweetList.Insert(0, new Tweet { Text = "Creating a simple Twitter app for Android with MvvmQuickCross", UserName = "Me", CreatedAt = now.AddSeconds(-115) });
-        TweetList.Insert(0, new Tweet { Text = "Created an Android solution with an application and a library project", UserName = "Me", CreatedAt = now.AddSeconds(-63) });
-        TweetList.Insert(0, new Tweet { Text = "Added Tweet model class", UserName = "Me", CreatedAt = now.AddSeconds(-45) });
-        TweetList.Insert(0, new Tweet { Text = "Added viewmodel properties and commands with code snippets", UserName = "Me", CreatedAt = now.AddSeconds(-25) });
-        TweetList.Insert(0, new Tweet { Text = "Added some hardcoded design data fot the viewmodel", UserName = "Me", CreatedAt = now.AddSeconds(-1) });
+        TweetList.Insert(0, new Tweet { 
+			Text = "Creating a simple Twitter app for Android with MvvmQuickCross", 
+			UserName = "Me", CreatedAt = now.AddSeconds(-115) });
+        TweetList.Insert(0, new Tweet { 
+			Text = "Created an Android solution with an application and a library project", 
+			UserName = "Me", CreatedAt = now.AddSeconds(-63) });
+        TweetList.Insert(0, new Tweet { 
+			Text = "Added Tweet model class", 
+			UserName = "Me", CreatedAt = now.AddSeconds(-45) });
+        TweetList.Insert(0, new Tweet { 
+			Text = "Added viewmodel properties and commands with code snippets", 
+			UserName = "Me", CreatedAt = now.AddSeconds(-25) });
+        TweetList.Insert(0, new Tweet { 
+			Text = "Added some hardcoded design data fot the viewmodel", 
+			UserName = "Me", CreatedAt = now.AddSeconds(-1) });
     }
 	```
 
@@ -415,7 +427,8 @@ Here is how to create an Android Twitter app that demonstrates simple data bindi
 
 	```xml
 	<?xml version="1.0" encoding="utf-8"?>
-	<mvvmquickcross.CheckableLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	<mvvmquickcross.CheckableLinearLayout 
+		xmlns:android="http://schemas.android.com/apk/res/android"
 	    android:id="@+id/TweetListItem"
 	    android:orientation="vertical"
 	    android:background="@drawable/CustomSelector"
@@ -449,7 +462,7 @@ Here is how to create an Android Twitter app that demonstrates simple data bindi
 	        android:layout_height="wrap_content" />
 	</mvvmquickcross.CheckableLinearLayout>
 	```
-    Note that the CheckableLinearLayout view is a simple extension of the standard LinearLayout view that implements the ICheckable to better support highlighting checked list items. If you dont care about highlighting checked items, you can use the standard LinearLayout (or any other layout view) for data binding as well.
+    Note that the CheckableLinearLayout view is a simple extension of the standard LinearLayout view that implements the ICheckable to better support highlighting checked list items; this view does not add anything specific for data-binding. If you dont care about highlighting checked items, you can use the standard LinearLayout (or any other layout view) for data binding as well.
 
 9.  Add a new XML File named **Resources\Drawable\CustomSelector.xml**, with this markup:
 
@@ -501,10 +514,15 @@ And in the markup this is how a child view is bound to the CharactersLeft proper
 Note that instead of using this id naming convention, you can specify the view in code. You can also change the default name prefix.
 
 #### Android Binding Parameters in Tag ####
-These are the binding parameters that you can specify in the view tag:
+These are the binding parameters that you can specify in the view tag (linebreaks added for readability):
 
 ```xml
-android:tag="... {Binding propertyName, Mode=OneWay|TwoWay|Command} {CommandParameter ListId=<view-Id>} {List ItemsSource=listPropertyName, ItemIsValue=false|true, ItemTemplate=listItemTemplateName, ItemValueId=listItemValueId} ..."
+<ViewType android:tag="...
+ {Binding propertyName, Mode=OneWay|TwoWay|Command} 
+ {CommandParameter ListId=<view-Id>} 
+ {List ItemsSource=listPropertyName, ItemIsValue=false|true, 
+       ItemTemplate=listItemTemplateName, ItemValueId=listItemValueId}
+ ..." />
 ```
 
 All of these parameters are optional. You can also put any additional text outside the { } in the tag if you want to. Note that you can also specify binding parameters through code instead of in the tag attribute.
@@ -590,17 +608,18 @@ spinner.Adapter = new DataBindableListAdapter<string>(LayoutInflater,
     itemValueResourceId:    Resource.Id.TextListItem);
 
 var bindingsParameters = new BindingParameters[] {
-   new BindingParameters { 
-       Mode                                    = BindingMode.TwoWay, 
-       View                                    = spinner, 
-       PropertyName                            = OrderViewModel.PROPERTYNAME_DeliveryLocation, 
-       ListPropertyName                        = OrderViewModel.PROPERTYNAME_DeliveryLocationList, 
+   new BindingParameters {
+       Mode                                    = BindingMode.TwoWay,
+       View                                    = spinner,
+       PropertyName                            = OrderViewModel.PROPERTYNAME_DeliveryLocation,
+       ListPropertyName                        = OrderViewModel.PROPERTYNAME_DeliveryLocationList,
        CommandParameterSelectedItemAdapterView = null
    }
 };
 
 Initialize(
-	FindViewById(Resource.Id.OrderView), CloudAuctionApplication.Instance.OrderViewModel, 
+	FindViewById(Resource.Id.OrderView),
+	CloudAuctionApplication.Instance.OrderViewModel, 
 	bindingsParameters, 
 	idPrefix: "OrderView_"
 );
@@ -635,9 +654,11 @@ protected override void OnPropertyChanged(string propertyName)
     switch (propertyName)
     {
         case OrderViewModel.PROPERTYNAME_DeliveryLocationListHasItems:
-            var hasItems = ViewModel.GetPropertyValue<bool>(OrderViewModel.PROPERTYNAME_DeliveryLocationListHasItems);
-            var spinner = FindViewById<Android.Widget.Spinner>(Resource.Id.OrderView_DeliveryLocation);
-            spinner.Visibility = hasItems ? Android.Views.ViewStates.Visible : Android.Views.ViewStates.Invisible;
+            var hasItems = ViewModel.GetPropertyValue<bool>(
+							  OrderViewModel.PROPERTYNAME_DeliveryLocationListHasItems);
+            var spinner = FindViewById<Android.Widget.Spinner>(
+							  Resource.Id.OrderView_DeliveryLocation);
+            spinner.Visibility = hasItems ? ViewStates.Visible : ViewStates.Invisible;
             break;
         default:
             base.OnPropertyChanged(propertyName); break;
@@ -654,18 +675,18 @@ public override void UpdateView(Android.Views.View view, object value)
     switch (view.Id)
     {
         case Resource.Id.OrderView_DeliveryLocationListHasItems:
-            view.Visibility = (bool)value ? Android.Views.ViewStates.Visible : Android.Views.ViewStates.Invisible; break;
+            view.Visibility = (bool)value ? ViewStates.Visible : ViewStates.Invisible; break;
         default:
             base.UpdateView(view, value); break;
     }
 }
 ```
-> Note that **UpdateView()** is also called for **data bindings in all list items** for all data-bound lists in your view. This makes it possible to customize data binding within list items in the normal view, instead of writing a custom data bindable adapter for each list.
+> Note that **UpdateView()** is also called for **data bindings in all list items** for all data-bound lists in your view. This makes it possible to customize data binding within list items with code in a normal view, instead of writing a custom data bindable adapter to put that customization code in.
 
 Finally, you can react to changes in lists that implement INotifyCollectionChanged (e.g. ObservableCollections) by overriding **OnCollectionChanged()** in your view:
 
 ```csharp
-public override void OnCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+public override void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
 {
     ...
 }
@@ -731,7 +752,10 @@ public abstract class ListActivityViewBase : ListActivity
 	...
 }
 
-public class ListActivityViewBase<ViewModelType> : ListActivityViewBase, ViewDataBindings.ViewExtensionPoints where ViewModelType : ViewModelBase
+public class ListActivityViewBase<ViewModelType> :
+			     ListActivityViewBase, 
+                 ViewDataBindings.ViewExtensionPoints
+                 where ViewModelType : ViewModelBase
 {
 	...
 }
