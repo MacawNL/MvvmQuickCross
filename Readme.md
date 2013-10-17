@@ -14,7 +14,7 @@ MvvmQuickCross aims to leave you in full control; it does not get in the way if 
 ## News ##
 **Coming up**: A blogpost on building the CloudAuction application for Android; Next planned MvvmQuickCross release: 2.0, which will add simple iOS data binding and an iOS example app.
 
-**October 17, 2013**: The Android specific features are now fully documented in this Readme.
+**October 17, 2013**: The Cross-Platform features and the Android-specific features are now fully documented in this Readme.
 
 **October 14, 2013**: Version 1.5.2 is published. This release adds support for command enabling/disabling and for list highlighting in Android, and more documentation.
 
