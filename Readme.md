@@ -812,9 +812,9 @@ In the `MvvmQuickCross\AndroidHelpers.cs` file in your application project, you 
 - `CurrentActivity` sometimes you need to code against the current activity from code that is not part of that activity. This static property is kept up to date by the Activity view base class, in such a way that no memory leaks can occur.
 - `Wrapper<T>` sometimes you need to provide a `Java.Lang.Object` to a Xamarin.Android method or property, but what you actually have is a `System.Object`. This wrapper allows you to cast between any .NET Object and Java Object, e.g.:
 
-```csharp
-rootView.Tag = (Wrapper<ListDictionary>)viewHolder;
-...
-var viewHolder = (ListDictionary)rootView.Tag;
-```
-Note that the Tag property of an Android View in Xamarin is a `Java.Lang.Object`. 
+	```csharp
+	rootView.Tag = (Wrapper<ListDictionary>)viewHolder;
+	...
+	var viewHolder = (ListDictionary)rootView.Tag;
+	```
+	Note that the Tag property of an Android View in Xamarin is a `Java.Lang.Object`. 
