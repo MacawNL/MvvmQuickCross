@@ -12,7 +12,9 @@ MvvmQuickCross accelerates development, also for a single platform app. For cros
 MvvmQuickCross aims to leave you in full control; it does not get in the way if you want to do some things differently, and you can simply extend it.
 
 ## News ##
-**Coming up**: Guidance on using the Android specific features in release 1.5.2 (Android simple data binding). Next planned release: 2.0, which will add simple iOS data binding and an iOS example app.
+**Coming up**: A blogpost on building the CloudAuction application for Android; Next planned MvvmQuickCross release: 2.0, which will add simple iOS data binding and an iOS example app.
+
+**October 17, 2013**: The Android specific features are now fully documented in this Readme.
 
 **October 14, 2013**: Version 1.5.2 is published. This release adds support for command enabling/disabling and for list highlighting in Android, and more documentation.
 
@@ -30,11 +32,11 @@ MvvmQuickCross aims to leave you in full control; it does not get in the way if 
 
 **Application-Navigator pattern**.<br />Maximize code sharing, including navigation logic, across platforms. See [these slides](http://www.slideshare.net/VincentHoogendoorn/mvvm-quickcross-windows-phone-devday-2013) for an overview of the MvvmQuickCross shared code pattern.
 
-**Simple Android data binding**.<br />Specify [data bindings in Android](#android) by using naming conventions, tag markup or code. Use observable collections. Create performant data-bound list views without writing an adapter.
+**Simple Android data binding**.<br />Specify [data bindings in Android](#android-data-binding) by using naming conventions, tag markup or code. Use observable collections. Create performant data-bound list views without writing an adapter.
 
 Override virtual methods in your activity or fragment to handle specific property change events with custom code instead of with data binding. Or customize how the data binding sets a value to a specific control. Add a few lines of code to make new view types data bindable.
 
-**Android lifecycle management**.<br />Prevent [memory leaks in Xamarin](http://docs.xamarin.com/guides/android/application_fundamentals/activity_lifecycle) by automatically removing and re-adding event handlers during the Android activity life-cycle.
+**Android lifecycle management**.<br />Prevent [memory leaks in Xamarin](http://docs.xamarin.com/guides/android/application_fundamentals/activity_lifecycle) by [automatically removing and re-adding event handlers](#android-view-lifecycle-support) during the Android activity life-cycle.
 
 **Simple iOS data binding**.<br />This will be added in the **upcoming v2.0 release**.
 
@@ -66,7 +68,7 @@ To create an app with MvvmQuickCross, follow these steps:
 	
 	**Note** do not select the MvvmQuickCross\Templates folder itself as the location to import snippets **to**; that may prevent the snippets to be imported correctly, as this would mean copying the snippets file over itself.
 
-5. Add new views and viewmodels with the **[New-View](#new-view)** and **[New-ViewModel](#new-viewmodel)** commands.
+5. Add new views and viewmodels with the [`New-View`](#new-view) and [`New-ViewModel`](#new-viewmodel) commands.
 
 	**Note** that currently New-View only supports Android and Windows Phone.
 
@@ -113,11 +115,11 @@ New-View [-ViewName] <string> [[-ViewType] <string>] [[-ViewModelName] <string>]
 ```
 Generates a new view. Currently only supports Android and Windows Phone.
 
-The specified **ViewName** will be suffixed with "View", and the specified **ViewModelName** will be suffixed with "ViewModel". If no ViewModelName is specified, it will be the same as the ViewName. If the view model does not exist, it will be generated with the **New-ViewModel** command.
+The specified `ViewName` will be suffixed with "View", and the specified `ViewModelName` will be suffixed with "ViewModel". If no ViewModelName is specified, it will be the same as the ViewName. If the view model does not exist, it will be generated with the `New-ViewModel` command.
 
-On Windows Phone, the **ViewType** can be **Page** (default) or **UserControl**. On Android, it can be **MainLauncher**, **Activity** (default) or **Fragment**. The specified view type determines which view templates are used. You can find these templates in the MvvmQuickCross\Templates folder of your application project. You can simply modify these templates or add your own (which is better) by adding similar named files there.
+On Windows Phone, the `ViewType` can be `Page` (default) or `UserControl`. On Android, it can be `MainLauncher`, `Activity` (default) or `Fragment`. The specified view type determines which view templates are used. You can find these templates in the MvvmQuickCross\Templates folder of your application project. You can simply modify these templates or add your own (which is better) by adding similar named files there.
 
-Unless the **-WithoutNavigation** switch is specified, New-View will also add basic navigation code to the navigator and application classes. The -WithoutNavigation switch is useful when creating views such as list item views, that do not need to navigated to directly from the application class.
+Unless the `-WithoutNavigation` switch is specified, New-View will also add basic navigation code to the navigator and application classes. The -WithoutNavigation switch is useful when creating views such as list item views, that do not need to navigated to directly from the application class.
 
 E.g. this command:
 
@@ -147,9 +149,9 @@ New-ViewModel [-ViewModelName] <string> [-NotInApplication]
 ```
 Generates a new viewmodel. You can use this command to create viewmodels without creating any corresponding views (yet).
 
-The specified **ViewModelName** will be suffixed with "ViewModel".
+The specified `ViewModelName` will be suffixed with "ViewModel".
 
-Unless the **-NotInApplication** switch is specified, New-ViewModel will also add a property to contain the instance of the viewmodel to the application class. The application class will then be responsible for providing an initialized viewmodel instance before navigating to the corresponding view. The -NotInApplication switch is useful when creating viewmodels such as list item viewmodels, that do not need to be instantiated and initialized directly by the application class.
+Unless the `-NotInApplication` switch is specified, New-ViewModel will also add a property to contain the instance of the viewmodel to the application class. The application class will then be responsible for providing an initialized viewmodel instance before navigating to the corresponding view. The -NotInApplication switch is useful when creating viewmodels such as list item viewmodels, that do not need to be instantiated and initialized directly by the application class.
 
 E.g. this command:
 
@@ -167,7 +169,7 @@ Check the **TODO comments** in the Visual Studio **Task List** to find guidance 
 New-ViewModel will not overwrite existing files or code. If you want to recreate files or code fragments, remove the existing one(s) first.
 
 ### Customizing and Extending Command Templates ###
-As Described above in the usage of the ViewType parameter of the [New-View command](#new-view), you can add your own code and markup templates for custom view types by adding properly named files in the **MvvmQuickCross\Templates **folder of your application project.
+As Described above in the usage of the ViewType parameter of the [New-View command](#new-view), you can add your own code and markup templates for custom view types by adding properly named files in the `MvvmQuickCross\Templates` folder of your application project.
 
 The code template files are named:   `_VIEWNAME_<view type name>View.cs`
 The markup template files are named: `_VIEWNAME_<view type name>View.axml.template`
@@ -177,7 +179,7 @@ Of course you can also modify existing templates in the MvvmQuickCross\Templates
 
 The library project also contains a viewmodel template that can be customized, at `MvvmQuickCross\Templates\_VIEWNAME_ViewModel.cs`.
 
-In addition to the template files, you can also modify the inline code templates in the Application, INavigator and Navigator. Inline templates are used to add properties and methods in these files when a new viewmodel or view is added. An example of an inline template in the Application class for a **view** is:
+In addition to the template files, you can also modify the inline code templates in the Application, INavigator and Navigator. Inline templates are used to add properties and methods in these files when a new viewmodel or view is added. An example of an inline template in the Application class for a `view` is:
 
 ```csharp
 public sealed class _APPNAME_Application : ApplicationBase
@@ -209,28 +211,28 @@ The format of an inline template is:
 5. Optionally some lines starting with ` * `
 6. A line ending with  ` */`
 
-Currently the template name can be **view** or **viewmodel**.
+Currently the template name can be `view` or `viewmodel`.
 
 ## Code Snippets ##
-When you run the Install-Mvvm command, the C# code snippets file **MvvmQuickCross\Templates\MvvmQuickCross.snippet** is added to your class library project. When you import this snippets file into Visual Studio with the Code Snippets Manager (see [how](http://msdn.microsoft.com/en-us/library/ms165394\(v=vs.110\).aspx)), the code snippets described below become available for coding viewmodels.
+When you run the Install-Mvvm command, the C# code snippets file `MvvmQuickCross\Templates\MvvmQuickCross.snippet` is added to your class library project. When you import this snippets file into Visual Studio with the Code Snippets Manager (see [how](http://msdn.microsoft.com/en-us/library/ms165394\(v=vs.110\).aspx)), the code snippets described below become available for coding viewmodels.
 
 Note that the code snippets and their parameters have intellisense when you invoke them in the Visual Studio C# editor.
 
-To instantiate a code snippet, place your cursor on an empty line in the "**Data-bindable properties and commands**" region of a viewmodel class .cs file, type the code snippet shortcut (e.g. propdb1), and press Tab twice. Now you can enter the parameters of the code snippet (press Tab to cycle through all parameters). Press Enter to complete the snippet instance.
+To instantiate a code snippet, place your cursor on an empty line in the "`#Data-bindable properties and commands`" region of a viewmodel class .cs file, type the code snippet shortcut (e.g. propdb1), and press Tab twice. Now you can enter the parameters of the code snippet (press Tab to cycle through all parameters). Press Enter to complete the snippet instance.
 
 ### propdb1 ###
 Adds a one-way data-bindable property to a Viewmodel. You can specify the property type and name.
 ### propdbcol ###
-Adds a one-way data-bindable collection property, a corresponding **(name)HasItems** property and an **Update(name)HasItems()** method to a Viewmodel. You can specify the generic collection type (e.g. **ObservableCollection** or **List**), the collection element type and the property name.
+Adds a one-way data-bindable collection property, a corresponding `(name)HasItems` property and an `Update(name)HasItems()` method to a Viewmodel. You can specify the generic collection type (e.g. `ObservableCollection` or `List`), the collection element type and the property name.
 
 If you want specific UI elements in your view to only be visible when the collection has elements (e.g. a list of error messages), you can use the HasItems property to bind to the visibility of those UI elements. In that case, you should also call the UpdateHasItems() method after you have added or removed items (this is necessary even if this is an ObservableCollection).
 
-**Note** that if you suffix a collection property name with **"List"**, you can benefit from data binding naming conventions in Android.
+**Note** that if you suffix a collection property name with **"List"**, you can benefit from the [list data binding naming convention in Android](#list-itemssource).
 
 ### propdb2 ###
 Adds a two-way data-bindable property to a Viewmodel. You can specify the property type and name.
 ### propdb2c ###
-Adds a two-way data-bindable property and a **On(name)Changed()** method for custom setter code to a Viewmodel. You can specify the property type and name.
+Adds a two-way data-bindable property and a `On(name)Changed()` method for custom setter code to a Viewmodel. You can specify the property type and name.
 ### cmd ###
 Adds a data-bindable command to a Viewmodel. You can specify the command name, which will be suffixed with **"Command"**.
 ### cmdp ###
@@ -243,13 +245,13 @@ Below is an overview of using MvvmQuickCross with Xamarin.Android. For a more de
 Here is how to create an Android Twitter app that demonstrates simple data binding:
 > Note that the complete source for this example is available in this repository, [here](http://github.com/MacawNL/MvvmQuickCross/tree/master/Examples/Twitter).
 
-1.  Create a working Android app by following steps 1 though 4 of [Getting Started](#getting-started) above - choose an **Android Application** project named "Twitter" and an **Android Class Library** project named "Twitter.Shared".
+1.  Create a working Android app by following steps 1 though 4 of [Getting Started](#getting-started) above - choose an `Android Application` project named "Twitter" and an `Android Class Library` project named "Twitter.Shared".
 
-2.  Remove the **Activity1.cs**, **Resources\Layout\Main.axml** and **Class1.cs** files that were included by the Xamarin.Android project templates
+2.  Remove the `Activity1.cs`, `Resources\Layout\Main.axml` and `Class1.cs` files that were included by the Xamarin.Android project templates
 
 3.  Now you can run the app on your device and test the example MainView that was generated by the Install-Mvvm command.
 
-4.  Create a **Models** folder in your Twitter.Shared project and create this **Tweet.cs** class in it:
+4.  Create a `Models` folder in your Twitter.Shared project and create this `Tweet.cs` class in it:
 
 	```csharp
 	using System;
@@ -264,7 +266,7 @@ Here is how to create an Android Twitter app that demonstrates simple data bindi
 	}
 	```
 
-5.  In **ViewModels\MainViewModel.cs** in your library project, in the **region Data-bindable properties and commands**, remove the example property and command add these properties and commands with the indicated [code snippets](#code-snippets):
+5.  In `ViewModels\MainViewModel.cs` in your library project, in the `#region Data-bindable properties and commands`, remove the example property and command add these properties and commands with the indicated [code snippets](#code-snippets):
 	
     <table>
         <tr>
@@ -308,7 +310,7 @@ Here is how to create an Android Twitter app that demonstrates simple data bindi
         </tr>
     </table>
     	
-6.  Add this code in the generated MainModel methods:
+6.  Add this code in the generated `MainModel` methods:
 		
 	```csharp
     public MainViewModel()
@@ -344,7 +346,7 @@ Here is how to create an Android Twitter app that demonstrates simple data bindi
     }
 	```
 
-7.  The MainViewModel.cs file also contains a **MainViewModelDesign** class where you can put some hardcoded viewmodel data. Put this code in the MainViewModelDesign constructor:
+7.  The `MainViewModel.cs` file also contains a `MainViewModelDesign` class where you can put some hardcoded viewmodel data. Put this code in the MainViewModelDesign constructor:
 		
 	```csharp
     public MainViewModelDesign()
@@ -369,7 +371,7 @@ Here is how to create an Android Twitter app that demonstrates simple data bindi
     }
 	```
 
-8.  In the application project, in the file **Resources\Layout\MainView.axml**, replace the existing markup with this:
+8.  In the application project, in the file `Resources\Layout\MainView.axml`, replace the existing markup with this:
 
 	```xml
 	<?xml version="1.0" encoding="utf-8"?>
@@ -423,7 +425,7 @@ Here is how to create an Android Twitter app that demonstrates simple data bindi
 	    </LinearLayout>
 	</LinearLayout>
 	```
-8.  Add a new Android Layout named **Resources\Layout\TweetListItem.axml**, with this markup:
+8.  Add a new Android Layout named `Resources\Layout\TweetListItem.axml`, with this markup:
 
 	```xml
 	<?xml version="1.0" encoding="utf-8"?>
@@ -464,7 +466,7 @@ Here is how to create an Android Twitter app that demonstrates simple data bindi
 	```
     Note that the CheckableLinearLayout view is a simple extension of the standard LinearLayout view that implements the ICheckable to better support highlighting checked list items; this view does not add anything specific for data-binding. If you dont care about highlighting checked items, you can use the standard LinearLayout (or any other layout view) for data binding as well.
 
-9.  Add a new XML File named **Resources\Drawable\CustomSelector.xml**, with this markup:
+9.  Add a new XML File named `Resources\Drawable\CustomSelector.xml`, with this markup:
 
 	```xml
 	<?xml version="1.0" encoding="utf-8"?>
@@ -474,7 +476,7 @@ Here is how to create an Android Twitter app that demonstrates simple data bindi
 	</selector>
 	```
 
-10. Add a new XML File named **Resources\Values\Colors.xml**, with this markup:
+10. Add a new XML File named `Resources\Values\Colors.xml`, with this markup:
 
 	```xml
 	<?xml version="1.0" encoding="utf-8"?>
@@ -496,7 +498,7 @@ An Android data binding is a one-on-one binding between an Android view, such as
 3. Tag binding parameters in the view markup
 
 #### Android Id Naming Convention ####
-To bind a view to a viewmodel property without using code, name the view **id** like this:
+To bind a view to a viewmodel property without using code, name the view `id` like this:
 
 ```xml
 android:id="@+id/<activity-or-fragment-class-name>_<viewmodel-property-or-command-name>"
@@ -528,10 +530,10 @@ These are the binding parameters that you can specify in the view tag (linebreak
 All of these parameters are optional. You can also put any additional text outside the { } in the tag if you want to. Note that you can also specify binding parameters through code instead of in the tag attribute.
 
 ##### Binding propertyName #####
-Is known by default from the naming convention for the view **id** = &lt;rootview prefix&gt;&lt;propertyName&gt;; the default for the rootview prefix is the rootview class name + "_". Note that viewmodel commands are just a special type of viewmodel property, so you can use the propertyName to specify a command name as well.
+Is known by default from the naming convention for the view `id` = &lt;rootview prefix&gt;&lt;propertyName&gt;; the default for the rootview prefix is the rootview class name + "_". Note that viewmodel commands are just a special type of viewmodel property, so you can use the propertyName to specify a command name as well.
 
 ##### Binding Mode #####
-Is **OneWay** by default. The mode specifies:
+Is `OneWay` by default. The mode specifies:
 
 - OneWay data binding where the viewmodel property updates the view - e.g. a display-only TextView. The bound property can be generated with the propdb1 or propdbcol code snippet.
 - TwoWay data binding where the viewmodel property updates the view and vice versa, e.g. an editable EditText. The bound property can be generated with the propdb2, propdb2c or propdbcol code snippet.
@@ -577,28 +579,28 @@ private void RemoveItem(object parameter)
 
 ```
 
-The **List** binding parameters are for use with views derived from AdapterView (ListView, Spinner etc):
+The `List` binding parameters are for use with views derived from `AdapterView` (`ListView`, `Spinner` etc):
 
 ##### List ItemsSource #####
-Specifies the name of the viewmodel collection property that contains the list items. The property must implement the standard .NET **IList** interface. If the property also implements the standard .NET **INotifyCollectionChanged** interface (e.g an **ObservableCollection**), the view will automatically reflect added, replaced or removed items. The default value of ItemsSource is **propertyName** + "**List**".
+Specifies the name of the viewmodel collection property that contains the list items. The property must implement the standard .NET `IList` interface. If the property also implements the standard .NET `INotifyCollectionChanged` interface (e.g an `ObservableCollection`), the view will automatically reflect added, replaced or removed items. The default value of ItemsSource is `propertyName` + "**List**".
 
 The items in an ItemsSource viewmodel collection property can be:
 
 - An object with fields or properties (e.g. a POCO model object)
-- An 'ValueItem' object, meaning an object that implements **ToString()** to present the value of the entire object as a human-readable text
+- An 'ValueItem' object, meaning an object that implements `ToString()` to present the value of the entire object as a human-readable text
 - A viewmodel object that has data-bindable properties and/or commands. This is also called **composite viewmodels**, which makes it possible to e.g. automatically display changes of individual fields within existing list item objects.
 
 ##### List ItemTemplate #####
-Specifies the name of the Android layout that represents a list item. E.g. the value "TweetListItem" corresponds to the view markup in the file Resources\Layout\TweetListItem.axml. The default value of ItemTemplate is the value of **ItemsSource** + "**Item**".
+Specifies the name of the Android layout that represents a list item. E.g. the value "TweetListItem" corresponds to the view markup in the file Resources\Layout\TweetListItem.axml. The default value of ItemTemplate is the value of `ItemsSource` + "**Item**".
 
 ##### List ItemIsValue #####
-Is a boolean flag indicating whether the list item should be displayed as a single text string, by calling the **ToString()** method on the object. If this flag is set to **true**, the **ItemValueId** binding parameter is also used. The default for ItemIsValue is **false**.
+Is a boolean flag indicating whether the list item should be displayed as a single text string, by calling the `ToString()` method on the object. If this flag is set to `true`, the `ItemValueId` binding parameter is also used. The default for ItemIsValue is `false`.
 
 ##### List ItemValueId #####
-If **ItemIsValue** is **true**, this parameter specifies the id of the child view within the item template view that should be used to display the object text. The default value of ItemValueId is the value of **ItemTemplate**. 
+If `ItemIsValue` is `true`, this parameter specifies the id of the child view within the item template view that should be used to display the object text. The default value of ItemValueId is the value of `ItemTemplate`. 
 
 #### Android Binding Parameters in Code ####
-As an alternative to using the Id naming convention and tag texts in markup, you can also specify bindings in code in an optional parameter of the **Initialize()** method. The Initialize method is implemented in the view base classes, and it is called in your view code from the **OnCreate()** (for an activity view) or **OnCreateView()** (for a fragment view) method. Here is an example of specifying binding parameters in code:
+As an alternative to using the Id naming convention and tag texts in markup, you can also specify bindings in code in an optional parameter of the **Initialize()** method. The Initialize method is implemented in the view base classes, and it is called in your view code from the `OnCreate()` (for an activity view) or `OnCreateView()` (for a fragment view) method. Here is an example of specifying binding parameters in code:
 
 ```csharp
 var spinner = FindViewById<Android.Widget.Spinner>(Resource.Id.OrderView_DeliveryLocation);
@@ -626,7 +628,7 @@ Initialize(
 ```
 You can specify some or all of the bindings, and in each binding some or all of the binding parameters. If you also specify parameters for a binding in a markup tag, those will override or supplement any parameters that you specify in code.
 
-Note that you do not need to use the [view id naming convention](#android-id-naming-convention) for normal views, since you specify a view instance in the **View** parameter. You could create the view entirely in code and not even give it an id. If you do use the id naming convention, you can specify a custom id name prefix in the **idPrefix** parameter of the **Initialize()** method (for normal views) and the **DataBindableListAdapter()** constructor (for list item views).
+Note that you do not need to use the [view id naming convention](#android-id-naming-convention) for normal views, since you specify a view instance in the `View` parameter. You could create the view entirely in code and not even give it an id. If you do use the id naming convention, you can specify a custom id name prefix in the `idPrefix` parameter of the `Initialize()` method (for normal views) and the `DataBindableListAdapter()` constructor (for list item views).
 
 Most binding parameters are specified in the Initialize call, while some List binding parameters are specified when constructing a data bindable list adapter for an AdapterView. When you use markup for data bindings and an AdapterView does not have an adapter assigned to it, a data bindable adapter is created and assigned to the AdapterView automatically.
 
@@ -644,8 +646,8 @@ Here is how the code binding parameters correspond to the tag binding parameters
 #### Customizing or Extending Android Data Binding ####
 MvvmQuickCross allows you to simply modify or extend it with overrides in the view base classes, and in the ViewDataBindings class. You can also add more view base classes if you need to derive your views from other classes besides Activity and Fragment.
 
-##### Customizing Android Views #####
-By overriding the **OnPropertyChanged()** method in your view class, you can handle changes for specific properties yourself instead of with the standard data binding. E.g:
+##### Customizing Data Binding in Android Views #####
+By overriding the `OnPropertyChanged()` method in your view class, you can handle changes for specific properties yourself instead of with the standard data binding. E.g:
 
 ```csharp
 // Example of how to handle specific viewmodel property changes in code instead of with (or in addition to) data binding:
@@ -666,7 +668,7 @@ protected override void OnPropertyChanged(string propertyName)
 }
 ```
 
-You can also override the **UpdateView()** method to change how the data binding mechanism sets a property value to a specific view (or modify multiple views based on the value etc.). E.g., an alternative to the OnPropertyChanged() code above is to add a containing FrameLayout around the spinner and then override UpdateView() like this:
+You can also override the `UpdateView()` method to change how the data binding mechanism sets a property value to a specific view (or modify multiple views based on the value etc.). E.g., an alternative to the `OnPropertyChanged()` code above is to add a containing `FrameLayout` around the spinner, data-bind the FrameLayout to the `DeliveryLocationListHasItems` property, and then override `UpdateView()` like this:
 
 ```xml
 <FrameLayout
@@ -694,9 +696,9 @@ public override void UpdateView(Android.Views.View view, object value)
     }
 }
 ```
-> Note that **UpdateView()** is also called for **data bindings in all list items** for all data-bound lists in your view. This makes it possible to customize data binding within list items with code in a normal view, instead of writing a custom data bindable adapter to put that customization code in.
+> Note that `UpdateView()` is also called for **data bindings in all list items** for all data-bound lists in your view. This makes it possible to customize data binding within list items with code in a normal view, instead of writing a custom data bindable adapter to put that customization code in.
 
-Finally, you can react to changes in lists that implement INotifyCollectionChanged (e.g. ObservableCollections) by overriding **OnCollectionChanged()** in your view:
+Finally, you can react to changes in lists that implement INotifyCollectionChanged (e.g. ObservableCollections) by overriding `OnCollectionChanged()` in your view:
 
 ```csharp
 public override void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -711,11 +713,11 @@ Out of the box MvvmQuickCross has default data binding support for these view ty
 
 One-Way binding:
 
-- **Android.Widget.ProgressBar**
-- **Android.Webkit.WebView**
-- **TextView** and derived types
-- **AbsListView** and derived types
-- **AdapterView** and derived types
+- `Android.Widget.ProgressBar`
+- `Android.Webkit.WebView`
+- `TextView` and derived types
+- `AbsListView` and derived types
+- `AdapterView` and derived types
 
 Two-way binding:
 
@@ -729,7 +731,7 @@ Command binding:
 - **AdapterView** and derived types
 - **View** and derived types
 
-To make more control types data bindable, you can simply add a case to the appropriate switch statements in the **MvvmQuickCross\ViewDataBindings.UI.cs** file in your application project, as indicated by the `// TODO: ` comments. E.g.:
+To make more control types data bindable, you can simply add a case to the appropriate switch statements in the `MvvmQuickCross\ViewDataBindings.UI.cs` file in your application project, as indicated by the `// TODO: ` comments. E.g.:
 
 ```csharp
 public static void UpdateView(View view, object value)
@@ -752,10 +754,10 @@ public static void UpdateView(View view, object value)
 	}
 }
 ```
-To prevent memory leaks, be sure that if you register an event handler on a view in **AddCommandHandler()** or **AddTwoWayHandler()**, you also unregister that handler in **RemoveCommandHandler()** resp. **RemoveTwoWayHandler()**.
+To prevent memory leaks, be sure that if you register an event handler on a view in `AddCommandHandler()` or `AddTwoWayHandler()`, you also unregister that handler in `RemoveCommandHandler()` resp. `RemoveTwoWayHandler()`.
 
 ##### Adding New Android View Base Classes #####
-If you need to derive your views from other classes besides Activity and Fragment, you can simply copy the existing **MvvmQuickCross\ActivityViewBase.cs** or **MvvmQuickCross\FragmentViewBase.cs** class and change the class that it derives from to the one that you need. 
+If you need to derive your views from other classes besides Activity and Fragment, you can simply copy the existing `MvvmQuickCross\ActivityViewBase.cs` or `MvvmQuickCross\FragmentViewBase.cs` class and change the class that it derives from to the one that you need. 
 
 E.g. to support data bindable classes derived from ListActivity, you would copy ActivityViewBase.cs to ListActivityViewBase.cs and just change "Activity" to "ListActivity" in these lines:
 
@@ -784,5 +786,34 @@ public class OrderView : ListActivityViewBase<OrderViewModel>
 ```
 It should take no more than a minute. To complete this, you could also [add a custom view template](#customizing-and-extending-command-templates) for this new view type.
 
-TODO: Describe Android helpers and checkable layouts, View Lifecycle support
+### Android View Lifecycle Support ###
+As described by Xamarin, under "**3.1. Removing Event Handlers in Activities**" [here](http://docs.xamarin.com/guides/cross-platform/application_fundamentals/memory_perf_best_practices), you need to remove and re-add any external event handlers that you register in your view code to prevent memory leaks (external meaning not tied to the view itself or to an object contained within that view). The MvvmQuickCross view base classes do this removing and re-adding automatically at the appropriate [lifecycle events](http://docs.xamarin.com/guides/android/application_fundamentals/activity_lifecycle). To have your own event handlers added, removed and re-added at the appropriate times, you only need to override the `AddHandlers()` and `RemoveHandlers()` methods and add/remove your handlers there. E.g.:
 
+```csharp
+protected override void AddHandlers()
+{
+    base.AddHandlers();
+    foreach (var tab in tabs) tab.TabSelected += Tab_TabSelected;
+}
+
+protected override void RemoveHandlers()
+{
+    foreach (var tab in tabs) tab.TabSelected -= Tab_TabSelected;
+    base.RemoveHandlers();
+}
+```
+Note: Be sure to always call the base class method as well!
+
+You should not call `AddHandlers()` yourself - that would mess up the base class tracking of added handlers. `AddHandlers()` is initially called by the base class in the `Initialize()` method, which you call in your view code in the `OnCreate()` or `OnCreateView()` method.
+
+### Android Helpers ###
+In the `MvvmQuickCross\AndroidHelpers.cs` file you will find a few simple helpers that are of general use in Android development. Noteable helpers are:
+
+- `CurrentActivity` sometimes you need to code against the current activity from code that is not part of that activity. This static property is kept up top date by the Activity view base class, and ensures that no memory leaks can occur.
+- `Wrapper<T>` sometimes you need to provide a `Java.Lang.Object` to a Xamarin.Android method or property but what you have is a `System.Object`. This wrapper allows you to cast between any .NET Object and Java.Lang.Object, e.g.:
+
+```csharp
+rootView.Tag = (Wrapper<ListDictionary>)viewHolder;
+...
+var viewHolder = (ListDictionary)rootView.Tag;
+```
