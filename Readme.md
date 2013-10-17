@@ -128,15 +128,15 @@ New-View Person
 ```
 will generate:
 
-- A PersonView view markup file + class
-- A PersonViewModel viewmodel class
-- A PersonViewModelDesign viewmodel class
-- A PersonViewModel property in the application class
-- A NavigateToPersonView() method signature in the navigator interface
-- A NavigateToPersonView() method implementation in the navigator class
-- A ContinueToPerson() method in the application class
+- A `PersonView` view markup file + class
+- A `PersonViewModel` viewmodel class
+- A `PersonViewModelDesign` viewmodel class
+- A `PersonViewModel` property in the application class
+- A `NavigateToPersonView()` method signature in the navigator interface
+- A `NavigateToPersonView()` method implementation in the navigator class
+- A `ContinueToPerson()` method in the application class
 
-Now the only thing needed to display the view, bound to the view model, is to call the ContinueToPerson() method on the application.
+Now the only thing needed to display the view, bound to the view model, is to call the `ContinueToPerson()` method on the application.
 
 Check the **TODO comments** in the Visual Studio **Task List** to find guidance on how to complete the generated project items.
 
@@ -218,7 +218,7 @@ When you run the Install-Mvvm command, the C# code snippets file `MvvmQuickCross
 
 Note that the code snippets and their parameters have intellisense when you invoke them in the Visual Studio C# editor.
 
-To instantiate a code snippet, place your cursor on an empty line in the "`#Data-bindable properties and commands`" region of a viewmodel class .cs file, type the code snippet shortcut (e.g. propdb1), and press Tab twice. Now you can enter the parameters of the code snippet (press Tab to cycle through all parameters). Press Enter to complete the snippet instance.
+To instantiate a code snippet, place your cursor on an empty line in the `#region Data-bindable properties and commands` of a viewmodel class .cs file, type the code snippet shortcut (e.g. `propdb1`), and press Tab twice. Now you can enter the parameters of the code snippet (press Tab to cycle through all parameters). Press Enter to complete the snippet instance.
 
 ### propdb1 ###
 Adds a one-way data-bindable property to a Viewmodel. You can specify the property type and name.
@@ -721,15 +721,15 @@ One-Way binding:
 
 Two-way binding:
 
-- **AbsSpinner** and derived types
-- **AbsListView** and derived types
-- **EditText** and derived types
+- `AbsSpinner` and derived types
+- `AbsListView` and derived types
+- `EditText` and derived types
 
 Command binding:
 
-- **AbsSpinner** and derived types
-- **AdapterView** and derived types
-- **View** and derived types
+- `AbsSpinner` and derived types
+- `AdapterView` and derived types
+- `View` and derived types
 
 To make more control types data bindable, you can simply add a case to the appropriate switch statements in the `MvvmQuickCross\ViewDataBindings.UI.cs` file in your application project, as indicated by the `// TODO: ` comments. E.g.:
 
@@ -807,10 +807,10 @@ Note: Be sure to always call the base class method as well!
 You should not call `AddHandlers()` yourself - that would mess up the base class tracking of added handlers. `AddHandlers()` is initially called by the base class in the `Initialize()` method, which you call in your view code in the `OnCreate()` or `OnCreateView()` method.
 
 ### Android Helpers ###
-In the `MvvmQuickCross\AndroidHelpers.cs` file you will find a few simple helpers that are of general use in Android development. Noteable helpers are:
+In the `MvvmQuickCross\AndroidHelpers.cs` file in your application project, you will find a few simple helpers that are of general use in Android development. Noteable helpers are:
 
-- `CurrentActivity` sometimes you need to code against the current activity from code that is not part of that activity. This static property is kept up top date by the Activity view base class, and ensures that no memory leaks can occur.
-- `Wrapper<T>` sometimes you need to provide a `Java.Lang.Object` to a Xamarin.Android method or property but what you have is a `System.Object`. This wrapper allows you to cast between any .NET Object and Java.Lang.Object, e.g.:
+- `CurrentActivity` sometimes you need to code against the current activity from code that is not part of that activity. This static property is kept up to date by the Activity view base class, in such a way that no memory leaks can occur.
+- `Wrapper<T>` sometimes you need to provide a `Java.Lang.Object` to a Xamarin.Android method or property, but what you actually have is a `System.Object`. This wrapper allows you to cast between any .NET Object and Java.Lang.Object, e.g.:
 
 ```csharp
 rootView.Tag = (Wrapper<ListDictionary>)viewHolder;
