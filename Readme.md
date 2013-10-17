@@ -666,7 +666,20 @@ protected override void OnPropertyChanged(string propertyName)
 }
 ```
 
-You can also override the **UpdateView()** method to change how the data binding mechanism sets a property value to a specific view (or modify multiple views based on the value etc.):
+You can also override the **UpdateView()** method to change how the data binding mechanism sets a property value to a specific view (or modify multiple views based on the value etc.). E.g., an alternative to the OnPropertyChanged() code above is to add a containing FrameLayout around the spinner and then override UpdateView() like this:
+
+```xml
+<FrameLayout
+    android:id="@+id/OrderView_DeliveryLocationListHasItems"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content">
+    <Spinner
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/OrderView_DeliveryLocation"
+        android:tag="{Binding Mode=TwoWay} {List ItemIsValue=true, ItemTemplate=TextListItem}" />
+</FrameLayout>
+```
 
 ```csharp
 // Example of how to handle specific viewmodel property changes in code instead of with (or in addition to) data binding:
