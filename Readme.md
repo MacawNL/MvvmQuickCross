@@ -30,7 +30,10 @@ MvvmQuickCross aims to leave you in full control; it does not get in the way if 
 
 **Viewmodel code snippets**.<br />Quickly add data-bindable properties and commands to viewmodels with [code snippets](#code-snippets).
 
-**Application-Navigator pattern**.<br />Maximize code sharing, including navigation logic, across platforms. See [these slides](http://www.slideshare.net/VincentHoogendoorn/mvvm-quickcross-windows-phone-devday-2013) for an overview of the MvvmQuickCross shared code pattern.
+**Application-Navigator pattern**.<br />Maximize code sharing, including navigation logic, across platforms.
+![MvvmQuickCross Pattern](https://raw.github.com/MacawNL/MvvmQuickCross/master/assets/mvvmquickcross_pattern.png)
+
+See [these slides](http://www.slideshare.net/VincentHoogendoorn/mvvm-quickcross-windows-phone-devday-2013) for an overview of the MvvmQuickCross pattern.
 
 **Simple Android data binding**.<br />Specify [data bindings in Android](#android-data-binding) by using naming conventions, tag markup or code. Use observable collections. Create performant data-bound list views without writing an adapter.
 
