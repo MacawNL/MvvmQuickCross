@@ -498,6 +498,8 @@ An Android data binding is a one-on-one binding between an Android view, such as
 
 Note that for performance reasons, Android data binding allows **no more than one view** (within the same rootview) to be bound to a property. If you need to update multiple views with the same property value, you can do that by overriding the `UpdateView()` method in your activity or fragment class, and adding [a few lines of code](#binding-multiple-android-views-to-a-viewmodel-property).
 
+Finally, note that **you do not need to use the MvvmQuickCross implementation of Android data binding** if you prefer not to. You can subscribe to the standard .NET data binding events (`PropertyChanged` on viewmodels, `CanExecuteChanged` on `RelayCommand` viewmodel commands, and `CollectionChanged` on `ObservableCollection` viewmodel properties) from your code in any view type, and handle data binding any way you like. In this case you can keep using the [New-View command](#new-view), if you [add your own view template files](#customizing-and-extending-command-templates).
+
 #### Android Id Naming Convention ####
 To bind a view to a viewmodel property without using code, name the view `id` like this:
 
@@ -700,7 +702,7 @@ public override void UpdateView(Android.Views.View view, object value)
 > Note that `UpdateView()` is also called for **data bindings in all list items** for all data-bound lists in your view. This makes it possible to customize data binding within list items with code in a normal view, instead of writing a custom data bindable adapter to put that customization code in.
 
 ###### Binding multiple Android views to a viewmodel property ######
-Another scenario for overriding `UpdateView()` is of you want to update more than one view from the same viewmodel property:
+Another scenario for overriding `UpdateView()` is when you want to update more than one view (within the same root view) from the same viewmodel property:
 
 ```csharp
 public override void UpdateView(Android.Views.View view, object value)
