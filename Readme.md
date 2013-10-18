@@ -171,11 +171,10 @@ New-ViewModel will not overwrite existing files or code. If you want to recreate
 ### Customizing and Extending Command Templates ###
 As Described above in the usage of the ViewType parameter of the [New-View command](#new-view), you can add your own code and markup templates for custom view types by adding properly named files in the `MvvmQuickCross\Templates` folder of your application project.
 
-The code template files are named:   `_VIEWNAME_<view type name>View.cs`
-The markup template files are named: `_VIEWNAME_<view type name>View.axml.template`
-If no markup file for the specified view type is found, this file is used: `_VIEWNAME_View.axml.template`, so you do not need to have multiple copies of the same markup template.
+The code and markup template files are named:   `_VIEWNAME_<view type name>View.*`
+If no markup file for the specified view type is found, the default markup file `_VIEWNAME_View.*` is used, so you do not need to have multiple copies of the same markup template.
 
-Of course you can also modify existing templates in the MvvmQuickCross\Templates folder.
+Of course you can also modify existing templates in the `MvvmQuickCross\Templates` folder.
 
 The library project also contains a viewmodel template that can be customized, at `MvvmQuickCross\Templates\_VIEWNAME_ViewModel.cs`.
 
@@ -497,6 +496,8 @@ An Android data binding is a one-on-one binding between an Android view, such as
 2. Id naming convention in the view markup
 3. Tag binding parameters in the view markup
 
+Note that for performance reasons, Android data binding allows **no more than one view** (within the same rootview) to be bound to a property. If you need to update multiple views with the same property value, you can do that by overriding the `UpdateView()` method in your activity or fragment class, and adding [a few lines of code](#binding-multiple-android-views-to-a-viewmodel-property).
+
 #### Android Id Naming Convention ####
 To bind a view to a viewmodel property without using code, name the view `id` like this:
 
@@ -684,7 +685,6 @@ You can also override the `UpdateView()` method to change how the data binding m
 ```
 
 ```csharp
-// Example of how to handle specific viewmodel property changes in code instead of with (or in addition to) data binding:
 public override void UpdateView(Android.Views.View view, object value)
 {
     switch (view.Id)
@@ -696,7 +696,27 @@ public override void UpdateView(Android.Views.View view, object value)
     }
 }
 ```
+
 > Note that `UpdateView()` is also called for **data bindings in all list items** for all data-bound lists in your view. This makes it possible to customize data binding within list items with code in a normal view, instead of writing a custom data bindable adapter to put that customization code in.
+
+###### Binding multiple Android views to a viewmodel property ######
+Another scenario for overriding `UpdateView()` is of you want to update more than one view from the same viewmodel property:
+
+```csharp
+public override void UpdateView(Android.Views.View view, object value)
+{
+    switch (view.Id)
+    {
+        case Resource.Id.OrderView_ProductName:
+            base.UpdateView(view, value); // Set the single data-bound view
+			string text = value == null ? "" : value.ToString();
+            if (ProductName2TextView.Text != text) ProductName2TextView.Text = text;
+			break;
+        default:
+            base.UpdateView(view, value); break;
+    }
+}
+```
 
 Finally, you can react to changes in lists that implement INotifyCollectionChanged (e.g. ObservableCollections) by overriding `OnCollectionChanged()` in your view:
 
