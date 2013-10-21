@@ -94,7 +94,7 @@ To code your app for more platforms:
 ## Commands ##
 After installing the MvvmQuickCross NuGet package, the below commands are available in the Visual Studio **Package Manager Console**.
 
-**Note** that except for Install-Mvvm, anything that these commands do can also be done by hand; the manual steps are documented inline in the files that you add to your projects with Install-Mvvm. This makes it possible to create your initial solutions in (a [free version](http://go.microsoft.com/fwlink/?linkid=244366) of) Visual Studio, and then continue working in [Xamarin Studio](http://xamarin.com/studio) for Android or iOS, if you prefer that.
+**Note** that except for Install-Mvvm, anything that these commands do can also be done by hand; the manual steps are documented inline in the files that you add to your projects with Install-Mvvm. This makes it possible to create your initial solutions in Visual Studio, and then continue working in [Xamarin Studio](http://xamarin.com/studio) for Android or iOS, if you prefer that.
 
 ### Install-Mvvm ###
 
