@@ -58,7 +58,6 @@
     <Compile Include="ViewModels\ProductViewModel.cs" />
     <Compile Include="ViewModels\OrderResultViewModel.cs" />
     <Compile Include="ViewModels\OrderViewModel.cs" />
-    <Compile Include="ViewModels\_VIEWNAME_ViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MvvmQuickCross\Templates\MvvmQuickCross.snippet" />

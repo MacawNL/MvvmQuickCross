@@ -37,6 +37,11 @@ namespace MvvmQuickCross
 
             public int? CommandParameterListId;
             public AdapterView CommandParameterListView;
+
+            public void Command_CanExecuteChanged(object sender, EventArgs e)
+            {
+                if (View != null) View.Enabled = ((RelayCommand)sender).IsEnabled;
+            }
         }
 
         private readonly View rootView;
@@ -248,8 +253,11 @@ namespace MvvmQuickCross
                 }
             }
 
-            var binding = new DataBinding { 
-                View = view, ResourceId = resourceId, Mode = mode, 
+            var binding = new DataBinding
+            {
+                View = view,
+                ResourceId = resourceId,
+                Mode = mode,
                 ViewModelPropertyInfo = viewModel.GetType().GetProperty(propertyName),
                 CommandParameterListId = commandParameterListId,
                 CommandParameterListView = commandParameterSelectedItemAdapterView
@@ -271,7 +279,8 @@ namespace MvvmQuickCross
                 if (pi != null)
                 {
                     var adapter = pi.GetValue(binding.View);
-                    if (adapter == null) {
+                    if (adapter == null)
+                    {
                         if (itemTemplateName == null) itemTemplateName = listPropertyName + "Item";
                         if (itemIsValue && itemValueId == null) itemValueId = itemTemplateName;
                         int? itemTemplateResourceId = AndroidHelpers.FindResourceId(itemTemplateName, AndroidHelpers.ResourceCategory.Layout);

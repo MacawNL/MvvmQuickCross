@@ -40,8 +40,7 @@
     <AndroidLinkMode>SdkOnly</AndroidLinkMode>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Macaw.UIComponents, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Macaw.UIComponents">
       <HintPath>..\Components\MultiImageView-1.1\lib\android\Macaw.UIComponents.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Android" />
@@ -55,6 +54,7 @@
     <Compile Include="CloudAuctionNavigator.cs" />
     <Compile Include="MvvmQuickCross\ActivityViewBase.cs" />
     <Compile Include="MvvmQuickCross\AndroidHelpers.cs" />
+    <Compile Include="MvvmQuickCross\CheckableLinearLayout.cs" />
     <Compile Include="MvvmQuickCross\DataBindableListAdapter.cs" />
     <Compile Include="MvvmQuickCross\FragmentViewBase.cs" />
     <Compile Include="MvvmQuickCross\Templates\_APPNAME_Navigator.cs" />

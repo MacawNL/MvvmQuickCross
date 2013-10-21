@@ -3,6 +3,7 @@ using System;
 using System.Threading.Tasks;
 using MvvmQuickCross;
 using CloudAuction.Shared.ViewModels;
+using CloudAuction.Shared.ViewModels.Design;
 
 namespace CloudAuction.Shared
 {

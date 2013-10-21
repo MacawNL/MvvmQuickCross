@@ -1,5 +1,4 @@
 ﻿using CloudAuction.Shared.ViewModels;
-
 namespace CloudAuction.Shared
 {
     public interface ICloudAuctionNavigator

@@ -21,7 +21,16 @@ namespace MvvmQuickCross
                 default:
                     if (view is AbsSpinner) ((AdapterView)view).ItemSelected += AdapterView_ItemSelected;
                     else if (view is AdapterView) ((AdapterView)view).ItemClick += AdapterView_ItemClick;
-                    else view.Click += View_Click;
+                    else
+                    {
+                        view.Click += View_Click;
+                        var command = (RelayCommand)binding.ViewModelPropertyInfo.GetValue(viewModel);
+                        if (command != null)
+                        {
+                            command.CanExecuteChanged += binding.Command_CanExecuteChanged;
+                            view.Enabled = command.IsEnabled;
+                        }
+                    }
                     break;
             }
         }
@@ -37,7 +46,12 @@ namespace MvvmQuickCross
                 default:
                     if (view is AbsSpinner) ((AdapterView)view).ItemSelected -= AdapterView_ItemSelected;
                     else if (view is AdapterView) ((AdapterView)view).ItemClick -= AdapterView_ItemClick;
-                    else view.Click -= View_Click;
+                    else
+                    {
+                        var command = (RelayCommand)binding.ViewModelPropertyInfo.GetValue(viewModel);
+                        if (command != null) command.CanExecuteChanged -= binding.Command_CanExecuteChanged;
+                        view.Click -= View_Click;
+                    }
                     break;
             }
         }
@@ -53,7 +67,7 @@ namespace MvvmQuickCross
                 if (binding.CommandParameterListView != null)
                 {
                     var adapter = binding.CommandParameterListView.GetAdapter() as IDataBindableListAdapter;
-                    if (adapter != null) 
+                    if (adapter != null)
                     {
                         var adapterView = binding.CommandParameterListView;
                         if (adapterView is AbsListView)
@@ -80,8 +94,8 @@ namespace MvvmQuickCross
                                     }
                                     break;
                             }
-                        } 
-                        else 
+                        }
+                        else
                         {
                             parameter = adapter.GetItemAsObject(adapterView.SelectedItemPosition);
                         }
@@ -149,7 +163,18 @@ namespace MvvmQuickCross
                             if (adapter != null)
                             {
                                 int position = adapter.GetItemPosition(value);
-                                if (adapterView.SelectedItemPosition != position) adapterView.SetSelection(position);
+                                if (adapterView is AbsListView)
+                                {
+                                    var absListView = (AbsListView)adapterView;
+                                    if (!absListView.IsItemChecked(position))
+                                    {
+                                        absListView.SetItemChecked(position, true);
+                                    }
+                                }
+                                else
+                                {
+                                    if (adapterView.SelectedItemPosition != position) adapterView.SetSelection(position);
+                                }
                             }
                         }
                         else throw new NotImplementedException("View type not implemented: " + viewTypeName);

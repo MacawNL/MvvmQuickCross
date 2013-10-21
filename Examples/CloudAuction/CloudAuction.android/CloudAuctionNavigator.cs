@@ -1,13 +1,12 @@
-using System;
+﻿using System;
 
 using Android.Content;
-using MvvmQuickCross;
 using CloudAuction.Shared;
 using CloudAuction.Shared.ViewModels;
 
 namespace CloudAuction
 {
-    public class CloudAuctionNavigator : ICloudAuctionNavigator
+    class CloudAuctionNavigator : ICloudAuctionNavigator
     {
         private void Navigate(object navigationContext, Type type)
         {

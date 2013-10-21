@@ -26,8 +26,8 @@ namespace CloudAuction
 		
 		public static void UpdateIdValues()
 		{
-			Macaw.UIComponents.Resource.String.ApplicationName = CloudAuction.Resource.String.ApplicationName;
-			Macaw.UIComponents.Resource.String.Hello = CloudAuction.Resource.String.Hello;
+			global::Macaw.UIComponents.Resource.String.ApplicationName = global::CloudAuction.Resource.String.ApplicationName;
+			global::Macaw.UIComponents.Resource.String.Hello = global::CloudAuction.Resource.String.Hello;
 		}
 		
 		public partial class Attribute

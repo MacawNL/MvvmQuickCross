@@ -8,7 +8,7 @@ namespace CloudAuction.Shared
 {
     public sealed class CloudAuctionApplication : ApplicationBase
     {
-        private readonly ICloudAuctionNavigator navigator;
+        private ICloudAuctionNavigator _navigator;
 
         public CloudAuctionApplication(ICloudAuctionNavigator navigator, object currentNavigationContext = null, TaskScheduler uiTaskScheduler = null)
             : base(currentNavigationContext, uiTaskScheduler)
@@ -16,7 +16,7 @@ namespace CloudAuction.Shared
             // Services that have a platform-specific implementation, such as the navigator,
             // are instantiated in a platform-specific project and passed to this application 
             // as a cross-platform interface.
-            this.navigator = navigator;
+            _navigator = navigator;
 
             // TODO: Create instances for all services that have a cross-platform implementation
         }
@@ -45,28 +45,28 @@ namespace CloudAuction.Shared
                     case MainViewModel.SubView.Products: if (ProductsViewModel == null) ProductsViewModel = new ProductsViewModelDesign(); break;
                 }
             }
-            if (!skipNavigation) RunOnUIThread(() => navigator.NavigateToMainView(CurrentNavigationContext, subView));
+            if (!skipNavigation) RunOnUIThread(() => _navigator.NavigateToMainView(CurrentNavigationContext, subView));
         }
 
         public void ContinueToProduct(ProductViewModel product, bool skipNavigation = false)
         {
             if (ProductViewModel == null) ProductViewModel = new ProductViewModel();
             ProductViewModel.Initialize(product); // Note that we update the existing ProductViewModel instance instead of replacing it with a new instance, because views may exist that are bound to the existing instance.
-            if (!skipNavigation) RunOnUIThread(() => navigator.NavigateToProductView(CurrentNavigationContext));
+            if (!skipNavigation) RunOnUIThread(() => _navigator.NavigateToProductView(CurrentNavigationContext));
         }
 
         public void ContinueToOrder(Bid bid, bool skipNavigation = false)
         {
             if (OrderViewModel == null) OrderViewModel = new OrderViewModelDesign();
             OrderViewModel.Initialize(bid);
-            if (!skipNavigation) RunOnUIThread(() => navigator.NavigateToOrderView(CurrentNavigationContext));
+            if (!skipNavigation) RunOnUIThread(() => _navigator.NavigateToOrderView(CurrentNavigationContext));
         }
 
         public void ContinueToOrderResult(Bid bid, bool skipNavigation = false)
         {
             if (OrderResultViewModel == null) OrderResultViewModel = new OrderResultViewModel();
             OrderResultViewModel.Initialize(bid);
-            if (!skipNavigation) RunOnUIThread(() => navigator.NavigateToOrderResultView(CurrentNavigationContext));
+            if (!skipNavigation) RunOnUIThread(() => _navigator.NavigateToOrderResultView(CurrentNavigationContext));
         }
 
         /* TODO: For each view, add a method (with any parameters needed) to initialize its viewmodel
