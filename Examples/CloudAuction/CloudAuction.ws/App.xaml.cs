@@ -61,7 +61,7 @@ namespace CloudAuction
                 // When the navigation stack isn't restored navigate to the first page,
                 // configuring the new page by passing required information as a navigation
                 // parameter
-                CloudAuctionApplication.Instance.ContinueToAuction();
+                CloudAuctionApplication.Instance.ContinueToMain(Shared.ViewModels.MainViewModel.SubView.Auction);
             }
             // Ensure the current window is active
             Window.Current.Activate();
