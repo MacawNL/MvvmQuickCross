@@ -13,8 +13,6 @@ namespace CloudAuction
     {
         public static MainViewModel.SubView CurrentSubView;
 
-        private ActionBar.Tab[] tabs;
-
         private CloudAuctionApplication EnsureApplication()
         {
             return CloudAuctionApplication.Instance ?? new CloudAuctionApplication(new CloudAuctionNavigator());
@@ -23,34 +21,32 @@ namespace CloudAuction
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
-
             SetContentView(Resource.Layout.MainView);
             ActionBar.NavigationMode = ActionBarNavigationMode.Tabs;
 
-            EnsureApplication(); // TODO: check if we should use class derived from android application object as entry point?
+            // One-time initialization of application and helpers.
+            // This can be done in the startup view, or in the android application object, or in the application loading screen.
+            EnsureApplication();
             AndroidHelpers.Initialize(typeof(Resource));
-            CloudAuctionApplication.Instance.ContinueToMain(skipNavigation: true);
 
-            tabs = new ActionBar.Tab[] { 
+            CloudAuctionApplication.Instance.ContinueToMain(skipNavigation: true);
+                // Ensure that our viewmodel is initialized, in case we navigated to this view by some other means 
+                // than through a call to CloudAuctionApplication.Instance.ContinueToMain().
+                // E.g. when the OS creates this view at application startup, because it is marked as MainLauncher.
+
+            ActionBar.Tab[] tabs = new ActionBar.Tab[] { 
                 ActionBar.NewTab().SetText("Auction").SetTag(new AuctionView()), 
                 ActionBar.NewTab().SetText("Products").SetTag(new ProductsView()), 
                 ActionBar.NewTab().SetText("Help").SetTag(new Fragment()) };
+            foreach (var tab in tabs) tab.TabSelected += Tab_TabSelected;
 
             Initialize(FindViewById(Resource.Id.MainView), CloudAuctionApplication.Instance.MainViewModel);
-            
-            for (int position = 0; position < tabs.Length; position++) ActionBar.AddTab(tabs[position], setSelected: (MainViewModel.SubView)position == CurrentSubView);
-        }
+                // This call initializes data binding and updates the view with the current viewmodel values.
 
-        protected override void AddHandlers()
-        {
-            base.AddHandlers();
-            foreach (var tab in tabs) tab.TabSelected += Tab_TabSelected;
-        }
-
-        protected override void RemoveHandlers()
-        {
-            foreach (var tab in tabs) tab.TabSelected -= Tab_TabSelected;
-            base.RemoveHandlers();
+            for (int position = 0; position < tabs.Length; position++)
+            {
+                ActionBar.AddTab(tabs[position], setSelected: (MainViewModel.SubView)position == CurrentSubView);
+            }
         }
 
         private void EnsureCurrentTabIsSelected()
