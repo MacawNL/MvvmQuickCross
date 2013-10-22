@@ -16,7 +16,6 @@ namespace CloudAuction
         {
             base.OnCreate(bundle);
             SetContentView(Resource.Layout._VIEWNAME_View);
-            CloudAuctionApplication.Instance.CurrentNavigationContext = this;
             Initialize(FindViewById(Resource.Id._VIEWNAME_View), CloudAuctionApplication.Instance._VIEWNAME_ViewModel);
         }
     }

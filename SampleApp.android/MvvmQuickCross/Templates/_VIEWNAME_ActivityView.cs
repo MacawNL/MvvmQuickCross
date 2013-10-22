@@ -15,7 +15,6 @@ namespace MvvmQuickCross.Templates
         {
             base.OnCreate(bundle);
             SetContentView(Resource.Layout._VIEWNAME_View);
-            _APPNAME_Application.Instance.CurrentNavigationContext = this;
             Initialize(FindViewById(Resource.Id._VIEWNAME_View), _APPNAME_Application.Instance._VIEWNAME_ViewModel);
         }
     }

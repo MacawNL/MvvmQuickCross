@@ -29,7 +29,6 @@ namespace CloudAuction
 
             EnsureApplication(); // TODO: check if we should use class derived from android application object as entry point?
             AndroidHelpers.Initialize(typeof(Resource));
-            CloudAuctionApplication.Instance.CurrentNavigationContext = this;
             CloudAuctionApplication.Instance.ContinueToMain(skipNavigation: true);
 
             tabs = new ActionBar.Tab[] { 

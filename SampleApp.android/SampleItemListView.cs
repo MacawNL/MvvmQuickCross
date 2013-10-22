@@ -21,7 +21,6 @@ namespace SampleApp
             SetContentView(Resource.Layout.SampleItemListView);
             AndroidHelpers.Initialize(typeof(Resource));
             EnsureApplication();
-            SampleAppApplication.Instance.CurrentNavigationContext = this;
             SampleAppApplication.Instance.ContinueToSampleItemList(skipNavigation: true);
             Initialize(FindViewById(Resource.Id.SampleItemListView), SampleAppApplication.Instance.SampleItemListViewModel);
         }

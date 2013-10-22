@@ -22,7 +22,6 @@ namespace CloudAuction
             SetContentView(Resource.Layout._VIEWNAME_View);
             AndroidHelpers.Initialize(typeof(Resource));
             EnsureApplication();
-            CloudAuctionApplication.Instance.CurrentNavigationContext = this;
             CloudAuctionApplication.Instance.ContinueTo_VIEWNAME_(skipNavigation: true);
             Initialize(FindViewById(Resource.Id._VIEWNAME_View), CloudAuctionApplication.Instance._VIEWNAME_ViewModel);
         }

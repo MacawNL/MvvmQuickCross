@@ -22,7 +22,6 @@ namespace MvvmQuickCross.Templates
             SetContentView(Resource.Layout._VIEWNAME_View);
             AndroidHelpers.Initialize(typeof(Resource));
             EnsureApplication();
-            _APPNAME_Application.Instance.CurrentNavigationContext = this;
             _APPNAME_Application.Instance.ContinueTo_VIEWNAME_(skipNavigation: true);
             Initialize(FindViewById(Resource.Id._VIEWNAME_View), _APPNAME_Application.Instance._VIEWNAME_ViewModel);
         }
