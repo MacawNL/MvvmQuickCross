@@ -77,6 +77,15 @@ namespace CloudAuction
             MenuInflater.Inflate(Resource.Menu.MainMenu, menu);
             return base.OnPrepareOptionsMenu(menu);
         }
+
+        public override bool OnOptionsItemSelected(IMenuItem item)
+        {
+            switch (item.ItemId)
+            {
+                case Resource.Id.LogoutMenuItem: ViewModel.LogoutCommand.Execute(null); return true;
+                default: return base.OnOptionsItemSelected(item);
+            }
+        }
     }
 }
 
