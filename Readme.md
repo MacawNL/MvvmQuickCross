@@ -12,7 +12,9 @@ MvvmQuickCross accelerates development, also for a single platform app. For cros
 MvvmQuickCross aims to leave you in full control; it does not get in the way if you want to do some things differently, and you can simply extend it.
 
 ## News ##
-**Coming up**: A blogpost on building the CloudAuction application for Android; Next planned MvvmQuickCross release: 2.0, which will add simple iOS data binding and an iOS example app.
+**Coming up**: Next planned MvvmQuickCross release: 2.0, which will add simple iOS data binding and an iOS example app.
+
+**October 24, 2013**: Blog post on building the CloudAuction application for Android is published [here](http://vincenth.net/blog/archive/2013/10/23/creating-a-cross-platform-native-app-using-mvvmquickcross-and-xamarin-part-2-android-app.aspx). Also version 1.5.2.1 is published, with some minor template and code improvements.
 
 **October 17, 2013**: The Cross-Platform features and the Android-specific features are now fully documented in this Readme.
 
