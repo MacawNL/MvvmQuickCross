@@ -61,12 +61,9 @@ The remainder of this Readme describes:
 This repository also contains a more elaborate **Cloud Auction example app**. You can find the full steps and explanation on how to build this app with MvvmQuickCross in these blog posts:
 
 - [Creating a Cross-Platform Native App Using MvvmQuickCross and Xamarin, Part 1: Cross-Platform Code and Windows 8 App](http://vincenth.net/blog/archive/2013/08/30/creating-a-cross-platform-native-app-using-mvvmquickcross-and-xamarin-part-1-cross-platform-code-and-windows-8-app.aspx)
-- [Creating a Cross-Platform Native App Using MvvmQuickCross and Xamarin, Part 2: Android App](vincenth.net/blog/archive/2013/10/23/creating-a-cross-platform-native-app-using-mvvmquickcross-and-xamarin-part-2-android-app.aspx)
-
+- [Creating a Cross-Platform Native App Using MvvmQuickCross and Xamarin, Part 2: Android App](vincenth.net/blog/archive/2013/10/23/creating-a-cross-platform-native-app-using-mvvmquickcross-and-xamarin-part-2-android-app.aspx)<br />**Note** this post has not yet been updated to show the new NuGet package install procedure; follow the Getting Started steps below for that.
 
 ## Getting Started ##
-**Note: for a detailed step-by-step guide on how to build the CloudAuction example app that can be found in this repository, see [here](http://vincenth.net/blog/archive/2013/08/30/creating-a-cross-platform-native-app-using-mvvmquickcross-and-xamarin-part-1-cross-platform-code-and-windows-8-app.aspx) (however, be aware that this post has not yet been updated to show the new NuGet package install procedure; follow the steps below for that).**
-
 To create an app with MvvmQuickCross, follow these steps:
 
 1. In Visual Studio, create a new solution with an application project for the platform (Windows Store, Windows Phone, Android, iOS) that you are most productive with. Add a class library project for that platform to the solution. Reference the class library from the application project.
