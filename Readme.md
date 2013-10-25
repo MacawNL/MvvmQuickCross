@@ -268,10 +268,12 @@ Here is how to create an Android Twitter app that demonstrates simple data bindi
 > For a more elaborate example, see this [blog post on the Android version of the Cloud Auction example application](http://vincenth.net/blog/archive/2013/10/23/creating-a-cross-platform-native-app-using-mvvmquickcross-and-xamarin-part-2-android-app.aspx).
 
 This is what the Twitter app will look like in Android:
+
 ![MvvmQuickCross Pattern](https://raw.github.com/MacawNL/MvvmQuickCross/master/assets/twitter_android.png)
+
 So let's get started.
 
-1.  Create a working Android app by following steps 1 though 4 of [Getting Started](#getting-started) above - choose an `Android Application` project named "Twitter" and an `Android Class Library` project named "Twitter.Shared".
+1.  Create a working Android app by following steps 1 though 4 of [Getting Started](#getting-started) above - create an `Android Application` project named `Twitter` and an `Android Class Library` project named `Twitter.Shared`.
 
 2.  Remove the `Activity1.cs`, `Resources\Layout\Main.axml` and `Class1.cs` files that were included by the Xamarin.Android project templates
 
