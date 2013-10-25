@@ -7,7 +7,7 @@ Quickly build cross-platform apps in C# with the MVVM pattern and [Xamarin](http
 ## Summary ##
 MvvmQuickCross is a lightweight cross-platform MVVM pattern to quickly build native Xamarin.iOS, Xamarin.Android, Windows Phone and Windows Store Apps with shared C# code.
 
-MvvmQuickCross accelerates development, also for a single platform app. For cross-platform apps MvvmQuickCross increases code sharing.
+MvvmQuickCross provides data binding for Android (and for iOS soon). It accelerates development, also for a single platform app. For cross-platform apps MvvmQuickCross increases code sharing.
 
 MvvmQuickCross aims to leave you in full control; it does not get in the way if you want to do some things differently, and you can simply extend it.
 
@@ -26,24 +26,43 @@ MvvmQuickCross aims to leave you in full control; it does not get in the way if 
 
 ## Features ##
 
-**Lightweight and easy to modify**.<br />No binaries, only adds a code snippets file and C# source files to your projects.
+### Lightweight and easy to modify ###
+No binaries, only adds a code snippets file and C# source files to your projects.
 
-**Scaffolders**.<br />Quickly add viewmodels and views from within the Visual Studio package manager console with the New-ViewModel and New-View [commands](#commands).
+### Scaffolders ###
+Quickly add viewmodels and views from within the Visual Studio package manager console with the New-ViewModel and New-View [commands](#commands).
 
-**Viewmodel code snippets**.<br />Quickly add data-bindable properties and commands to viewmodels with [code snippets](#code-snippets).
+### Viewmodel code snippets ###
+Quickly add data-bindable properties and commands to viewmodels with [code snippets](#code-snippets).
 
-**Application-Navigator pattern**.<br />Maximize code sharing, including navigation logic, across platforms.
+### Application-Navigator pattern ###
+Maximize code sharing, including navigation logic, across platforms.
 ![MvvmQuickCross Pattern](https://raw.github.com/MacawNL/MvvmQuickCross/master/assets/mvvmquickcross_pattern.png)
 
 See [these slides](http://www.slideshare.net/VincentHoogendoorn/mvvm-quickcross-windows-phone-devday-2013) for an overview of the MvvmQuickCross pattern.
 
-**Simple Android data binding**.<br />Specify [data bindings in Android](#android-data-binding) by using naming conventions, tag markup or code. Use observable collections. Create performant data-bound list views without writing an adapter.
+### Simple Android data binding ###
+Specify [data bindings in Android](#android-data-binding) by using naming conventions, tag markup or code. Use observable collections. Create performant data-bound list views without writing an adapter.
 
 Override virtual methods in your activity or fragment to handle specific property change events with custom code instead of with data binding. Or customize how the data binding sets a value to a specific control. Add a few lines of code to make new view types data bindable.
 
-**Android lifecycle management**.<br />Prevent [memory leaks in Xamarin](http://docs.xamarin.com/guides/android/application_fundamentals/activity_lifecycle) by [automatically removing and re-adding event handlers](#android-view-lifecycle-support) during the Android activity life-cycle.
+### Android lifecycle management ###
+Prevent [memory leaks in Xamarin](http://docs.xamarin.com/guides/android/application_fundamentals/activity_lifecycle) by [automatically removing and re-adding event handlers](#android-view-lifecycle-support) during the Android activity life-cycle.
 
 **Simple iOS data binding**.<br />This will be added in the **upcoming v2.0 release**.
+
+## Documentation and Examples ##
+The remainder of this Readme describes:
+
+-  **Getting Started** steps
+-  The complete **MvvmQuickCross reference**
+-  How to build a simple **Twitter example app**
+
+This repository also contains a more elaborate **Cloud Auction example app**. You can find the full steps and explanation on how to build this app with MvvmQuickCross in these blog posts:
+
+- [Creating a Cross-Platform Native App Using MvvmQuickCross and Xamarin, Part 1: Cross-Platform Code and Windows 8 App](http://vincenth.net/blog/archive/2013/08/30/creating-a-cross-platform-native-app-using-mvvmquickcross-and-xamarin-part-1-cross-platform-code-and-windows-8-app.aspx)
+- [Creating a Cross-Platform Native App Using MvvmQuickCross and Xamarin, Part 2: Android App](vincenth.net/blog/archive/2013/10/23/creating-a-cross-platform-native-app-using-mvvmquickcross-and-xamarin-part-2-android-app.aspx)
+
 
 ## Getting Started ##
 **Note: for a detailed step-by-step guide on how to build the CloudAuction example app that can be found in this repository, see [here](http://vincenth.net/blog/archive/2013/08/30/creating-a-cross-platform-native-app-using-mvvmquickcross-and-xamarin-part-1-cross-platform-code-and-windows-8-app.aspx) (however, be aware that this post has not yet been updated to show the new NuGet package install procedure; follow the steps below for that).**
