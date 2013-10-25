@@ -49,7 +49,8 @@ Override virtual methods in your activity or fragment to handle specific propert
 ### Android lifecycle management ###
 Prevent [memory leaks in Xamarin](http://docs.xamarin.com/guides/android/application_fundamentals/activity_lifecycle) by [automatically removing and re-adding event handlers](#android-view-lifecycle-support) during the Android activity life-cycle.
 
-**Simple iOS data binding**.<br />This will be added in the **upcoming v2.0 release**.
+### Simple iOS data binding ###
+This will be added in the **upcoming v2.0 release**.
 
 ## Documentation and Examples ##
 The remainder of this Readme describes:
@@ -259,11 +260,16 @@ Adds a data-bindable command to a Viewmodel. You can specify the command name, w
 Adds a data-bindable command with a parameter to a Viewmodel. You can specify the command name, which will be suffixed with **"Command"**, the parameter type and the parameter name.
 
 ## Android ##
-Below is an overview of using MvvmQuickCross with Xamarin.Android. For a more detailed example, see the Android version of the [CloudAuction example application](http://github.com/MacawNL/MvvmQuickCross/tree/master/Examples/CloudAuction) in this repository.
+Below is an overview of using MvvmQuickCross with Xamarin.Android.
 
 ### Create an Android App ###
 Here is how to create an Android Twitter app that demonstrates simple data binding:
-> Note that the complete source for this example is available in this repository, [here](http://github.com/MacawNL/MvvmQuickCross/tree/master/Examples/Twitter).
+> Note that the complete source for this Twitter app example is available in this repository, [here](http://github.com/MacawNL/MvvmQuickCross/tree/master/Examples/Twitter).
+> For a more elaborate example, see this [blog post on the Android version of the Cloud Auction example application](http://vincenth.net/blog/archive/2013/10/23/creating-a-cross-platform-native-app-using-mvvmquickcross-and-xamarin-part-2-android-app.aspx).
+
+This is what the Twitter app will look like in Android:
+![MvvmQuickCross Pattern](https://raw.github.com/MacawNL/MvvmQuickCross/master/assets/twitter_android.png)
+So let's get started.
 
 1.  Create a working Android app by following steps 1 though 4 of [Getting Started](#getting-started) above - choose an `Android Application` project named "Twitter" and an `Android Class Library` project named "Twitter.Shared".
 
