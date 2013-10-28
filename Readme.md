@@ -3,6 +3,7 @@ NuGet package: [http://nuget.org/packages/MvvmQuickCross](http://nuget.org/packa
 
 # MvvmQuickCross #
 Quickly build cross-platform apps in C# with the MVVM pattern and [Xamarin](http://xamarin.com/).
+![MvvmQuickCross Pattern](https://raw.github.com/MacawNL/MvvmQuickCross/master/assets/mvvmquickcross.gif)
 
 ## Summary ##
 MvvmQuickCross is a lightweight cross-platform MVVM pattern to quickly build native Xamarin.iOS, Xamarin.Android, Windows Phone and Windows Store Apps with shared C# code.
