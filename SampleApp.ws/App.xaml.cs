@@ -55,14 +55,8 @@ namespace SampleApp
             }
 
             EnsureSampleAppApplication(rootFrame);
+            if (rootFrame.Content == null) SampleAppApplication.Instance.ContinueToSampleItemList();
 
-            if (rootFrame.Content == null)
-            {
-                // When the navigation stack isn't restored navigate to the first page,
-                // configuring the new page by passing required information as a navigation
-                // parameter
-                SampleAppApplication.Instance.ContinueToSampleItemList();
-            }
             // Ensure the current window is active
             Window.Current.Activate();
         }

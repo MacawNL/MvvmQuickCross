@@ -6,6 +6,7 @@
     xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:MvvmQuickCross.Templates"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
@@ -31,15 +32,15 @@
 
         <!--ContentPanel - place additional content here-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
-
-            <!-- Example markup with a data bound command and property -->
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
+          <!-- Example markup with a data bound command and property. TODO: Remove -->
+          <StackPanel>
             <Button Content="Click Me!" Command="{Binding IncreaseCountCommand}" />
-            <TextBlock Grid.Row="1"><Run Text="Clicked: " /><Run Text="{Binding Count}" /></TextBlock>
-
+            <TextBlock HorizontalAlignment="Center">
+              <Run Text="Clicked: " />
+              <Run Text="{Binding Count}" />
+            </TextBlock>
+          </StackPanel>
+          <!-- End of example markup -->
         </Grid>
     </Grid>
 

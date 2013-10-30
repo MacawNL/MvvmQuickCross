@@ -3,6 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:MvvmQuickCross.Templates"
     mc:Ignorable="d"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
@@ -12,6 +13,15 @@
     d:DataContext="{d:DesignInstance Type=vm:_VIEWNAME_ViewModelDesign, IsDesignTimeCreatable=True}"
 >
     <Grid x:Name="LayoutRoot" Background="{StaticResource PhoneChromeBrush}">
-      <TextBlock Text="_VIEWNAME_" Style="{StaticResource PhoneTextTitle1Style}" />
+      <!-- Example markup with a data bound command and property. TODO: Remove -->
+      <StackPanel>
+        <TextBlock Text="_VIEWNAME_" Style="{StaticResource PhoneTextTitle1Style}" />
+        <Button Content="Click Me!" Command="{Binding IncreaseCountCommand}" />
+        <TextBlock HorizontalAlignment="Center">
+          <Run Text="Clicked: " />
+          <Run Text="{Binding Count}" />
+        </TextBlock>
+      </StackPanel>
+      <!-- End of example markup -->
     </Grid>
 </UserControl>

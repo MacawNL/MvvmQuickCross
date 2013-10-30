@@ -1,8 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.20827.3
-MinimumVisualStudioVersion = 10.0.40219.1
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleApp.Shared.wp", "SampleApp.Shared\SampleApp.Shared.wp.csproj", "{1F59E643-1066-4177-BC2F-1CD0E9224263}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleApp", "SampleApp.wp\SampleApp.csproj", "{F0B4BFA6-FBD7-45C6-8380-1D1732F5A65C}"
@@ -14,6 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GitHub", "GitHub", "{68625B
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuGet", "NuGet", "{FB6691B4-E603-4030-8387-4699B9BF1783}"
 	ProjectSection(SolutionItems) = preProject
+		NuGet\about_MvvmQuickCross.help.txt = NuGet\about_MvvmQuickCross.help.txt
 		NuGet\CreatePackage.cmd = NuGet\CreatePackage.cmd
 		NuGet\Init.ps1 = NuGet\Init.ps1
 		NuGet\MvvmQuickCross.nuspec = NuGet\MvvmQuickCross.nuspec

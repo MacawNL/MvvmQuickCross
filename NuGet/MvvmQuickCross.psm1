@@ -407,6 +407,7 @@ function Install-Mvvm
                                            -contentReplacements            $csContentReplacements
                     New-View -ViewName Main -ViewType MainLauncher
                 }
+
                 'wp' {
                     $null = AddProjectItem -project $project `
                                            -destinationProjectRelativePath ('MvvmQuickCross\App.xaml.cs' -f $appName) `
@@ -416,6 +417,20 @@ function Install-Mvvm
                     $null = AddProjectItem -project $project `
                                            -destinationProjectRelativePath ('{0}Navigator.cs' -f $appName) `
                                            -templatePackageFolder          'app.wp' `
+                                           -templateProjectRelativePath    'MvvmQuickCross\Templates\_APPNAME_Navigator.cs' `
+                                           -contentReplacements            $csContentReplacements
+                    New-View -ViewName Main
+                }
+
+                'ws' {
+                    $null = AddProjectItem -project $project `
+                                           -destinationProjectRelativePath ('MvvmQuickCross\App.xaml.cs' -f $appName) `
+                                           -templatePackageFolder          'app.ws' `
+                                           -templateProjectRelativePath    'MvvmQuickCross\Templates\App.xaml.cs' `
+                                           -contentReplacements            $csContentReplacements
+                    $null = AddProjectItem -project $project `
+                                           -destinationProjectRelativePath ('{0}Navigator.cs' -f $appName) `
+                                           -templatePackageFolder          'app.ws' `
                                            -templateProjectRelativePath    'MvvmQuickCross\Templates\_APPNAME_Navigator.cs' `
                                            -contentReplacements            $csContentReplacements
                     New-View -ViewName Main
@@ -551,7 +566,26 @@ function New-View
                                    -contentReplacements            $csContentReplacements
         }
 
-        default { Write-Host "New-View currenty only supports Android and Windows Phone application projects"; return }
+        'ws' {
+            if ("$ViewType" -eq '') { $ViewType = 'Page' }
+            foreach ($markupType in @($ViewType, ''))
+            {
+                if (AddProjectItem -project $project `
+                                   -destinationProjectRelativePath ('{0}View.xaml' -f $ViewName) `
+                                   -templatePackageFolder          'app.ws' `
+                                   -templateProjectRelativePath    ('MvvmQuickCross\Templates\_VIEWNAME_{0}View.xaml.template' -f $markupType) `
+                                   -contentReplacements            $csContentReplacements `
+                                   -isOptionalItem:($markupType -ne ''))
+                { break }
+            }
+            $null = AddProjectItem -project $project `
+                                   -destinationProjectRelativePath ('{0}View.xaml.cs' -f $ViewName) `
+                                   -templatePackageFolder          'app.ws' `
+                                   -templateProjectRelativePath    ('MvvmQuickCross\Templates\_VIEWNAME_{0}View.xaml.cs' -f $ViewType) `
+                                   -contentReplacements            $csContentReplacements
+        }
+
+        default { Write-Host "New-View currenty only supports Android, Windows Phone and Windows Store application projects"; return }
     }
 }
 
