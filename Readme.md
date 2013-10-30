@@ -1,19 +1,23 @@
 NuGet package: [http://nuget.org/packages/MvvmQuickCross](http://nuget.org/packages/mvvmquickcross)
-> NOTE: This readme describes version 1.5.2, which is the current NuGet release.
+> NOTE: This readme describes version 1.6, which is the current NuGet release.
 
 # MvvmQuickCross #
 Quickly build cross-platform apps in C# with the MVVM pattern and [Xamarin](http://xamarin.com/).
 ![MvvmQuickCross Pattern](https://raw.github.com/MacawNL/MvvmQuickCross/master/assets/MvvmQuickCross.gif)
 
 ## Summary ##
-MvvmQuickCross is a lightweight cross-platform MVVM pattern to quickly build native Xamarin.iOS, Xamarin.Android, Windows Phone and Windows Store Apps with shared C# code.
+MvvmQuickCross is a lightweight (no binaries) cross-platform MVVM pattern to quickly build native Xamarin.iOS, Xamarin.Android, Windows Phone and Windows Store Apps with shared C# code.
 
-MvvmQuickCross provides data binding for Android (and for iOS soon). It accelerates development, also for a single platform app. For cross-platform apps MvvmQuickCross increases code sharing.
+MvvmQuickCross provides data binding for Android (and for iOS soon). It accelerates development with scaffolders and code snippets, also for a single platform app. For cross-platform apps MvvmQuickCross increases code sharing with an Application-Navigator pattern.
 
-MvvmQuickCross aims to leave you in full control; it does not get in the way if you want to do some things differently, and you can simply extend it.
+MvvmQuickCross aims to leave you in full control; it does not get in the way if you want to do some things differently, and you can simply extend or modify it.
+
+This Readme contains news, example apps and full reference documentation.
 
 ## News ##
 **Coming up**: Next planned MvvmQuickCross release: 2.0, which will add simple iOS data binding and an iOS example app.
+
+**October 30, 2013**: Version 1.6 is published, which now also generates Windows Store navigator and views, and has improved Windows Phone view templates.
 
 **October 24, 2013**: Blog post on building the CloudAuction application for Android is published [here](http://vincenth.net/blog/archive/2013/10/23/creating-a-cross-platform-native-app-using-mvvmquickcross-and-xamarin-part-2-android-app.aspx). Also version 1.5.2.1 is published, with some minor template and code improvements.
 
@@ -68,7 +72,7 @@ This repository also contains a more elaborate **Cloud Auction example app**. Yo
 ## Getting Started ##
 To create an app with MvvmQuickCross, follow these steps:
 
-1. In Visual Studio, create a new solution with an application project for the platform (Windows Store, Windows Phone, Android, iOS) that you are most productive with. Add a class library project for that platform to the solution. Reference the class library from the application project.
+1. In Visual Studio, create a new solution with an application project for the **platform** (Windows Store, Windows Phone, Android, iOS) that you are most productive with. Add a class library project **for the same platform** to the solution. Reference the class library from the application project.
 
 	**Note for Android:** Set the API level to 12 (Android 3.1) or higher in the Project properties for both projects. This is needed to support the Fragment view type. You can target lower API versions by either using the [Android Support Library](http://developer.android.com/tools/support-library/index.html) (which is supported in Xamarin) or by removing the Fragment view base class and template from the MvvmQuickCross folder in your application project.
 
@@ -92,8 +96,6 @@ To create an app with MvvmQuickCross, follow these steps:
 	**Note** do not select the MvvmQuickCross\Templates folder itself as the location to import snippets **to**; that may prevent the snippets to be imported correctly, as this would mean copying the snippets file over itself.
 
 5. Add new views and viewmodels with the [`New-View`](#new-view) and [`New-ViewModel`](#new-viewmodel) commands.
-
-	**Note** that currently New-View only supports Android and Windows Phone.
 
 6. Add data-bindable properties and commands to your viewmodels with the [code snippets](#code-snippets).
 
@@ -136,11 +138,11 @@ Install-Mvvm will not overwrite existing files or code. If you want to recreate 
 ```posh
 New-View [-ViewName] <string> [[-ViewType] <string>] [[-ViewModelName] <string>] [-WithoutNavigation]
 ```
-Generates a new view. Currently only supports Android and Windows Phone.
+Generates a new view.
 
 The specified `ViewName` will be suffixed with "View", and the specified `ViewModelName` will be suffixed with "ViewModel". If no ViewModelName is specified, it will be the same as the ViewName. If the view model does not exist, it will be generated with the `New-ViewModel` command.
 
-On Windows Phone, the `ViewType` can be `Page` (default) or `UserControl`. On Android, it can be `MainLauncher`, `Activity` (default) or `Fragment`. The specified view type determines which view templates are used. You can find these templates in the MvvmQuickCross\Templates folder of your application project. You can simply modify these templates or add your own (which is better) by adding similar named files there.
+On Windows Phone or Windows Store, the `ViewType` can be `Page` (default) or `UserControl`. On Android, it can be `MainLauncher`, `Activity` (default) or `Fragment`. The specified view type determines which view templates are used. You can find these templates in the MvvmQuickCross\Templates folder of your application project. You can simply modify these templates or add your own (which is better) by adding similar named files there.
 
 Unless the `-WithoutNavigation` switch is specified, New-View will also add basic navigation code to the navigator and application classes. The -WithoutNavigation switch is useful when creating views such as list item views, that do not need to navigated to directly from the application class.
 
