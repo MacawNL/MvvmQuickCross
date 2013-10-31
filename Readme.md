@@ -17,6 +17,8 @@ This Readme contains news, example apps and full reference documentation.
 ## News ##
 **Coming up**: Next planned MvvmQuickCross release: 2.0, which will add simple iOS data binding and an iOS example app.
 
+**October 31, 2013**: Updated the **Windows Store** version of the **CloudAuction** example application [source](http://github.com/MacawNL/MvvmQuickCross/tree/master/Examples/CloudAuction) and [blog post](http://vincenth.net/blog/archive/2013/08/30/creating-a-cross-platform-native-app-using-mvvmquickcross-and-xamarin-part-1-cross-platform-code-and-windows-8-app.aspx) to version 1.6.
+
 **October 30, 2013**: Version 1.6 is published, which now also generates Windows Store navigator and views, and has improved Windows Phone view templates.
 
 **October 24, 2013**: Blog post on building the CloudAuction application for Android is published [here](http://vincenth.net/blog/archive/2013/10/23/creating-a-cross-platform-native-app-using-mvvmquickcross-and-xamarin-part-2-android-app.aspx). Also version 1.5.2.1 is published, with some minor template and code improvements.
@@ -140,7 +142,7 @@ New-View [-ViewName] <string> [[-ViewType] <string>] [[-ViewModelName] <string>]
 ```
 Generates a new view.
 
-The specified `ViewName` will be suffixed with "View", and the specified `ViewModelName` will be suffixed with "ViewModel". If no ViewModelName is specified, it will be the same as the ViewName. If the view model does not exist, it will be generated with the `New-ViewModel` command.
+The specified `ViewName` will be suffixed with "View", and the specified `ViewModelName` will be suffixed with "ViewModel". If no ViewModelName is specified, it will be the same as the ViewName. If the viewmodel does not exist, it will be generated with the `New-ViewModel` command.
 
 On Windows Phone or Windows Store, the `ViewType` can be `Page` (default) or `UserControl`. On Android, it can be `MainLauncher`, `Activity` (default) or `Fragment`. The specified view type determines which view templates are used. You can find these templates in the MvvmQuickCross\Templates folder of your application project. You can simply modify these templates or add your own (which is better) by adding similar named files there.
 
@@ -161,7 +163,7 @@ will generate:
 - A `NavigateToPersonView()` method implementation in the navigator class
 - A `ContinueToPerson()` method in the application class
 
-Now the only thing needed to display the view, bound to the view model, is to call the `ContinueToPerson()` method on the application.
+Now the only thing needed to display the view, bound to the viewmodel, is to call the `ContinueToPerson()` method on the application.
 
 Check the **TODO comments** in the Visual Studio **Task List** to find guidance on how to complete the generated project items.
 
@@ -543,7 +545,7 @@ E.g, the MainView in the Twitter example above is created by this class:
 ```csharp
 public class MainView : ActivityViewBase<MainViewModel> { ... }
 ```
-And in the markup this is how a child view is bound to the CharactersLeft property on the view model:
+And in the markup this is how a child view is bound to the CharactersLeft property on the viewmodel:
 
 ```xml
 <TextView android:id="@+id/MainView_CharactersLeft"	... />
