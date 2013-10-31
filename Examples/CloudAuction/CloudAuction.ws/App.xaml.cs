@@ -23,11 +23,6 @@ namespace CloudAuction
             this.Suspending += OnSuspending;
         }
 
-        public static CloudAuctionApplication EnsureCloudAuctionApplication(Frame navigationContext)
-        {
-            return CloudAuctionApplication.Instance ?? new CloudAuctionApplication(new CloudAuctionNavigator(), navigationContext);
-        }
-
         /// <summary>
         /// Invoked when the application is launched normally by the end user.  Other entry points
         /// will be used when the application is launched to open a specific file, to display
@@ -55,14 +50,8 @@ namespace CloudAuction
             }
 
             EnsureCloudAuctionApplication(rootFrame);
+            if (rootFrame.Content == null) CloudAuctionApplication.Instance.ContinueToMain(Shared.ViewModels.MainViewModel.SubView.Auction);
 
-            if (rootFrame.Content == null)
-            {
-                // When the navigation stack isn't restored navigate to the first page,
-                // configuring the new page by passing required information as a navigation
-                // parameter
-                CloudAuctionApplication.Instance.ContinueToMain(Shared.ViewModels.MainViewModel.SubView.Auction);
-            }
             // Ensure the current window is active
             Window.Current.Activate();
         }

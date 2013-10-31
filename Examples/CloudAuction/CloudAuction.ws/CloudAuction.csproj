@@ -114,6 +114,11 @@
       <DependentUpon>AuctionView.xaml</DependentUpon>
     </Compile>
     <Compile Include="CloudAuctionNavigator.cs" />
+    <Compile Include="MvvmQuickCross\App.xaml.cs" />
+    <Compile Include="MvvmQuickCross\Templates\App.xaml.cs" />
+    <Compile Include="MvvmQuickCross\Templates\_APPNAME_Navigator.cs" />
+    <Compile Include="MvvmQuickCross\Templates\_VIEWNAME_PageView.xaml.cs" />
+    <Compile Include="MvvmQuickCross\Templates\_VIEWNAME_UserControlView.xaml.cs" />
     <Compile Include="OrderResultView.cs" />
     <Compile Include="OrderView.xaml.cs">
       <DependentUpon>OrderView.xaml</DependentUpon>
@@ -125,6 +130,8 @@
       <SubType>Designer</SubType>
     </AppxManifest>
     <None Include="CloudAuction_TemporaryKey.pfx" />
+    <None Include="MvvmQuickCross\Templates\_VIEWNAME_PageView.xaml.template" />
+    <None Include="MvvmQuickCross\Templates\_VIEWNAME_UserControlView.xaml.template" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\Logo.png" />

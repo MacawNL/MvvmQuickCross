@@ -99,6 +99,7 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="CloudAuctionApplication.cs" />
     <Compile Include="ICloudAuctionNavigator.cs" />
     <Compile Include="MvvmQuickCross\ApplicationBase.cs" />
     <Compile Include="MvvmQuickCross\RelayCommand.cs" />
@@ -112,7 +113,6 @@
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\OrderResultViewModel.cs" />
     <Compile Include="ViewModels\OrderViewModel.cs" />
-    <Compile Include="CloudAuctionApplication.cs" />
     <Compile Include="ViewModels\ProductsViewModel.cs" />
     <Compile Include="ViewModels\ProductViewModel.cs" />
   </ItemGroup>
