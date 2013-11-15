@@ -6,13 +6,21 @@ Quickly build cross-platform apps in C# with the MVVM pattern and [Xamarin](http
 ![MvvmQuickCross Pattern](https://raw.github.com/MacawNL/MvvmQuickCross/master/assets/MvvmQuickCross.gif)
 
 ## Summary ##
-MvvmQuickCross is a lightweight (no binaries) cross-platform MVVM pattern to quickly build native Xamarin.iOS, Xamarin.Android, Windows Phone and Windows Store Apps with shared C# code.
+MvvmQuickCross is a lightweight (no binaries) cross-platform MVVM framework to quickly build native Xamarin.iOS, Xamarin.Android, Windows Phone and Windows Store Apps with shared C# code.
 
 MvvmQuickCross provides data binding for Android (and for iOS soon). It accelerates development with scaffolders and code snippets, also for a single platform app. For cross-platform apps MvvmQuickCross increases code sharing with an Application-Navigator pattern.
 
 MvvmQuickCross aims to leave you in full control; it does not get in the way if you want to do some things differently, and you can simply extend or modify it.
 
 This Readme contains news, example apps and full reference documentation.
+## Why another cross-platform Mvvm framework? ##
+We developed MvvmQuickCross after trying [MvvmCross](http://github.com/mvvmcross). We were looking for an Mvvm framework to let us maximize code sharing across Windows Store, Windows Phone, Xamarin.iOS and Xamarin.Android platforms, and MvvmCross was the most promising option for us. In our opinion MvvmCross is a mature framework that offers a lot of functionality and has an impressive architecture. However, MvvmCross is also binary based (you use it as dlls in your app) and we found it to be too heavily engineered for our needs. It has lots of nuget packages and dlls, a plugin system, uses IoC, has many internal layers etc. It's a *lot* to take in - there are over 40(!) [video's](http://www.youtube.com/playlist?list=PLR6WI6W1JdeYSXLbm58jwAKYT7RQR31-W) on it.
+
+If we were to build an app with MvvmCross and we would run across something - anything, either big or small - that is not supported (yet) out of the box, we would either need to wait for someone else to add it, or take on an additional - potentially complex - project to create a new plugin for the framework or even a modified version of existing framework component(s). We did not want to put ourselves in this situation. Not finding a suitable alternative, we set out to create a **lightweight**, pragmatic framework with a focus on **productivity** and **simple customization**: *MvvmQuickCross*.
+
+MvvmQuickCross is not based on or derived from MvvmCross; it solves some of the same problems but is quite different. MvvmQuickCross supports most common data binding scenario's out of the box and lets you implement other scenario's by adding a few lines of code in your app project. It is simple in both usage and internal implementation; it is distributed in a single NuGet package, included as source in your app projects, and this single readme page contains the complete reference plus an example app tutorial.
+
+While MvvmQuickCross has some unique [features](#features) (e.g. customizable code templates and scaffolder commands to quickly generate views, viewmodels and navigation code), MvvmCross has been around longer and offers more functionality, e.g. value converters and WPF and Mac platform support. If you are looking for a cross-platform Mvvm framework, we do encourage you to check out all options and decide for yourself which is best for your needs and capabilities. Happy app building!
 
 ## News ##
 **Coming up**: Next planned MvvmQuickCross release: 2.0, which will add simple iOS data binding and an iOS example app.
