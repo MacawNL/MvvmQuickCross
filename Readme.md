@@ -1,8 +1,14 @@
-NuGet package: [http://nuget.org/packages/MvvmQuickCross](http://nuget.org/packages/mvvmquickcross)
-> NOTE: This readme describes version 1.6, which is the current NuGet release.
+# MvvmQuickCross is now QuickCross #
+Starting at version 2.0, MvvmQuickCross has been renamed to **QuickCross**. See [QuickCross on GitHub](https://github.com/MacawNL/QuickCross) for the latest version and for upgrade instructions from MvvmQuickCross to QuickCross.
+
+The last version of MvvmQuickCross is 1.6, which is documented below. It will remain available here as a reference for existing apps that use it. New apps should use [QuickCross](https://github.com/MacawNL/QuickCross "QuickCross") instead, which supports more platforms and has more features  (including iOS data binding).
 
 # MvvmQuickCross #
 Quickly build cross-platform apps in C# with the MVVM pattern and [Xamarin](http://xamarin.com/).
+
+NuGet package: [http://nuget.org/packages/MvvmQuickCross](http://nuget.org/packages/mvvmquickcross)
+> NOTE: This readme describes version MvvmQuickCross 1.6, which is the last version before we renamed to [QuickCross](https://github.com/MacawNL/QuickCross).
+
 ![MvvmQuickCross Pattern](https://raw.github.com/MacawNL/MvvmQuickCross/master/assets/MvvmQuickCross.gif)
 
 ## Summary ##
